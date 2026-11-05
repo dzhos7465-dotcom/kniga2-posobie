@@ -363,7 +363,7 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
 </div></div>
 <div class="modal" id="hwModal"><div class="box">
   <b style="font-size:20px">Ссылка на домашний тест</b>
-  <span style="color:var(--mut)">По этой ссылке у ребёнка сразу откроется мини‑тест урока ٥ без остальных разделов. В конце он пишет своё имя и присылает вам скриншот.</span>
+  <span style="color:var(--mut)">По этой ссылке у ребёнка сразу откроется мини‑тест урока <span id="hwN">٥</span> без остальных разделов. В конце он пишет своё имя и присылает вам скриншот.</span>
   <input id="hwUrl" readonly>
   <div class="row" style="direction:ltr"><button class="btn main" id="hwCopy">Скопировать</button><button class="btn ghost" id="hwClose">Закрыть</button></div>
 </div></div>
@@ -372,6 +372,28 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
 <script>
 /*ASSETS*/
 /*DATA*/
+
+// ================= lessons =================
+// Содержимое уроков — в lessons/urokN/data.js (LESSONS[n]), картинки и звук — в ASSETS[n].
+let LN=0,CUR=null,LD=null,A={},TREE_W,TREE_H,TREE,NAME,WHO,TF,PAIRS,NOTES,LX,BLOB,S1,S1C,S2,S3,S4,SUBW,R1,RCOL,RTEXT,RQ,R4,LET,ACT,ACOL,CONC,GAPS,PARTS=[],PAGE={};
+const NOTE_TEST=`<h4>Тест</h4><div class="n">${'20'} вопросов: слушание, чтение, правда/нет, пропущенное слово и 4 вопроса по тексту. Каждый раз перемешиваются.</div><div class="n">Перед тестом выберите ребёнка: результат запишется рядом с его звёздами. Для домашки — «Ссылка для домашки».</div>`;
+const NOTE_STAMP=`<h4>Режим «Штампы»</h4><div class="n">Кнопка «Штампы» в шапке: игры, слушание и тест не переходят дальше сами. Дети ставят штампы Zoom на ответ, вы нажимаете «Показать ответ», потом «Стереть и дальше».</div>`;
+const PSTRUCT=[['p1','١',['dialog','words']],['p2','٢',['tree','listen']],['p3','٣',['pairs']],['p4','٤',['sounds','listen2']],['p5','٥',['read','letters']],['p6','نَشَاط',['activity'],{wide:1}],['p7','Игры',['games'],{wide:1,rus:1}],['p8','Тест',['test'],{wide:1,rus:1}]];
+const FIXTABS={games:['Игры',''],test:['Мини-тест','']};
+function femAns(s){return CUR&&CUR.femAns?CUR.femAns(s):s}
+function setLesson(n){
+ CUR=LESSONS[n];LN=n;LD=CUR;A=ASSETS[n]||{};
+ ({TREE_W,TREE_H,TREE,NAME,WHO,TF,PAIRS,LX,BLOB,S1,S1C,S2,S3,S4,SUBW,R1,RCOL,RTEXT,RQ,R4,LET,ACT,ACOL,CONC,GAPS}=CUR);
+ PAGE=CUR.meta.PAGE;
+ PARTS=PSTRUCT.map(([id,c,tabs,o])=>Object.assign({id,c,tabs:tabs.map(k=>[k,...(FIXTABS[k]||CUR.meta.tabs[k])])},o||{}));
+ NOTES=Object.assign({},CUR.NOTES);NOTES.test=NOTES.test||NOTE_TEST;NOTES.games=(NOTES.games||'')+NOTE_STAMP;
+}
+function useLesson(n){if(n===LN)return;setLesson(n);
+ const f1=LX.findIndex(e=>e.part===1),f2=LX.findIndex(e=>e.part===2);
+ T={mode:'who',i:0,ans:null};T6={mode:'m1',i:0,ans:null};X={ex:{1:f1,2:f2},i:0,ans:{},checked:{},mode:'now',hint:false};
+ P={ex:0,card:0,hide:false,sq:-1,cue:0,hint:false};SX={tab:0,g:0,res:[],shown:false,twice:true};
+ RD={tab:0,sel:null,got:{},qi:0,qa:{},shown:{},mode:'ch',cur:0};LT={mode:'hunt',li:0,found:{},q:null,res:[]};
+ AC={sel:null,done:[],halves:null};GS=null;TS=null;wIdx=0;dBlur=false;S.chain=0}
 // ================= icons =================
 const I={
  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
@@ -402,8 +424,7 @@ const LS=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem(k)|
 S.kids=LS('b2kids')||['Ученик 1','Ученик 2','Ученик 3','Ученик 4','Ученик 5'].map(n=>({n,g:'m',t:0}));
 let UI=Object.assign({side:true,fold:false,stamp:false},LS('b2ui')||{});
 function saveKids(){LS('b2kids',S.kids)} function saveUI(){LS('b2ui',UI)}
-const HW=location.hash==='#l5-test';
-if(HW){document.body.classList.add('hw');S.view='test'}
+const HWM=location.hash.match(/^#l(\d+)-test$/);const HW=!!(HWM&&LESSONS[+HWM[1]]);
 
 // ================= audio & helpers =================
 let cur=null;
@@ -413,7 +434,7 @@ function tone(ok){try{actx=actx||new (window.AudioContext||window.webkitAudioCon
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 function shuffleFixed(a,seed){a=a.slice();let s=seed;for(let i=a.length-1;i>0;i--){s=(s*9301+49297)%233280;const j=Math.floor(s/233280*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-const W=k=>L5.words.find(w=>w.k===k);
+const W=k=>LD.words.find(w=>w.k===k);
 const toAr=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const AN=Array.from({length:30},(_,i)=>toAr(i+1));
 const PIC=k=>A[k.startsWith('w_')||k.startsWith('e8')||k.startsWith('b_')||k==='scene'||k==='scene2'?k:'w_'+k];
@@ -423,21 +444,11 @@ document.addEventListener('click',e=>{const t=e.target;if(t.classList&&t.classLi
 $('#lb').onclick=()=>$('#lb').classList.remove('on');
 
 // ================= structure =================
-const PARTS=[
- {id:'p1',c:'١',tabs:[['dialog','Диалог','43'],['words','Слова','43']]},
- {id:'p2',c:'٢',tabs:[['tree','Дерево семьи','44'],['listen','Слушание','45']]},
- {id:'p3',c:'٣',tabs:[['pairs','Говорим в парах','46–47']]},
- {id:'p4',c:'٤',tabs:[['sounds','Звуки ش / س','48'],['listen2','Слушание','49']]},
- {id:'p5',c:'٥',tabs:[['read','Читаем','50–51'],['letters','Буквы','51']]},
- {id:'p6',c:'نَشَاط',wide:1,tabs:[['activity','Игра со страницы 52','52']]},
- {id:'p7',c:'Игры',wide:1,rus:1,tabs:[['games','Игры','']]},
- {id:'p8',c:'Тест',wide:1,rus:1,tabs:[['test','Мини-тест','']]}];
-const PAGE={dialog:'٤٣',words:'٤٣',tree:'٤٤',listen:'٤٥',pairs:'٤٦',sounds:'٤٨',listen2:'٤٩',read:'٥٠',letters:'٥١',activity:'٥٢'};
 function partOf(v){if(v.startsWith('g_'))return PARTS[6];return PARTS.find(p=>p.tabs.some(t=>t[0]===v))}
 function band(){
  if(S.view==='home'){$('#band').innerHTML=`<div class="in"><div class="island"><div class="sand"></div>${PALM}<span class="n">٢</span></div><div><h1>العربية بين يدي أولادنا</h1><div class="rus">Книга 2 · пособие по урокам</div></div><div class="parts"></div><div class="tools"><button class="tb" id="bKids">${I.kids}Дети</button></div></div>`;$('#bKids').onclick=openKids;$('#subtabs').innerHTML='';return}
  const P=partOf(S.view);
- $('#band').innerHTML=`<div class="in"><div class="island"><div class="sand"></div>${PALM}<span class="n">٥</span></div><div><h1>أُسْرَةُ مُحَمَّدٍ</h1><div class="rus">Урок 5 · страницы 43–52</div></div>
+ $('#band').innerHTML=`<div class="in"><div class="island"><div class="sand"></div>${PALM}<span class="n">${CUR.meta.n}</span></div><div><h1>${CUR.meta.t}</h1><div class="rus">${CUR.meta.ru}</div></div>
  <div class="parts">${PARTS.map(p=>`<button class="pc ${p.wide?'wide':''} ${p.rus?'rus':''} ${p===P?'on':''}" data-part="${p.id}">${p.c}</button>`).join('')}</div>
  <div class="tools">${HW?'':`<button class="tb" id="bHome">${I.home}Уроки</button><button class="tb ${UI.stamp?'on':''}" id="bStamp" title="Дети отвечают штампами Zoom, приложение не переходит дальше само">${I.stamp}Штампы</button><button class="tb ${$('#drawer').classList.contains('on')?'on':''}" id="bNotes">${I.note}Учителю</button><button class="tb" id="bKids">${I.kids}Дети</button>`}</div></div>`;
  $$('[data-part]').forEach(b=>b.onclick=()=>{const p=PARTS.find(x=>x.id===b.dataset.part);go(p.tabs[0][0])});
@@ -474,54 +485,46 @@ function wireStamp(onShow,onNext){if(!UI.stamp)return;$('#sbShow').onclick=onSho
 
 // ================= home =================
 function home(){
- $('#view').innerHTML=`<div class="lead" style="align-self:flex-end;text-align:right">Внутри каждого урока всё как в книге: диалог с голосом диктора, слова, слушание, пары, звуки, чтение и игра «نَشَاط». Плюс игры на закрепление и тест. Урок ٥ готов, остальные делаются по тому же образцу.</div>
- <div class="lessons" style="direction:rtl">${BOOK.map(b=>`<button class="lt" style="--c:${b.c}" ${b.ready?'data-open="1"':'disabled'}><div class="top"><span class="n">${b.n}</span>${PALM}</div><div class="t">${b.t}</div><div class="s ${b.ready?'ready':''}">${b.p} · ${b.ready?'готов':'скоро'}</div></button>`).join('')}</div>`;
- $('[data-open]').onclick=()=>go('dialog');
+ $('#view').innerHTML=`<div class="lead" style="align-self:flex-end;text-align:right">Внутри каждого урока всё как в книге: диалог с голосом диктора, слова, слушание, пары, звуки, чтение и игра «نَشَاط». Плюс игры на закрепление и тест. Готовы уроки ${BOOK.filter(b=>b.ready).map(b=>b.n).join(' и ')}, остальные делаются по тому же образцу.</div>
+ <div class="lessons" style="direction:rtl">${BOOK.map((b,i)=>`<button class="lt" style="--c:${b.c}" ${b.ready?`data-open="${i+1}"`:'disabled'}><div class="top"><span class="n">${b.n}</span>${PALM}</div><div class="t">${b.t}</div><div class="s ${b.ready?'ready':''}">${b.p} · ${b.ready?'готов':'скоро'}</div></button>`).join('')}</div>`;
+ $$('[data-open]').forEach(b=>b.onclick=()=>{useLesson(+b.dataset.open);go('dialog')});
 }
 
 // ================= dialogue =================
 let dBlur=false,seqOn=false,rep=0;
 function dialog(){
  $('#view').innerHTML=`<div class="hrow">${LAB('١','أُنْظُرْ وَاسْتَمِعْ وَأَعِدْ')}<button class="btn main" id="dAll">${I.play}Весь диалог</button><div class="seg"><button id="dT" class="${dBlur?'':'on'}">С текстом</button><button id="dB" class="${dBlur?'on':''}">Только слушать</button></div><button class="btn ghost" id="dRep"></button></div>
- <div class="dlg"><div class="paper lines ${dBlur?'blur':''}">${L5.dialog.map((d,i)=>`<button class="ln ${i%2?'b':'a'}" data-l="${i}"><span class="who">${d[0]}:</span><span class="tx">${d[1]}</span><span class="pl">${I.play}</span></button>`).join('')}</div>
- <div class="pic"><img class="zoom" src="${A.scene}" alt="Мухаммад с дедушкой и братом встречает Фадля на вокзале"><span class="hintz">Нажмите, чтобы увеличить</span></div></div>`;
+ <div class="dlg"><div class="paper lines ${dBlur?'blur':''}">${LD.dialog.map((d,i)=>`<button class="ln ${i%2?'b':'a'}" data-l="${i}"><span class="who">${d[0]}:</span><span class="tx">${d[1]}</span><span class="pl">${I.play}</span></button>`).join('')}</div>
+ <div class="pic"><img class="zoom" src="${A.scene}" alt="${CUR.meta.sceneAlt}"><span class="hintz">Нажмите, чтобы увеличить</span></div></div>`;
  $$('.ln').forEach(b=>b.onclick=()=>{seqOn=false;mark(+b.dataset.l);play('d_'+b.dataset.l)});
  $('#dT').onclick=()=>{dBlur=false;dialog()};$('#dB').onclick=()=>{dBlur=true;dialog()};
  $('#dAll').onclick=()=>seq(0);
  const rv=()=>$('#dRep').textContent='Пауза для повтора: '+(rep?rep+' сек':'нет');rv();$('#dRep').onclick=()=>{rep=rep?0:3;rv()};
 }
-function mark(i){$$('.ln').forEach((e,j)=>e.classList.toggle('cur',j===i))}
-function seq(i){seqOn=true;if(i>=L5.dialog.length||S.view!=='dialog'){mark(-1);seqOn=false;return}mark(i);const a=play('d_'+i);if(a)a.onended=()=>{if(seqOn)setTimeout(()=>seqOn&&seq(i+1),rep?rep*1000:450)}}
+function mark(i){$$('.ln').forEach((e,j)=>e.classList.toggle('cur',j===i));if(CUR.dialogScene&&i>=0){const im=$('.dlg .pic img');if(im)im.src=A[CUR.dialogScene[i]]}}
+function seq(i){seqOn=true;if(i>=LD.dialog.length||S.view!=='dialog'){mark(-1);seqOn=false;return}mark(i);const a=play('d_'+i);if(a)a.onended=()=>{if(seqOn)setTimeout(()=>seqOn&&seq(i+1),rep?rep*1000:450)}}
 
 // ================= words =================
 let wHide=false,wOne=false,wIdx=0;
 function words(){
  const head=`<div class="hrow">${LAB('٢','أُنْظُرْ وَاسْتَمِعْ وَأَعِدْ')}<div class="seg"><button id="wg" class="${wOne?'':'on'}">Все карточки</button><button id="wo" class="${wOne?'on':''}">По одной</button></div><div class="seg"><button id="ws" class="${wHide?'':'on'}">Слова видны</button><button id="wh" class="${wHide?'on':''}">Скрыть слова</button></div><button class="btn" id="wAll">${I.play}Прослушать все</button></div>`;
- if(!wOne){$('#view').innerHTML=head+`<div class="frame cards">${L5.words.map((w,i)=>`<button class="wc ${wHide?'hideword':''} ${['yusalli','yadhhab'].includes(w.k)?'blue':''}" data-w="${i}"><img src="${A['w_'+w.k]}" alt="${w.ru}"><span class="w ar">${w.w}</span></button>`).join('')}<span class="rep">${IC('rep')}</span></div>`;
-  $$('.wc').forEach(b=>b.onclick=()=>{b.classList.remove('hideword');play('a_'+L5.words[+b.dataset.w].k,b)});}
- else{const w=L5.words[wIdx];$('#view').innerHTML=head+`<div class="big"><button class="arrow" id="wr" aria-label="Дальше">${I.right}</button><div class="frame card"><img class="zoom" src="${A['w_'+w.k]}" alt="${w.ru}"><button class="w ar" id="wcw" style="${wHide?'color:transparent;background:var(--uL);border-radius:12px':''}">${w.w}</button><span style="color:var(--mut);font-weight:800">${wIdx+1} / ${L5.words.length}</span></div><button class="arrow" id="wl" aria-label="Назад">${I.left}</button></div>`;
-  $('#wl').onclick=()=>{wIdx=(wIdx+11)%12;words();play('a_'+L5.words[wIdx].k)};$('#wr').onclick=()=>{wIdx=(wIdx+1)%12;words();play('a_'+L5.words[wIdx].k)};
+ if(!wOne){$('#view').innerHTML=head+`<div class="frame cards">${LD.words.map((w,i)=>`<button class="wc ${wHide?'hideword':''} ${(CUR.blueWords||[]).includes(w.k)?'blue':''}" data-w="${i}"><img src="${A['w_'+w.k]}" alt="${w.ru}"><span class="w ar">${w.w}</span></button>`).join('')}<span class="rep">${IC('rep')}</span></div>`;
+  $$('.wc').forEach(b=>b.onclick=()=>{b.classList.remove('hideword');play('a_'+LD.words[+b.dataset.w].k,b)});}
+ else{const w=LD.words[wIdx];$('#view').innerHTML=head+`<div class="big"><button class="arrow" id="wr" aria-label="Дальше">${I.right}</button><div class="frame card"><img class="zoom" src="${A['w_'+w.k]}" alt="${w.ru}"><button class="w ar" id="wcw" style="${wHide?'color:transparent;background:var(--uL);border-radius:12px':''}">${w.w}</button><span style="color:var(--mut);font-weight:800">${wIdx+1} / ${LD.words.length}</span></div><button class="arrow" id="wl" aria-label="Назад">${I.left}</button></div>`;
+  $('#wl').onclick=()=>{wIdx=(wIdx+LD.words.length-1)%LD.words.length;words();play('a_'+LD.words[wIdx].k)};$('#wr').onclick=()=>{wIdx=(wIdx+1)%LD.words.length;words();play('a_'+LD.words[wIdx].k)};
   $('#wcw').onclick=()=>{$('#wcw').style.cssText='';play('a_'+w.k)};}
  $('#wg').onclick=()=>{wOne=false;words()};$('#wo').onclick=()=>{wOne=true;words()};$('#ws').onclick=()=>{wHide=false;words()};$('#wh').onclick=()=>{wHide=true;words()};
- $('#wAll').onclick=()=>{let i=0;const nx=()=>{if(i>=12||S.view!=='words')return;const el=document.querySelector(`[data-w="${i}"]`);const a=play('a_'+L5.words[i].k,el);i++;if(a)a.onended=()=>{el&&el.classList.remove('playing');setTimeout(nx,700)}};nx()};
+ $('#wAll').onclick=()=>{let i=0;const nx=()=>{if(i>=LD.words.length||S.view!=='words')return;const el=document.querySelector(`[data-w="${i}"]`);const a=play('a_'+LD.words[i].k,el);i++;if(a)a.onended=()=>{el&&el.classList.remove('playing');setTimeout(nx,700)}};nx()};
 }
 document.addEventListener('keydown',e=>{if(S.view==='words'&&wOne){if(e.key==='ArrowRight')$('#wr').click();if(e.key==='ArrowLeft')$('#wl').click()}});
 
 // ================= tree (spotlight) =================
 let T={mode:'who',i:0,ans:null};
-const TF=[
- {spk:'basim',pt:'khalid',line:'أَنَا بَاسِمٌ. هَذَا عَمِّي خَالِدٌ.',ok:false,fix:'لَا! هَذَا خَالِي خَالِدٌ.'},
- {spk:'isa',pt:'khalid',line:'أَنَا عِيسَى. هَذَا عَمِّي خَالِدٌ.',ok:true,fix:'نَعَمْ! هَذَا عَمِّي خَالِدٌ.'},
- {spk:'muhammad',pt:'mutie',line:'أَنَا مُحَمَّدٌ. هَذَا جَدِّي مُطِيعٌ.',ok:true,fix:'نَعَمْ! هَذَا جَدِّي.'},
- {spk:'muhammad',pt:'basim',line:'أَنَا مُحَمَّدٌ. هَذَا أَخِي بَاسِمٌ.',ok:false,fix:'لَا! هَذَا أَخِي عِيسَى.'},
- {spk:'nuha',pt:'basim',line:'أَنَا نُهَى. هَذَا أَخِي بَاسِمٌ.',ok:true,fix:'نَعَمْ! هَذَا أَخِي.'},
- {spk:'nuha',pt:'khalid',line:'أَنَا نُهَى. هَذَا عَمِّي خَالِدٌ.',ok:false,fix:'لَا! هَذَا خَالِي خَالِدٌ.'},
- {spk:'khawla',pt:'khalid',line:'أَنَا خَوْلَةُ. هَذَا عَمِّي خَالِدٌ.',ok:true,fix:'نَعَمْ! هَذَا عَمِّي.'},
- {spk:'basim',pt:'mutie',line:'أَنَا بَاسِمٌ. هَذَا جَدِّي مُطِيعٌ.',ok:true,fix:'نَعَمْ! هَذَا جَدِّي.'}];
 const pct=(b)=>`left:${b[0]/TREE_W*100}%;top:${b[1]/TREE_H*100}%;width:${(b[2]-b[0])/TREE_W*100}%;height:${(b[3]-b[1])/TREE_H*100}%`;
 function lift(k,cls,tag){const b=TREE[k];const wB=b[2]-b[0],hB=b[3]-b[1];
  return `<div class="lift ${cls||''}" style="${pct(b)}"><img src="${A.b_tree}" style="width:${TREE_W/wB*100}%;height:${TREE_H/hB*100}%;left:${-b[0]/wB*100}%;top:${-b[1]/hB*100}%"></div>`+(tag?`<div class="ttag" style="left:${(b[0]+b[2])/2/TREE_W*100}%;top:${b[1]/TREE_H*100}%">${tag}</div>`:'')}
-function tree(){
+function tree(){if(!CUR.TREE)return treePics();treeFamily()}
+function treeFamily(){
  const list=T.mode==='who'?WHO:TF;const q=list[T.i];let hs='';
  if(T.mode==='who'){
   for(const k in TREE)if(k!==q.spk&&!T.ans)hs+=`<button class="hot" data-p="${k}" aria-label="${NAME[k]}" style="${pct(TREE[k])}"></button>`;
@@ -538,14 +541,22 @@ function tree(){
  else{const h=v=>{tone(v===q.ok);T.ans=1;tree()};$('#ty').onclick=()=>h(true);$('#tno').onclick=()=>h(false)}
 }
 
+
+// часть ٢ без дерева семьи (урок ٦): «Соедини» стр. ٥٤ и «Правда или нет?» по сцене
+let T6={mode:'m1',i:0,ans:null};
+function treePics(){
+ const M=CUR.MATCH1.items,TFL=CUR.TFS;let body='';const list=T6.mode==='m1'?M:TFL;const q=list[T6.i];
+ if(T6.mode==='m1'){const [w,a,b,key]=q;
+  body=`<div class="say"><button class="bubble q" id="mw" style="cursor:pointer">${W(w).w}</button></div><div class="opts n2">${[['أ',a,'a'],['ب',b,'b']].map(([l,k,s])=>`<button class="op ${T6.ans===s?(s===key?'good':'bad'):(T6.ans&&s===key?'good':'')}" data-m="${s}"><span class="tag">${l}</span><img src="${PIC(k)}" alt=""></button>`).join('')}</div>`}
+ else body=`<div class="say"><div class="bubble q">${q.line}</div>${T6.ans?`<div class="bubble r">${q.fix}</div>`:`<div class="tf"><button id="ty" aria-label="Правда">👍</button><button id="tno" aria-label="Нет">👎</button></div>`}</div><img class="zoom" src="${A[q.img]}" alt="" style="max-height:calc(100vh - 430px);max-width:100%;border-radius:18px;align-self:center">`;
+ $('#view').innerHTML=`<div class="hrow">${LAB(CUR.MATCH1.n,'صِلْ')}<div class="seg"><button id="tw" class="${T6.mode==='m1'?'on':''}">Соедини · стр. ${CUR.MATCH1.page}</button><button id="tt" class="${T6.mode==='tf'?'on':''}">Правда или нет?</button></div><span style="font-weight:900;color:var(--mut)">${T6.i+1} / ${list.length}</span><button class="btn main" id="tn">${I.left}Дальше</button><button class="btn ghost" id="tp" aria-label="Назад">${I.right}</button></div><div style="display:flex;flex-direction:column;gap:16px;align-items:center;padding-top:10px">${body}</div>`;
+ $('#tw').onclick=()=>{T6={mode:'m1',i:0,ans:null};treePics()};$('#tt').onclick=()=>{T6={mode:'tf',i:0,ans:null};treePics()};
+ $('#tn').onclick=()=>{T6.i=(T6.i+1)%list.length;T6.ans=null;treePics();if(T6.mode==='m1')play('a_'+list[T6.i][0])};$('#tp').onclick=()=>{T6.i=(T6.i+list.length-1)%list.length;T6.ans=null;treePics()};
+ if(T6.mode==='m1'){$('#mw').onclick=()=>play('a_'+q[0]);$$('[data-m]').forEach(b=>b.onclick=()=>{if(T6.ans)return;T6.ans=b.dataset.m;tone(T6.ans===q[3]);treePics()})}
+ else if(!T6.ans){const h=v=>{tone(v===q.ok);T6.ans=1;treePics()};$('#ty').onclick=()=>h(true);$('#tno').onclick=()=>h(false)}
+}
+
 // ================= listening (book style) =================
-const LX=[
- {id:'x3',n:'٣',part:1,title:'اِسْتَمِعْ، وَضَعْ (✓)',type:'ab',items:[['yusalli','bayt','b'],['yawm','asif','b'],['yusalli','bayt','a'],['fi','khal','b'],['sadiq','fi','b'],['yawm','shafak','a']]},
- {id:'x4',n:'٤',part:1,title:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ',type:'pic',pics:[['أ','asif'],['ب','fi'],['ت','bayt'],['ث','yusalli'],['ج','khal'],['ح','shafak']],key:['khal','yusalli','asif','fi','bayt','shafak']},
- {id:'x5',n:'٥',part:1,title:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ',type:'word',key:['amm','jadd','akh','sadiq','yadhhab','yawm','yusalli','fi','bayt','khal','asif','shafak']},
- {id:'x7',n:'٧',part:2,title:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ',type:'pic',pics:[['أ','w_sadiq'],['ب','w_amm'],['ت','w_jadd'],['ث','w_khal'],['ج','w_akh']],key:null,count:5},
- {id:'x8',n:'٨',part:2,title:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ',type:'pic',pics:[['أ','e8a'],['ب','e8b'],['ت','e8c'],['ث','e8d']],key:null,count:4}];
-const BLOB=[['khal','#2c66b8'],['yawm','#e9a23b'],['fi','#7d3c98'],['jadd','#e9a23b'],['yusalli','#e9a23b'],['sadiq','#2c66b8'],['bayt','#3cae4a'],['akh','#3cae4a'],['asif','#e85c8a'],['amm','#e85c8a'],['shafak','#2c66b8'],['yadhhab','#e85c8a']];
 let X={ex:{1:0,2:3},i:0,ans:{},checked:{},mode:'now',hint:false};
 function listen(part){
  const list=LX.filter(e=>e.part===part);let ei=X.ex[part];
@@ -586,26 +597,22 @@ function listen(part){
 }
 
 // ================= sounds =================
-const S1=['شَفِيقٌ','شَرِيفٌ','شَاكِرٌ','شَمْسٌ','شَمْسُ الدِّينِ','الشَّيْمَاءُ','شَرِيفَةُ','شَعْبَانُ'];
-const S1C=['#f3f6cf','#e3f4d0','#f8e5cf','#eef5cc','#fde3c8','#d7ecfa','#fde3c8','#f3f6cf'];
-const S2=[['شَادَ','سَادَ'],['شَالَ','سَالَ'],['شِعْر','سِعْر'],['شَلَّ','سَلَّ'],['شَمَّ','سَمَّ'],['شِبَاع','سِبَاع'],['أَشْعَار','أَسْعَار'],['نَشْر','نَسْر'],['كَشَرَ','كَسَرَ'],['كَشَفَ','كَسَفَ'],['بَشَر','بَسَر'],['حَشَرَ','حَسَرَ'],['فِرَاش','فِرَاس'],['فَرَش','فَرَس'],['نَكَش','نَكَس'],['عَرِيش','عَرِيس'],['تَعْرِيش','تَعْرِيس'],['عَشْعَش','عَسْعَس']];
 // ayat: [text with <mark> on the word with ش, surah name, ayah number]
-const S3=[['مِنْ <mark>شَرِّ</mark> مَا خَلَقَ','الفلق',2],['لِإِيلَافِ <mark>قُرَيْشٍ</mark>','قريش',1],['إِيلَافِهِمْ رِحْلَةَ <mark>الشِّتَاءِ</mark> وَالصَّيْفِ','قريش',2],['أَلَمْ <mark>نَشْرَحْ</mark> لَكَ صَدْرَكَ','الشرح',1],['وَاللَّيْلِ إِذَا <mark>يَغْشَى</mark>','الليل',1],['<mark>وَالشَّمْسِ</mark> وَضُحَاهَا','الشمس',1],['وَالْفَجْرِ ﴿١﴾ وَلَيَالٍ <mark>عَشْرٍ</mark>','الفجر',2],['<mark>وَالشَّفْعِ</mark> وَالْوَتْرِ','الفجر',3],['<mark>وَشَاهِدٍ</mark> <mark>وَمَشْهُودٍ</mark>','البروج',3],['إِذَا السَّمَاءُ <mark>انْشَقَّتْ</mark>','الانشقاق',1]];
-const S4=[1,0,1,0,0,1,0,1,1,0];
 let SX={tab:0,g:0,res:[],shown:false,twice:true};
 function sounds(){
- const tabs=['Имена с ش','Пары ش / س','Аяты','Подними руку'];let body='';
- const red=w=>w.replace(/(ش[ً-ْ]*)/g,'<span style="color:var(--no)">$1</span>');
+ const SH=CUR.meta.snd[0],SS=CUR.meta.snd[1];
+ const tabs=['Имена с '+SH,'Пары '+SH+' / '+SS,'Аяты','Подними руку'];let body='';
+ const red=w=>w.replace(new RegExp('('+SH+'[ً-ْ]*)','g'),'<span style="color:var(--no)">$1</span>');
  if(SX.tab===0)body=`<div class="hrow">${LAB('١','اِسْتَمِعْ وَرَدِّدْ')}<button class="btn" id="sAll">${I.play}Все имена</button></div><div class="tags">${S1.map((w,i)=>`<button class="htag" data-p="s1_${i}" style="background:${S1C[i]}"><i class="r"></i><i class="l"></i>${red(w)}</button>`).join('')}</div>`;
- if(SX.tab===1)body=`<div class="hrow">${LAB('٢','اِسْتَمِعْ وَرَدِّدْ')}</div><div style="height:30px"></div><div class="towers">${[0,1,2].map(c=>`<div class="tower"><div class="flag"></div><div class="roof"></div><div class="hd"><span style="color:var(--no)">ش</span><span style="color:var(--blue)">س</span></div>${S2.slice(c*6,c*6+6).map((p,j)=>{const i=c*6+j;return `<div class="pr"><button class="tile" data-p="s2_${i*2}">${p[0]}</button><button class="tile" data-p="s2_${i*2+1}">${p[1]}</button></div>`}).join('')}</div>`).join('')}</div>`;
+ if(SX.tab===1)body=`<div class="hrow">${LAB('٢','اِسْتَمِعْ وَرَدِّدْ')}</div><div style="height:30px"></div><div class="towers">${[0,1,2].map(c=>`<div class="tower"><div class="flag"></div><div class="roof"></div><div class="hd"><span style="color:var(--no)">${SH}</span><span style="color:var(--blue)">${SS}</span></div>${S2.slice(c*6,c*6+6).map((p,j)=>{const i=c*6+j;return `<div class="pr"><button class="tile" data-p="s2_${i*2}">${p[0]}</button><button class="tile" data-p="s2_${i*2+1}">${p[1]}</button></div>`}).join('')}</div>`).join('')}</div>`;
  if(SX.tab===2)body=`<div class="hrow">${LAB('٣','اِسْتَمِعْ وَرَدِّدْ')}<button class="btn" id="ayAll">${I.play}Все аяты</button><div class="seg"><button id="ay1" class="${SX.twice?'':'on'}">Один раз</button><button id="ay2" class="${SX.twice?'on':''}">Дважды</button></div></div>
   <div class="mus">${S3.map(([t,s,n],i)=>`<button class="ay" data-ay="${i}"><span class="t">${t} ﴿${toAr(n)}﴾</span><span style="font:700 13px var(--fa);color:#a08040;min-width:56px">${s}</span><span class="pl">${I.play}</span></button>`).join('')}</div>`;
  if(SX.tab===3){const i=SX.g;
   if(i>=S4.length){const ok=SX.res.filter(Boolean).length;body=`<div class="stage"><div class="done"><div class="big5">${ok} / ${S4.length}</div><button class="btn main" id="sAgain">Ещё раз</button></div></div>`}
-  else body=`<div class="hrow">${LAB('٤','اِسْتَمِعْ، وَارْفَعْ يَدَكَ مَعَ (ش)')}</div><div class="stage"><div class="row" style="justify-content:center;gap:10px">${S4.map((v,j)=>`<span style="width:18px;height:18px;border-radius:50%;background:${j<i?(SX.res[j]?'var(--ok)':'var(--no)'):'#efdfe7'}"></span>`).join('')}</div>
+  else body=`<div class="hrow">${LAB('٤','اِسْتَمِعْ، وَارْفَعْ يَدَكَ مَعَ ('+SH+')')}</div><div class="stage"><div class="row" style="justify-content:center;gap:10px">${S4.map((v,j)=>`<span style="width:18px;height:18px;border-radius:50%;background:${j<i?(SX.res[j]?'var(--ok)':'var(--no)'):'#efdfe7'}"></span>`).join('')}</div>
    <button class="speaker pulse" id="sSpk" aria-label="Повторить">${I.spk}</button>
-   ${SX.shown?`<div class="syl" style="color:${S4[i]?'var(--no)':'var(--blue)'}">${S4[i]?'ش':'س'}</div><div class="lead">${SX.res[i]?'Верно!':'Это был звук '+(S4[i]?'ش':'س')}</div><button class="btn main" id="sNext">${I.left}Дальше</button>`
-   :`<div class="tf"><button id="sYes" aria-label="Это ш" style="font:700 52px var(--fa);color:var(--no);width:170px">ش ✋</button><button id="sNo" aria-label="Это с" style="font:700 52px var(--fa);color:var(--blue);width:170px">س</button></div>`}</div>`}
+   ${SX.shown?`<div class="syl" style="color:${S4[i]?'var(--no)':'var(--blue)'}">${S4[i]?SH:SS}</div><div class="lead">${SX.res[i]?'Верно!':'Это был звук '+(S4[i]?SH:SS)}</div><button class="btn main" id="sNext">${I.left}Дальше</button>`
+   :`<div class="tf"><button id="sYes" aria-label="Это ш" style="font:700 52px var(--fa);color:var(--no);width:170px">${SH} ✋</button><button id="sNo" aria-label="Это с" style="font:700 52px var(--fa);color:var(--blue);width:170px">${SS}</button></div>`}</div>`}
  $('#view').innerHTML=`<div class="row"><div class="seg">${tabs.map((t,i)=>`<button data-st="${i}" class="${i===SX.tab?'on':''}">${t}</button>`).join('')}</div></div>`+body;
  $$('[data-st]').forEach(b=>b.onclick=()=>{SX=Object.assign(SX,{tab:+b.dataset.st,g:0,res:[],shown:false});sounds();if(SX.tab===3)setTimeout(()=>play('s4_0'),300)});
  $$('[data-p]').forEach(b=>b.onclick=()=>play(b.dataset.p,b));
@@ -623,7 +630,6 @@ function sounds(){
 // ================= pairs =================
 let P={ex:0,card:0,hide:false,sq:-1,cue:0,hint:false};
 function pairNow(){const n=Math.max(1,S.kids.length);return{KA:S.kids[S.chain%n],KB:S.kids[(S.chain+1)%n],ia:S.chain%n,ib:(S.chain+1)%n}}
-const SUBW={w_amm:'عَمّ',w_khal:'خَال',w_jadd:'جَدّ',b_zamil:'زَمِيل',b_walid:'وَالِد'};
 function pairs(){
  const ex=PAIRS[P.ex];const {KA,KB,ia,ib}=pairNow();const g=KB.g==='f'?1:0;let body,chips='';
  if(ex.items[0].surprise){
@@ -637,7 +643,7 @@ function pairs(){
   if(ex.items.length>1)chips=`<div class="chips">${ex.items.map((x,j)=>`<button class="chip ${j===P.card%ex.items.length?'on':''}" data-chip="${j}"><img src="${PIC(x.img)}" alt="">${SUBW[x.img]||''}</button>`).join('')}</div>`;
  }
  const lt=ex.items[0].surprise?'تَبَادَلِ الْحِوَارَ مَعَ زَمِيلِكَ':'تَبَادَلِ السُّؤَالَ وَالْجَوَابَ مَعَ زَمِيلِكَ';
- $('#view').innerHTML=`<div class="hrow">${LAB(['١','٢','٣','٤'][P.ex],lt)}<div class="seg">${PAIRS.map((p,i)=>`<button data-ex="${i}" class="${i===P.ex?'on':''}">Упр. ${['١','٢','٣','٤'][i]}</button>`).join('')}</div></div>
+ $('#view').innerHTML=`<div class="hrow">${LAB(AN[P.ex],lt)}<div class="seg">${PAIRS.map((p,i)=>`<button data-ex="${i}" class="${i===P.ex?'on':''}">Упр. ${AN[i]}</button>`).join('')}</div></div>
  <div class="who2"><span class="nm a">спрашивает: ${KA.n}</span>${I.left.replace('<svg','<svg style="width:24px;height:24px"')}<span class="nm b">отвечает: ${KB.n}</span></div>
  <div style="display:flex;justify-content:flex-end"><div class="frame pairs">${body}<span class="rep">${IC('rep')}</span>${chips}</div></div>
  <div class="row" style="margin-top:14px"><button class="btn go" id="ok">Пара справилась ★</button><button class="btn ghost" id="skip">Следующая пара</button>${ex.items[0].surprise?'':`<button class="btn ghost" id="hide">${P.hide?'Показать текст':'Размыть текст'}</button>`}</div>`;
@@ -652,18 +658,6 @@ function pairs(){
 }
 
 // ================= reading =================
-const R1=[['أَخٌ','akh'],['جَدٌّ','jadd'],['عَمٌّ','amm'],['صَدِيقٌ','sadiq'],['بَيْتٌ','bayt'],['يَذْهَبُ','yadhhab'],['يُصَلِّي','yusalli']];
-const RCOL=['#e85c8a','#8bc34a','#e9a23b','#5aa9e6','#26a69a','#ef6c00','#9b59b6'];
-const RTEXT=[['s1','أَنَا عَلِيٌّ، عُمْرِي أَرْبَعُونَ سَنَةً،'],['s2','وَهَذَا وَالِدِي يَاسِرٌ.'],['s3','وَالِدِي مُعَلِّمٌ.'],['s4','وَالِدَتِي اسْمُهَا عَائِشَةُ،'],['s5','وَوَالِدَتِي مُعَلِّمَةٌ.'],['s6','هَذِهِ سَيَّارَةُ وَالِدِي،'],['s7','وَهَذِهِ حَقِيبَةُ وَالِدَتِي وَقَلَمُهَا.']];
-const RQ=[
- {q:'كَمْ عُمْرُ عَلِيٍّ؟',ch:['أَرْبَعُونَ سَنَةً','عَشْرُ سَنَوَاتٍ','سَبْعُ سَنَوَاتٍ'],a:0,ev:'s1'},
- {q:'مَا اسْمُ وَالِدِ عَلِيٍّ؟',ch:['صَالِحٌ','يَاسِرٌ','خَالِدٌ'],a:1,ev:'s2'},
- {q:'هَلِ اسْمُ وَالِدَةِ عَلِيٍّ سَمِيرَةُ؟',ch:['نَعَمْ','لَا'],a:1,ev:'s4'},
- {q:'هَلْ وَالِدَةُ عَلِيٍّ مُعَلِّمَةٌ؟',ch:['نَعَمْ','لَا'],a:0,ev:'s5'},
- {q:'مَا اسْمُ وَالِدَةِ عَلِيٍّ؟',ch:['مَرْيَمُ','عَائِشَةُ','سَمِيرَةُ'],a:1,ev:'s4'},
- {q:'مَا هُوَ عَمَلُ وَالِدِ عَلِيٍّ؟',ch:['مُعَلِّمٌ','مَرِيضٌ'],a:0,ev:'s3'},
- {q:'هَلْ عِنْدَ وَالِدِ عَلِيٍّ سَيَّارَةٌ؟',ch:['نَعَمْ','لَا'],a:0,ev:'s6'}];
-const R4=[['أ','كَمْ عُمْرُكِ يَا لَطِيفَةُ؟'],['ب','عُمْرِي أَرْبَعُونَ.'],['ت','أَنْتَ مَرِيضٌ الْيَوْمَ.'],['ث','هَذَا صَدِيقِي صَالِحٌ.'],['ج','هَذِهِ وَالِدَتِي مَرْيَمُ.'],['ح','صَلَّيْتُ مَعَ أَخِي.']];
 let RD={tab:0,sel:null,got:{},qi:0,qa:{},shown:{},mode:'ch',cur:0};
 function read(){
  const tabs=['Слово и картинка','Текст и вопросы','Читаем по очереди'];let body='';
@@ -714,25 +708,20 @@ function drawRopes(){const bd=$('#board'),sv=$('#ropes');if(!bd||!sv)return;cons
 window.addEventListener('resize',()=>{if(S.view==='read'&&RD.tab===0)drawRopes()});
 
 // ================= letters =================
-const LET=[
- {l:'د',c:'#f0a12a',w:[['دُعَاء',0],['بَدْر',1],['سَعْد',2]]},
- {l:'ذ',c:'#2a73c9',w:[['ذِكْرَى',0],['مُنْذِر',1],['مُعِيذ',2]]},
- {l:'ر',c:'#1f9a7a',w:[['رَاشِد',0],['فَرِيد',1],['سَمَر',2]]},
- {l:'ز',c:'#7c2a4a',w:[['زَيْد',0],['عُزَيْر',1],['عَزِيز',2]]},
- {l:'و',c:'#6ab43e',w:[['وَحِيد',0],['نَوْف',1],['عَمْرو',2]]}];
 const POS=['в начале','в середине','в конце'];
 let LT={mode:'hunt',li:0,found:{},q:null,res:[]};
 function hlAll(word,letter,col){let out='';for(let i=0;i<word.length;i++){const c=word[i];if(c===letter){let e=i+1;while(e<word.length&&/[ً-ْ]/.test(word[e]))e++;out+=`<span style="color:${col};text-shadow:0 0 1px ${col}">${word.slice(i,e)}</span>`;i=e-1}else out+=c}return out}
 function hlWord(word,letter,pos,col){const idx=[];for(let i=0;i<word.length;i++)if(word[i]===letter)idx.push(i);if(!idx.length)return word;const k=pos===2?idx[idx.length-1]:idx[0];let e=k+1;while(e<word.length&&/[ً-ْ]/.test(word[e]))e++;return word.slice(0,k)+`<span style="color:${col}">${word.slice(k,e)}</span>`+word.slice(e)}
 function letters(){
+ const HD=(CUR.hunt&&CUR.hunt[LET[LT.li].l])||LD.dialog;
  let body='';const L=LET[LT.li];
  const tabs=`<div class="row"><div class="seg"><button id="lmH" class="${LT.mode==='hunt'?'on':''}">Охота за буквой</button><button id="lmA" class="${LT.mode==='arch'?'on':''}">Буквы в словах</button><button id="lmG" class="${LT.mode==='game'?'on':''}">Где буква?</button></div></div>`;
  if(LT.mode==='hunt'){
-  const words=[];L5.dialog.forEach((d,li)=>d[1].split(' ').forEach((w,wi)=>words.push({li,wi,w})));
+  const words=[];HD.forEach((d,li)=>d[1].split(' ').forEach((w,wi)=>words.push({li,wi,w})));
   const tot=words.filter(o=>strip(o.w).includes(L.l)).length;const got=Object.keys(LT.found).filter(k=>k.startsWith(L.l)).length;
   body=`<div class="hrow">${LAB('٥','اِقْرَأْ، وَاكْتُبْ')}<div class="lpick">${LET.map((x,i)=>`<button data-li="${i}" class="${i===LT.li?'on':''}" style="--c:${x.c}">${x.l}</button>`).join('')}</div><span style="font:900 18px var(--fr);color:${L.c}">найдено ${got} из ${tot}</span><button class="btn ghost" id="lAll">Показать все</button></div>
   <div class="lead" style="align-self:flex-end;text-align:right">Найдите в диалоге все слова с буквой ${L.l} и нажмите на них.</div>
-  <div class="sheet hunt">${L5.dialog.map((d,li)=>`<div class="hl"><b>${d[0]}:</b>${d[1].split(' ').map((w,wi)=>{const k=L.l+li+'_'+wi;const f=LT.found[k];return `<button class="hw ${f?'found':''}" data-hw="${li}_${wi}">${f?hlAll(w,L.l,L.c):w}</button>`}).join(' ')}</div>`).join('')}</div>`;
+  <div class="sheet hunt">${HD.map((d,li)=>`<div class="hl"><b>${d[0]}:</b>${d[1].split(' ').map((w,wi)=>{const k=L.l+li+'_'+wi;const f=LT.found[k];return `<button class="hw ${f?'found':''}" data-hw="${li}_${wi}">${f?hlAll(w,L.l,L.c):w}</button>`}).join(' ')}</div>`).join('')}</div>`;
  }
  if(LT.mode==='arch'){
   body=`<div class="hrow">${LAB('٥','اِقْرَأْ، وَاكْتُبْ')}</div><div class="letters">${LET.map((x,li)=>`<div class="arch" style="--c:${x.c}"><div class="top">${x.l}</div>${x.w.map(([w,p],wi)=>`<button data-lw="${li}_${wi}">${LT.show===li+'_'+wi?hlWord(w,x.l,p,x.c):w}</button>`).join('')}</div>`).join('')}</div>
@@ -750,16 +739,14 @@ function letters(){
  $('#view').innerHTML=tabs+body;
  $('#lmH').onclick=()=>{LT.mode='hunt';letters()};$('#lmA').onclick=()=>{LT.mode='arch';letters()};$('#lmG').onclick=()=>{LT.mode='game';LT.q=null;letters()};
  $$('[data-li]').forEach(b=>b.onclick=()=>{LT.li=+b.dataset.li;letters()});
- $$('[data-hw]').forEach(b=>b.onclick=()=>{const [li,wi]=b.dataset.hw.split('_');const w=L5.dialog[li][1].split(' ')[wi];const ok=strip(w).includes(L.l);if(ok){LT.found[L.l+b.dataset.hw]=1;tone(true);letters()}else{tone(false);b.style.background='#fde6e8';setTimeout(()=>b.style.background='',400)}});
- if($('#lAll'))$('#lAll').onclick=()=>{L5.dialog.forEach((d,li)=>d[1].split(' ').forEach((w,wi)=>{if(strip(w).includes(L.l))LT.found[L.l+li+'_'+wi]=1}));letters()};
+ $$('[data-hw]').forEach(b=>b.onclick=()=>{const [li,wi]=b.dataset.hw.split('_');const w=HD[li][1].split(' ')[wi];const ok=strip(w).includes(L.l);if(ok){LT.found[L.l+b.dataset.hw]=1;tone(true);letters()}else{tone(false);b.style.background='#fde6e8';setTimeout(()=>b.style.background='',400)}});
+ if($('#lAll'))$('#lAll').onclick=()=>{HD.forEach((d,li)=>d[1].split(' ').forEach((w,wi)=>{if(strip(w).includes(L.l))LT.found[L.l+li+'_'+wi]=1}));letters()};
  $$('[data-lw]').forEach(b=>b.onclick=()=>{LT.show=b.dataset.lw;letters()});
  if($('#ltAgain'))$('#ltAgain').onclick=()=>{LT.q=null;letters()};
  $$('[data-pos]').forEach(b=>b.onclick=()=>{if(LT.ans!==undefined)return;const [li,wi]=LT.order[LT.i];const ok=+b.dataset.pos===LET[li].w[wi][1];LT.ans=+b.dataset.pos;LT.res.push(ok);tone(ok);letters();setTimeout(()=>{if(S.view!=='letters'||LT.mode!=='game')return;LT.ans=undefined;LT.i++;letters()},1300)});
 }
 
-// ================= activity p.52 =================
-const ACT=[['فِي','الْبَيْتِ','c1'],['هُوَ','مَرِيضٌ',''],['شَفَاكَ','اللهُ',''],['أَيْنَ','عَمُّكَ؟',''],['عَمِّي','ذَهَبَ',''],['هَذَا','أَخِي','c3'],['أَنَا','وَخَالِي','c1']];
-const ACOL=['#c9c33b','#d6337a','#b44fc4','#e04a4a','#7ac143','#27a36b','#e8a93a'];
+// ================= activity (نَشَاط) =================
 let AC={sel:null,done:[],halves:null};
 function activity(){
  if(!AC.halves)AC.halves=shuffle(ACT.flatMap((p,i)=>[[i,0],[i,1]]));
@@ -777,20 +764,20 @@ const GLIST=[
  ['g_find2','Слушай и найди','Звучит слово. Какая из двух картинок?','понимание · легко','ear'],
  ['g_find4','Слушай и найди ×4','То же, но картинок четыре.','понимание','ear'],
  ['g_tf','Правда или нет?','Картинка и слово. Совпадают или нет?','понимание','eye'],
- ['g_conc','Найди пару','Переворачивай карточки и ищи одинаковые фразы (упр. ٢ стр. ٥٠).','чтение · память','read'],
+ ['g_conc','Найди пару','Переворачивай карточки и ищи одинаковые фразы (упр. ٢ стр. {CONC}).','чтение · память','read'],
  ['g_memo','Что пропало?','Запомни карточки. Одна исчезнет.','память · говорение','eye'],
  ['g_build','Собери фразу','Нажимай на слова по порядку и собери реплику из диалога.','чтение · порядок слов','read']];
 function games(){
- $('#view').innerHTML=`<div class="lead" style="align-self:flex-end;text-align:right">Игры на картинках и голосе диктора. В каждой 6–10 ходов, в конце результат. Идут по возрастанию трудности.</div><div class="games">${GLIST.map(([id,t,s,e,ic])=>`<button class="gt" data-g="${id}">${IC(ic)}<em>${e}</em><b>${t}</b><span>${s}</span></button>`).join('')}</div>`;
+ $('#view').innerHTML=`<div class="lead" style="align-self:flex-end;text-align:right">Игры на картинках и голосе диктора. В каждой 6–10 ходов, в конце результат. Идут по возрастанию трудности.</div><div class="games">${GLIST.map(([id,t,s,e,ic])=>(s=s.replace('{CONC}',CUR.meta.concPage),`<button class="gt" data-g="${id}">${IC(ic)}<em>${e}</em><b>${t}</b><span>${s}</span></button>`)).join('')}</div>`;
  $$('[data-g]').forEach(b=>b.onclick=()=>go(b.dataset.g));
 }
 function gHead(title,R){return `<div class="ghead"><button class="btn ghost" id="gBack">${I.left}Все игры</button><b style="font-size:21px">${title}</b><div class="pips" style="margin-left:auto">${Array.from({length:R},(_,i)=>`<i class="${GS.res[i]||''}"></i>`).join('')}</div></div>`}
-const deco=(a,b)=>`<img class="deco r" src="${A['w_'+a]}" alt=""><img class="deco l" src="${A['w_'+b]}" alt="">`;
+const deco=(a,b)=>(CUR.decoMap&&(a=CUR.decoMap[a]||a,b=CUR.decoMap[b]||b),`<img class="deco r" src="${A['w_'+a]}" alt=""><img class="deco l" src="${A['w_'+b]}" alt="">`);
 function wireBack(){$('#gBack').onclick=()=>go('games')}
 function finish(title,R){const ok=GS.res.filter(x=>x==='ok').length;$('#view').innerHTML=gHead(title,R)+`<div class="stage gstage">${deco('jadd','akh')}<div class="done"><div class="big5">${ok} / ${R}</div><div class="ar" style="font-size:44px;color:var(--u);font-weight:700">${ok>=R-1?'مُمْتَازٌ!':ok>=R/2?'أَحْسَنْتَ!':'حَاوِلْ مَرَّةً أُخْرَى'}</div><div class="row" style="justify-content:center"><button class="btn main" id="again">Ещё раз</button><button class="btn ghost" id="gb2">Все игры</button></div></div></div>`;wireBack();$('#again').onclick=()=>{GS=null;GAMES[S.view].run()};$('#gb2').onclick=()=>go('games');if(ok>=R-1)confetti()}
 function answer(ok,el,next,delay=1100){if(GS.lock)return;GS.lock=true;GS.res.push(ok?'ok':'no');tone(ok);if(el)el.classList.add(ok?'good':'bad');const g0=GS,v0=S.view;const go2=()=>{if(GS!==g0||S.view!==v0)return;GS.lock=false;GS.i++;next()};if(UI.stamp){GS.pending=go2}else setTimeout(go2,delay)}
 function findGame(n,title){
- const R=10;if(!GS){const ks=shuffle(L5.words.map(w=>w.k));GS={i:0,res:[],q:Array.from({length:R},(_,i)=>{const t=ks[i%12];return{t,opts:shuffle([t,...shuffle(ks.filter(x=>x!==t)).slice(0,n-1)])}})}}
+ const R=10;if(!GS){const ks=shuffle(LD.words.map(w=>w.k));GS={i:0,res:[],q:Array.from({length:R},(_,i)=>{const t=ks[i%ks.length];return{t,opts:shuffle([t,...shuffle(ks.filter(x=>x!==t)).slice(0,n-1)])}})}}
  if(GS.i>=R)return finish(title,R);
  const q=GS.q[GS.i];const L=['أ','ب','ت','ث'];
  $('#view').innerHTML=gHead(title,R)+`<div class="stage gstage">${deco('sadiq','amm')}<button class="speaker pulse" id="spk" aria-label="Повторить слово">${I.spk}</button><div class="opts n${n}">${q.opts.map((k,j)=>`<button class="op" data-k="${k}"><span class="tag">${L[j]}</span><img src="${A['w_'+k]}" alt=""></button>`).join('')}</div>${stampBar()}</div>`;
@@ -798,12 +785,11 @@ function findGame(n,title){
  $$('.op').forEach(b=>b.onclick=()=>{const ok=b.dataset.k===q.t;if(!ok){const g=document.querySelector(`.op[data-k="${q.t}"]`);setTimeout(()=>g&&g.classList.add('good'),300)}else $$('.op').forEach(o=>o!==b&&o.classList.add('dim'));answer(ok,b,()=>findGame(n,title),1300)});
  wireStamp(()=>{const g=document.querySelector(`.op[data-k="${q.t}"]`);g&&g.classList.add('good')},()=>{if(GS.pending){GS.pending();GS.pending=null}else{GS.res.push('');GS.i++;findGame(n,title)}});
 }
-const CONC=['هَذَا أَخِي','أَنَا مَرِيضٌ','أَيْنَ عَمُّكَ؟','عَمِّي يَذْهَبُ','فِي الْبَيْتِ','أَنَا وَخَالِي','يَوْمٌ'];
 const GAMES={
  g_find2:{run(){findGame(2,'Слушай и найди')}},
  g_find4:{run(){findGame(4,'Слушай и найди ×4')}},
  g_tf:{run(){
-  const R=10;if(!GS){const ks=shuffle(L5.words.map(w=>w.k));GS={i:0,res:[],q:Array.from({length:R},(_,i)=>{const k=ks[i%12];const s=Math.random()<.5?k:shuffle(ks.filter(x=>x!==k))[0];return{img:k,snd:s}})}}
+  const R=10;if(!GS){const ks=shuffle(LD.words.map(w=>w.k));GS={i:0,res:[],q:Array.from({length:R},(_,i)=>{const k=ks[i%ks.length];const s=Math.random()<.5?k:shuffle(ks.filter(x=>x!==k))[0];return{img:k,snd:s}})}}
   if(GS.i>=R)return finish('Правда или нет?',R);
   const q=GS.q[GS.i];const tr=q.img===q.snd;
   $('#view').innerHTML=gHead('Правда или нет?',R)+`<div class="stage gstage">${deco('khal','bayt')}<div class="op tfcard"><img src="${A['w_'+q.img]}" alt=""></div><div class="row" style="justify-content:center;gap:28px"><button class="speaker" id="spk" aria-label="Повторить слово">${I.spk}</button><div class="tf"><button id="yes" aria-label="Правда">👍</button><button id="no" aria-label="Нет">👎</button></div></div><div class="bubble" id="rev" style="visibility:hidden">${W(q.snd).w}</div>${stampBar()}</div>`;
@@ -823,7 +809,7 @@ const GAMES={
  g_memo:{run(){
   const R=6;if(!GS)GS={i:0,res:[],ph:'show'};
   if(GS.i>=R)return finish('Что пропало?',R);
-  if(!GS.set){GS.set=shuffle(L5.words.map(w=>w.k)).slice(0,6);GS.gone=GS.set[Math.random()*6|0];GS.ph='show'}
+  if(!GS.set){GS.set=shuffle(LD.words.map(w=>w.k)).slice(0,6);GS.gone=GS.set[Math.random()*6|0];GS.ph='show'}
   const cards=GS.set.map(k=>{if(GS.ph==='cover')return `<div class="cover"></div>`;if(GS.ph==='ask'&&k===GS.gone)return `<div class="gone">?</div>`;if(GS.ph==='rev'&&k===GS.gone)return `<div class="op good"><img src="${A['w_'+k]}" alt=""></div>`;return `<div class="op ${GS.ph==='rev'?'dim':''}"><img src="${A['w_'+k]}" alt=""></div>`}).join('');
   let ctrl='';
   if(GS.ph==='show')ctrl=`<div class="lead" style="text-align:center">Посмотрите и запомните. Учитель называет все шесть.</div><button class="btn main" id="mGo">Закройте глаза!</button>`;
@@ -836,7 +822,7 @@ const GAMES={
   if(GS.ph==='rev'){const nx=ok=>{GS.res.push(ok?'ok':'no');tone(ok);GS.i++;GS.set=null;GAMES.g_memo.run()};$('#mOk').onclick=()=>nx(true);$('#mNo').onclick=()=>nx(false)}
  }},
  g_build:{run(){
-  const R=L5.build.length;if(!GS)GS={i:0,res:[],order:shuffle(L5.build)};
+  const R=LD.build.length;if(!GS)GS={i:0,res:[],order:shuffle(LD.build)};
   if(GS.i>=R)return finish('Собери фразу',R);
   const [phrase,li]=GS.order[GS.i];const toks=phrase.split(' ');
   if(!GS.t){GS.t=shuffle(toks.map((w,i)=>({w,i})));GS.got=[];GS.err=0}
@@ -854,12 +840,11 @@ const GAMES={
 
 // ================= test (20 questions) =================
 let TS=null;
-const GAPS=[{s:'أَيْنَ ___؟',ch:['عَمُّكَ','عَمِّي'],a:0},{s:'آسِفٌ، أَنَا ___.',ch:['مَرِيضٌ','بَيْتٌ'],a:0},{s:'صَلَّيْتُ فِي ___ أَنَا وَخَالِي.',ch:['الْيَوْمِ','الْبَيْتِ'],a:1},{s:'___ اللهُ.',ch:['شَفَاكَ','ذَهَبَ'],a:0},{s:'عَمِّي ___.',ch:['ذَهَبَ','صَدِيقِي'],a:0},{s:'هَذَا جَدِّي، وَهَذَا ___.',ch:['أَخِي','يَوْمٌ'],a:0},{s:'أَيْنَ أَنْتَ ___؟',ch:['الْيَوْمَ','الْبَيْتَ'],a:0},{s:'السَّلَامُ عَلَيْكُمْ يَا ___.',ch:['صَدِيقِي','آسِفٌ'],a:0},{s:'أَيْنَ ___ الْيَوْمَ؟',ch:['صَلَّيْتَ','صَلَّيْتُ'],a:0}];
 function makeTest(){
- const ks=shuffle(L5.words.map(w=>w.k));const qs=[];const opts=t=>shuffle([t,...shuffle(ks.filter(x=>x!==t)).slice(0,3)]);
- for(let i=0;i<5;i++)qs.push({type:'listen',t:ks[i],opts:opts(ks[i])});
- for(let i=5;i<9;i++)qs.push({type:'readpic',t:ks[i],opts:opts(ks[i])});
- for(let i=9;i<12;i++){const same=i!==10;qs.push({type:'tf',img:ks[i],word:same?ks[i]:ks[(i+4)%12],ok:same})}
+ const ks=shuffle(LD.words.map(w=>w.k));const qs=[];const opts=t=>shuffle([t,...shuffle(ks.filter(x=>x!==t)).slice(0,3)]);
+ for(let i=0;i<5;i++)qs.push({type:'listen',t:ks[i%ks.length],opts:opts(ks[i%ks.length])});
+ for(let i=5;i<9;i++)qs.push({type:'readpic',t:ks[i%ks.length],opts:opts(ks[i%ks.length])});
+ for(let i=9;i<12;i++){const same=i!==10;qs.push({type:'tf',img:ks[i%ks.length],word:same?ks[i%ks.length]:ks[(i+4)%ks.length],ok:same})}
  shuffle(GAPS).slice(0,4).forEach(g=>qs.push({type:'gap',...g,ch:shuffle(g.ch.map((c,j)=>[c,j]))}));
  shuffle(RQ).slice(0,4).forEach(q=>qs.push({type:'readq',...q}));
  return qs}
@@ -867,7 +852,7 @@ function test(){
  if(!TS)TS={q:makeTest(),i:-1,res:[],name:'',kid:-1};
  const R=TS.q.length;
  if(TS.i<0){
-  $('#view').innerHTML=`<div class="stage"><div class="cert"><div class="ar" style="font:40px var(--ft);color:var(--u)">اِخْتِبَارٌ</div><div style="font-weight:900">Мини‑тест · урок ٥ · ${R} вопросов</div>
+  $('#view').innerHTML=`<div class="stage"><div class="cert"><div class="ar" style="font:40px var(--ft);color:var(--u)">اِخْتِبَارٌ</div><div style="font-weight:900">Мини‑тест · урок ${CUR.meta.n} · ${R} вопросов</div>
   ${HW?`<input class="who-in" id="tName" placeholder="Напиши своё имя" aria-label="Имя">`:`<div class="lead">Кто проходит тест? Результат запишется рядом с его звёздами.</div><div class="pick">${S.kids.map((k,i)=>`<button data-kid="${i}">${k.n}</button>`).join('')}<button data-kid="-1">Без имени</button></div>`}
   ${HW?`<button class="btn main" id="tStart">Начать</button>`:''}</div></div>`;
   $$('[data-kid]').forEach(b=>b.onclick=()=>{TS.kid=+b.dataset.kid;TS.name=TS.kid>=0?S.kids[TS.kid].n:'';TS.i=0;test()});
@@ -879,7 +864,7 @@ function test(){
   if(TS.kid>=0&&!TS.saved){S.kids[TS.kid].test=ok+'/'+R;S.kids[TS.kid].t+=st;saveKids();TS.saved=1;foot()}
   $('#view').innerHTML=`<div class="stage"><div class="cert"><div class="ar" style="font:44px var(--ft);color:var(--u)">${st===3?'مُمْتَازٌ!':st===2?'جَيِّدٌ جِدًّا!':st===1?'جَيِّدٌ':'حَاوِلْ مَرَّةً أُخْرَى'}</div>
   <div class="big5" style="font-size:72px">${ok} / ${R}</div><div class="stars">${'★'.repeat(st)}${'☆'.repeat(3-st)}</div>
-  <div style="font-weight:800;color:var(--mut)">Урок ٥ · أُسْرَةُ مُحَمَّدٍ · ${ds}</div>
+  <div style="font-weight:800;color:var(--mut)">Урок ${CUR.meta.n} · ${CUR.meta.t} · ${ds}</div>
   <input class="who-in" id="tName2" placeholder="Напиши своё имя" value="${TS.name}" aria-label="Имя">
   <div class="lead" style="text-align:center">${HW?'Сделай скриншот этого экрана и отправь учителю.':TS.kid>=0?'Результат записан рядом с именем ребёнка.':''}</div>
   <div class="row" style="direction:ltr"><button class="btn main" id="tAgain">Пройти ещё раз</button>${HW?'':`<button class="btn ghost" id="tLink">Ссылка для домашки</button>`}</div></div></div>`;
@@ -890,31 +875,22 @@ function test(){
  if(q.type==='tf'){prompt='Подходит слово к картинке?';body=`<div class="row" style="gap:24px;justify-content:center"><div class="op tfcard"><img src="${A['w_'+q.img]}" alt=""></div><div class="ask">${W(q.word).w}</div></div><div class="tf"><button data-a="${q.ok?1:0}" aria-label="Да">👍</button><button data-a="${q.ok?0:1}" aria-label="Нет">👎</button></div>`}
  if(q.type==='gap'){prompt='Вставь пропущенное слово';body=`<div class="ask">${q.s.replace('___','<span style="color:var(--u)">_____</span>')}</div><div class="chs">${q.ch.map(([c,j])=>`<button data-a="${j===q.a?1:0}">${c}</button>`).join('')}</div>`}
  if(q.type==='readq'){prompt='Прочитай текст и ответь';body=`<div class="sheet text" style="max-width:820px"><div class="holes"><i></i><i></i><i></i></div>${RTEXT.map(r=>r[1]).join(' ')}</div><div class="ask" style="font-size:32px">${q.q}</div><div class="chs">${q.ch.map((c,j)=>`<button data-a="${j===q.a?1:0}">${c}</button>`).join('')}</div>`}
- $('#view').innerHTML=`<div class="row" style="direction:ltr"><b style="font-size:20px">Тест · урок ٥${TS.name?' · '+TS.name:''}</b>${pips}<span style="font-weight:900;color:var(--mut)">${TS.i+1} / ${R}</span></div><div class="stage"><div class="tq"><div class="prompt">${prompt}</div>${body}${stampBar()}</div></div>`;
+ $('#view').innerHTML=`<div class="row" style="direction:ltr"><b style="font-size:20px">Тест · урок ${CUR.meta.n}${TS.name?' · '+TS.name:''}</b>${pips}<span style="font-weight:900;color:var(--mut)">${TS.i+1} / ${R}</span></div><div class="stage"><div class="tq"><div class="prompt">${prompt}</div>${body}${stampBar()}</div></div>`;
  if($('#tSpk')){const s=()=>play('a_'+q.t);$('#tSpk').onclick=s;setTimeout(s,350)}
  const nxt=()=>{TS.lock=false;TS.i++;test()};
  $$('[data-a]').forEach(b=>b.onclick=()=>{if(TS.lock)return;TS.lock=true;const ok=b.dataset.a==='1';tone(ok);b.classList.add(ok?'good':'bad');if(!ok){const g=document.querySelector('[data-a="1"]');setTimeout(()=>g&&g.classList.add('good'),300)}TS.res.push(ok);const t0=TS;if(!UI.stamp)setTimeout(()=>{if(TS!==t0||S.view!=='test')return;nxt()},1300)});
  wireStamp(()=>{const g=document.querySelector('[data-a="1"]');g&&g.classList.add('good')},()=>{if(TS.res.length<=TS.i)TS.res.push(null);nxt()});
 }
-function hwLink(){$('#hwUrl').value=location.href.split('#')[0]+'#l5-test';$('#hwModal').classList.add('on')}
+function hwLink(){$('#hwUrl').value=location.href.split('#')[0]+'#l'+LN+'-test';$('#hwN').textContent=CUR.meta.n;$('#hwModal').classList.add('on')}
 $('#hwClose').onclick=()=>$('#hwModal').classList.remove('on');
 $('#hwCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('#hwUrl').value);$('#hwCopy').textContent='Скопировано ✓'}catch(e){$('#hwUrl').select();$('#hwCopy').textContent='Выделено, нажмите Ctrl+C'}};
 
 // ================= notes =================
-Object.assign(NOTES,{
- tree:`<h4>Дерево семьи · стр. 44 (7 мин)</h4><div class="n">Герой, от имени которого вы говорите, поднят и подписан «أَنَا». Скажите фразу на экране два раза. <span class="p">3 сек</span> Дети показывают пальцами, кликают или ставят штамп.</div><div class="n">Главная находка: <span class="ar">خَالِد</span> для <span class="ar">عِيسَى</span> это <span class="ar">عَمّ</span>, а для <span class="ar">بَاسِم</span> это <span class="ar">خَال</span>.</div><div class="n">На этой картинке подписаны и другие родственники (<span class="ar">جَدَّة، حَفِيد، سِبْط</span>…) — это дерево из урока ١, вслух эти слова не используем.</div>`,
- listen:`<h4>Слушание</h4><div class="n">Звук — запись издателя: номер и слово. Ребёнок нажимает на картинку или слово, и номер «вписывается» в квадратик, как в книге.</div><div class="n">«Проверять сразу» — цвет квадратика сразу показывает, верно ли. «Проверить в конце» — сначала всё заполняют, потом кнопка «Проверить».</div><div class="n">В упр. ٧ и ٨ ключа нет: ответ проверяете на слух.</div>`,
- pairs:`<h4>Пары по цепочке</h4><div class="n">Сначала модель: вы читаете обе роли два раза.</div><div class="n">Под рамкой — слова для подстановки с картинками, как внизу страницы книги. Нажмите на слово, и вопрос с ответом поменяются.</div><div class="n">Упр. ٤: вопрос вытягивается вместе с картинкой. Ребёнок отвечает по картинке; «Показать ответ» — только если застрял.</div><div class="n">«Пара справилась» даёт обоим звезду.</div>`,
- sounds:`<h4>Звуки ش и س · стр. 48</h4><div class="n">Имена: нажимайте по одному, дети повторяют; «Все имена» — с паузой для повтора.</div><div class="n">Пары: в каждой сначала ش, потом س.</div><div class="n">Аяты: «Дважды» — каждый аят звучит два раза с паузой, чтобы дети успели повторить. Слово со звуком ش подсвечено.</div><div class="n">«Подними руку»: после ответа показывается, какой звук прозвучал.</div>`,
- read:`<h4>Чтение · стр. 50–51</h4><div class="n">Упр. ١: слово → картинка, протягивается «верёвочка».</div><div class="n">Упр. ٣: сначала вы читаете текст вслух два раза. Режим «С вариантами» — дети выбирают ответ; «Устно» — отвечают голосом, вы открываете ответ кнопкой. В тексте подсвечивается место ответа. Слова вне банка: <span class="ar">عَمَل، عِنْد، اسْمُهَا</span> — показать жестом.</div><div class="n">Упр. ٤: «Читаем по очереди».</div>`,
- letters:`<h4>Буквы · стр. 51</h4><div class="n">«Охота за буквой»: выберите букву, дети находят в диалоге все слова с ней. «Буквы в словах» и «Где буква?» — по словам со страницы книги.</div>`,
- activity:`<h4>نَشَاط · стр. 52</h4><div class="n">Цели видны сверху бледно — дети собирают их из слов снизу. 3–5 минут как разминка в чтении.</div>`,
- test:`<h4>Тест</h4><div class="n">${'20'} вопросов: слушание, чтение, правда/нет, пропущенное слово и 4 вопроса по тексту. Каждый раз перемешиваются.</div><div class="n">Перед тестом выберите ребёнка: результат запишется рядом с его звёздами. Для домашки — «Ссылка для домашки».</div>`,
- games:(NOTES.games||'')+`<h4>Режим «Штампы»</h4><div class="n">Кнопка «Штампы» в шапке: игры, слушание и тест не переходят дальше сами. Дети ставят штампы Zoom на ответ, вы нажимаете «Показать ответ», потом «Стереть и дальше».</div>`});
 
 // ================= fx =================
 function confetti(){const c=$('#fx'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const cols=['#b84773','#f5b800','#3cae4a','#e9672e','#2c66b8'];const Pp=Array.from({length:150},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,v:2+Math.random()*4,r:4+Math.random()*6,c:cols[Math.random()*5|0],a:Math.random()*6}));let n=0;(function f(){x.clearRect(0,0,c.width,c.height);Pp.forEach(p=>{p.y+=p.v;p.a+=.1;x.fillStyle=p.c;x.save();x.translate(p.x+Math.sin(p.a)*8,p.y);x.rotate(p.a);x.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6);x.restore()});if(++n<200)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
 
+useLesson(HW?+HWM[1]:5);if(HW){document.body.classList.add('hw');S.view='test'}
 render();
 </script>
 </body>

@@ -913,7 +913,7 @@ function test(){
  if(!TS){const q=makeTest();TS={q,base:q.length,i:-1,res:[],name:'',kid:-1}}
  const R=TS.base;
  if(TS.i<0){
-  $('#view').innerHTML=`<div class="stage"><div class="cert"><div class="ar" style="font:40px var(--ft);color:var(--u)">اِخْتِبَارٌ</div><div style="font-weight:900">Мини‑тест · урок ${CUR.meta.n}${partName()} · ${R} вопросов</div>
+  $('#view').innerHTML=`<div class="stage"><div class="cert"><div class="ar" style="font:40px var(--ft);color:var(--u)">اِخْتِبَارٌ</div><div style="font-weight:900">Мини‑тест · урок ${CUR.meta.n}${partName()} · ${R} ${R%10>=2&&R%10<=4&&(R%100<10||R%100>=20)?'вопроса':R%10===1&&R%100!==11?'вопрос':'вопросов'}</div>
   ${hwPart()?`<div class="lead">${hwPart().t}</div>`:''}
   ${!HW&&CUR.HW?`<div class="seg" style="margin:6px auto">${[['Весь урок',0],...CUR.HW.map((h,i)=>['Часть '+toAr(i+1),i+1])].map(([l,v])=>`<button data-part="${v}" class="${TPART===v?'on':''}">${l}</button>`).join('')}</div>`:''}
   ${HW?`<input class="who-in" id="tName" placeholder="Напиши своё имя" aria-label="Имя">`:`<div class="lead">Кто проходит тест? Результат запишется рядом с его звёздами.</div><div class="pick">${S.kids.map((k,i)=>`<button data-kid="${i}">${k.n}</button>`).join('')}<button data-kid="-1">Без имени</button></div>`}

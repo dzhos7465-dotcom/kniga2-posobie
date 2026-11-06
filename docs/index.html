@@ -317,6 +317,8 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .chs{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;direction:rtl}
 .chs button{font:700 30px/1.6 var(--fa);background:#fff;border:3px solid var(--line);border-radius:18px;padding:4px 22px}
 .chs button.good{border-color:var(--ok);background:#ecf8ee} .chs button.bad{border-color:var(--no);animation:shake .35s}
+/* ссылки для домашки */
+.hwrow{display:flex;flex-direction:column;gap:6px;width:100%;text-align:start}.hwl{display:flex;gap:8px;direction:ltr}.hwl input{flex:1;min-width:0;font-size:13px}
 /* тест: соедини линиями, собери фразу */
 .mt{position:relative;display:flex;justify-content:space-between;gap:80px;direction:rtl;width:min(100%,600px)}
 .mcol{display:flex;flex-direction:column;gap:12px;flex:1;max-width:230px}
@@ -843,9 +845,9 @@ function band(){
  const P=partOf(S.view);
  $('#band').innerHTML=`<div class="in"><div class="island"><div class="sand"></div>${PALM}<span class="n">${CUR.meta.n}</span></div><div><h1>${CUR.meta.t}</h1><div class="rus">${CUR.meta.ru}</div></div>
  <div class="parts">${PARTS.map(p=>`<button class="pc ${p.wide?'wide':''} ${p.rus?'rus':''} ${p===P?'on':''}" data-part="${p.id}">${p.c}</button>`).join('')}</div>
- <div class="tools">${HW?'':`<button class="tb" id="bHome">${I.home}Уроки</button><button class="tb ${UI.stamp?'on':''}" id="bStamp" title="Дети отвечают штампами Zoom, приложение не переходит дальше само">${I.stamp}Штампы</button><button class="tb ${$('#drawer').classList.contains('on')?'on':''}" id="bNotes">${I.note}Учителю</button><button class="tb" id="bKids">${I.kids}Дети</button>`}</div></div>`;
+ <div class="tools">${HW?'':`<button class="tb" id="bHome">${I.home}Уроки</button><button class="tb ${UI.stamp?'on':''}" id="bStamp" title="Дети отвечают штампами Zoom, приложение не переходит дальше само">${I.stamp}Штампы</button><button class="tb ${$('#drawer').classList.contains('on')?'on':''}" id="bNotes">${I.note}Учителю</button><button class="tb" id="bHw" title="Ссылки на домашний тест этого урока">🔗 Домашка</button><button class="tb" id="bKids">${I.kids}Дети</button>`}</div></div>`;
  $$('[data-part]').forEach(b=>b.onclick=()=>{const p=PARTS.find(x=>x.id===b.dataset.part);go(p.tabs[0][0])});
- if(!HW){$('#bHome').onclick=()=>go('home');$('#bNotes').onclick=toggleNotes;$('#bKids').onclick=openKids;$('#bStamp').onclick=()=>{UI.stamp=!UI.stamp;saveUI();render()}}
+ if(!HW){$('#bHome').onclick=()=>go('home');$('#bNotes').onclick=toggleNotes;$('#bKids').onclick=openKids;$('#bHw').onclick=hwLink;$('#bStamp').onclick=()=>{UI.stamp=!UI.stamp;saveUI();render()}}
  $('#subtabs').innerHTML=P&&P.tabs.length>1?P.tabs.map(([id,t,p])=>`<button class="st ${S.view===id?'on':''}" data-tab="${id}">${t}${p?`<small>стр. ${p}</small>`:''}</button>`).join(''):'';
  $$('[data-tab]').forEach(b=>b.onclick=()=>go(b.dataset.tab));
 }
@@ -1281,9 +1283,10 @@ function test(){
   ${hwPart()?`<div class="lead">${hwPart().t}</div>`:''}
   ${!HW&&CUR.HW?`<div class="seg" style="margin:6px auto">${[['Весь урок',0],...CUR.HW.map((h,i)=>['Часть '+toAr(i+1),i+1])].map(([l,v])=>`<button data-part="${v}" class="${TPART===v?'on':''}">${l}</button>`).join('')}</div>`:''}
   ${HW?`<input class="who-in" id="tName" placeholder="Напиши своё имя" aria-label="Имя">`:`<div class="lead">Кто проходит тест? Результат запишется рядом с его звёздами.</div><div class="pick">${S.kids.map((k,i)=>`<button data-kid="${i}">${k.n}</button>`).join('')}<button data-kid="-1">Без имени</button></div>`}
-  ${HW?`<button class="btn main" id="tStart">Начать</button>`:''}</div></div>`;
+  ${HW?`<button class="btn main" id="tStart">Начать</button>`:`<button class="btn ghost" id="tLinks">🔗 Ссылки для домашки</button>`}</div></div>`;
   $$('[data-part]').forEach(b=>b.onclick=()=>{TPART=+b.dataset.part;TS=null;test()});
   $$('[data-kid]').forEach(b=>b.onclick=()=>{TS.kid=+b.dataset.kid;TS.name=TS.kid>=0?S.kids[TS.kid].n:'';TS.i=0;test()});
+  if($('#tLinks'))$('#tLinks').onclick=hwLink;
   if($('#tStart'))$('#tStart').onclick=()=>{TS.name=$('#tName').value.trim();TS.i=0;test()};
   return}
  const pips=`<div class="pips">${TS.q.slice(0,R).map((_,j)=>`<i class="${TS.res[j]===true?'ok':TS.res[j]===false?'no':''}"></i>`).join('')}</div>`;
@@ -1333,7 +1336,14 @@ function test(){
  $$('[data-a]').forEach(b=>b.onclick=()=>{if(TS.lock)return;TS.lock=true;const ok=b.dataset.a==='1';tone(ok);b.classList.add(ok?'good':'bad');if(!ok){const g=document.querySelector('[data-a="1"]');setTimeout(()=>g&&g.classList.add('good'),300)}TS.res.push(ok);afterAns(q,ok);const t0=TS;if(!UI.stamp)setTimeout(()=>{if(TS!==t0||S.view!=='test')return;nxt()},q.type==='who'?2200:1800)});
  wireStamp(()=>{const g=document.querySelector('[data-a="1"]');g&&g.classList.add('good')},()=>{if(TS.res.length<=TS.i)TS.res.push(null);nxt()});
 }
-function hwLink(){$('#hwUrl').value=location.href.split('#')[0]+'#l'+LN+'-test'+(TPART?'-'+TPART:'');$('#hwN').textContent=CUR.meta.n+partName();$('#hwModal').classList.add('on')}
+function hwLink(){const base=location.href.split('#')[0].split('?')[0];
+ const parts=[...(CUR.HW||[]).map((h,i)=>[`Часть ${toAr(i+1)} · ${h.t}`,'-'+(i+1)]),['Весь урок','']];
+ $('#hwModal .box').innerHTML=`<b style="font-size:20px">Домашка · урок ${LN}</b><span style="color:var(--mut)">Отправьте детям ссылку на ту часть, которую уже прошли. Откроется только тест, без остальных разделов. Вопросы каждый раз перемешаны. В конце ребёнок пишет имя и присылает скриншот.</span>
+ ${parts.map(([t,s],i)=>`<div class="hwrow"><b>${t}</b><div class="hwl"><input readonly value="${base}#l${LN}-test${s}" id="hwU${i}" aria-label="Ссылка"><button class="btn main" data-cp="${i}">Копировать</button></div></div>`).join('')}
+ <div class="row" style="direction:ltr"><button class="btn ghost" id="hwClose">Закрыть</button></div>`;
+ $('#hwClose').onclick=()=>$('#hwModal').classList.remove('on');
+ $$('[data-cp]').forEach(b=>b.onclick=async()=>{const inp=$('#hwU'+b.dataset.cp);try{await navigator.clipboard.writeText(inp.value);b.textContent='Скопировано ✓'}catch(e){inp.focus();inp.select();b.textContent='Выделено, скопируйте'}});
+ $('#hwModal').classList.add('on')}
 $('#hwClose').onclick=()=>$('#hwModal').classList.remove('on');
 $('#hwCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('#hwUrl').value);$('#hwCopy').textContent='Скопировано ✓'}catch(e){$('#hwUrl').select();$('#hwCopy').textContent='Выделено, нажмите Ctrl+C'}};
 

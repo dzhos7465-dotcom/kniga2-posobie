@@ -148,7 +148,8 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .gt .ic{position:absolute;top:12px;right:12px}
 .ghead{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .pips{display:flex;gap:4px} .pips i{width:13px;height:13px;border-radius:50%;background:#efdfe7} .pips i.ok{background:var(--ok)} .pips i.no{background:var(--no)}
-.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;min-height:320px;position:relative}
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:18px;min-height:320px;position:relative}
+.stage::before{content:'';margin-top:auto;margin-bottom:-18px}.stage::after{content:'';margin-bottom:auto;margin-top:-18px} /* по центру, а если не помещается — сверху, без наезда на заголовок */
 .gstage{background:#fff;border:2px dashed var(--line);border-radius:26px;padding:22px 150px;position:relative}
 .deco{position:absolute;bottom:12px;width:120px;pointer-events:none}
 .deco.l{left:14px} .deco.r{right:14px}
@@ -345,6 +346,20 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
 @media (max-width:900px){.app.side{grid-template-columns:1fr}.app.side .foot{grid-column:1;grid-row:auto;flex-direction:row}.app.side .band,.app.side .subtabs,.app.side .view{grid-column:1}
  .dlg,.pairs,.readwrap{grid-template-columns:1fr}.opts.n4{grid-template-columns:repeat(2,1fr)}.memo,.conc{grid-template-columns:repeat(3,1fr)}.letters{grid-template-columns:repeat(2,1fr)}.band h1{font-size:30px}.gstage{padding:16px}.deco{display:none}.towers{grid-template-columns:1fr}}
+@media (max-width:600px){ /* телефон */
+ .tq{gap:12px}.tq .prompt{font-size:16px;text-align:center}.tq .ask{font-size:26px}
+ .tq .sheet.text{font-size:22px;line-height:1.9;max-height:46vh;overflow:auto}
+ .pips{flex-wrap:wrap;justify-content:center}.pips i{width:11px;height:11px}
+ .cert{padding:20px 16px}.opts .op img{max-height:26vh;object-fit:contain}
+ .row{flex-wrap:wrap}
+ /* страница листается целиком, шапка компактная, ничего не наезжает */
+ body{overflow:auto}.app{height:auto;min-height:100%}.view{overflow:visible;padding:10px 12px 18px}
+ .band{padding:6px 12px 26px}.band .in{gap:8px}.island{width:66px;height:50px}.island .n{font-size:48px;-webkit-text-stroke:4px var(--u)}.island svg{width:38px;height:48px;bottom:8px}
+ .band h1{font-size:24px}.band .rus{font-size:12px}
+ .parts{gap:5px;margin-inline-start:0}.pc{width:34px;height:34px;font-size:18px}.pc.wide{padding:0 10px;font-size:15px;border-radius:17px}.pc.rus{font-size:11px}
+ .tb{padding:5px 8px;font-size:12px}.subtabs{padding:0 10px;gap:6px}.st{padding:6px 11px;font-size:13px}
+ .opts .op img{max-height:19vh}.ay .t{font-size:24px;line-height:2}.ay{gap:6px}
+ .board .rowp,.board .roww{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.board .roww{margin-top:70px}}
 </style>
 </head>
 <body>

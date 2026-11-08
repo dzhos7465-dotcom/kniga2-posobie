@@ -59,7 +59,7 @@ h1{font:700 92px/1.25 Naskh;direction:rtl;text-shadow:0 4px 0 rgba(0,0,0,.15)}
     await p.screenshot({ path: `${out}/${name}.jpg`, type: 'jpeg', quality: 86 }); console.log('docs/hw/' + name + '.jpg'); };
   for (const n of Object.keys(LESSONS).map(Number).sort((a, b) => a - b)) {
     const L = LESSONS[n]; const all = L.words.map(w => w.k);
-    const parts = [...(L.HW || []).map((h, i) => ({ id: `l${n}-${i + 1}`, chip: `Часть ${AR(i + 1)}`, note: h.t + '<br>Слушай, соединяй, собирай · 10 минут', words: h.words || all })),
+    const parts = [...(L.HW || []).map((h, i) => ({ id: `l${n}-${i + 1}`, chip: `Часть ${i + 1}`, note: h.t + '<br>Слушай, соединяй, собирай · 10 минут', words: h.words || all })),
                    { id: `l${n}`, chip: 'Весь урок', note: 'Все слова, фразы и текст урока<br>Слушай, соединяй, собирай · 10 минут', words: all }];
     for (const [i, pt] of parts.entries()) {
       const ks = pt.words.slice(i * 3 % Math.max(1, pt.words.length - 2)).concat(pt.words).slice(0, 3);

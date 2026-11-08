@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Книга 2 · пособие по урокам</title>
+<meta property="og:type" content="website"><meta property="og:title" content="Книга 2 · пособие по урокам">
+<meta property="og:description" content="العربية بين يدي أولادنا: диалоги с голосом диктора, слова, игры и тесты.">
+<meta property="og:image" content="https://dzhos7465-dotcom.github.io/kniga2-posobie/hw/book.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Lalezar&family=Noto+Naskh+Arabic:wght@500;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -1339,7 +1343,7 @@ function test(){
 function hwLink(){const base=location.href.split('#')[0].split('?')[0];
  const parts=[...(CUR.HW||[]).map((h,i)=>[`Часть ${toAr(i+1)} · ${h.t}`,'-'+(i+1)]),['Весь урок','']];
  $('#hwModal .box').innerHTML=`<b style="font-size:20px">Домашка · урок ${LN}</b><span style="color:var(--mut)">Отправьте детям ссылку на ту часть, которую уже прошли. Откроется только тест, без остальных разделов. Вопросы каждый раз перемешаны. В конце ребёнок пишет имя и присылает скриншот.</span>
- ${parts.map(([t,s],i)=>`<div class="hwrow"><b>${t}</b><div class="hwl"><input readonly value="${base}#l${LN}-test${s}" id="hwU${i}" aria-label="Ссылка"><button class="btn main" data-cp="${i}">Копировать</button></div></div>`).join('')}
+ ${parts.map(([t,s],i)=>`<div class="hwrow"><b>${t}</b><div class="hwl"><input readonly value="${base.replace(/[^/]*$/,'')}hw/l${LN}${s}.html" id="hwU${i}" aria-label="Ссылка"><button class="btn main" data-cp="${i}">Копировать</button></div></div>`).join('')}
  <div class="row" style="direction:ltr"><button class="btn ghost" id="hwClose">Закрыть</button></div>`;
  $('#hwClose').onclick=()=>$('#hwModal').classList.remove('on');
  $$('[data-cp]').forEach(b=>b.onclick=async()=>{const inp=$('#hwU'+b.dataset.cp);try{await navigator.clipboard.writeText(inp.value);b.textContent='Скопировано ✓'}catch(e){inp.focus();inp.select();b.textContent='Выделено, скопируйте'}});

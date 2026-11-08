@@ -24,3 +24,8 @@
 - `main` (`244452f`) — на сайте уроки ٥ и ٦ в общем приложении. `pravki-0311` и `urok6` перемотаны на main.
 - Новый урок: ветка `urokN` от свежего main, папка `lessons/urokN/` по образцу урока ٦, `ready:true` в `lessons/book.js`, `python3 build.py`.
 - Звук диалога: в записях издателя L01E01 под диалогом идёт фоновая музыка. Для реплик нужен звук без музыки (см. «Звук» в памятке проекта).
+
+## Превью ссылок на домашку (06.11)
+- Ссылка для детей: `…/kniga2-posobie/hw/l6-1.html` (урок 6, часть 1), `hw/l6.html` — весь урок. Страница показывает в WhatsApp/Telegram картинку урока и сразу открывает тест.
+- Картинки: `node tools/make_previews.js` → `docs/hw/*.jpg` (шрифты в `tools/fonts`). Страницы `docs/hw/*.html` пишет `python3 build.py`.
+- Новый урок: после `data.js` запустить `node tools/make_previews.js`, потом `python3 build.py`.

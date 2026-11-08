@@ -36,7 +36,7 @@ def hw_page(slug, target, title, desc):
 <meta property="og:title" content="{title}"><meta property="og:description" content="{desc}">
 <meta property="og:image" content="{img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:url" content="{SITE}hw/{slug}.html"><meta name="twitter:card" content="summary_large_image">
-<meta http-equiv="refresh" content="0;url=../{target}"><script>location.replace('../{target}')</script>
+<script>location.replace('../{target}')</script>
 <style>body{{font:18px system-ui;text-align:center;padding:40px;color:#8c2d55}}</style></head>
 <body><a href="../{target}">Открыть домашнее задание</a></body></html>''')
 for n, d in lessons:

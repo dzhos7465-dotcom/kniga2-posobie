@@ -977,7 +977,7 @@ function test(){
 function hwLink(){const base=location.href.split('#')[0].split('?')[0];
  const parts=[...(CUR.HW||[]).map((h,i)=>[`Часть ${toAr(i+1)} · ${h.t}`,'-'+(i+1)]),['Весь урок','']];
  $('#hwModal .box').innerHTML=`<b style="font-size:20px">Домашка · урок ${LN}</b><span style="color:var(--mut)">Отправьте детям ссылку на ту часть, которую уже прошли. Откроется только тест, без остальных разделов. Вопросы каждый раз перемешаны. В конце ребёнок пишет имя и присылает скриншот.</span>
- ${parts.map(([t,s],i)=>`<div class="hwrow"><b>${t}</b><div class="hwl"><input readonly value="${base.replace(/[^/]*$/,'')}hw/l${LN}${s}.html" id="hwU${i}" aria-label="Ссылка"><button class="btn main" data-cp="${i}">Копировать</button></div></div>`).join('')}
+ ${parts.map(([t,s],i)=>`<div class="hwrow"><b>${t}</b><div class="hwl"><input readonly value="${base.replace(/[^/]*$/,'')}hw/l${LN}${s}.html?v=${typeof HW_V!='undefined'?HW_V:1}" id="hwU${i}" aria-label="Ссылка"><button class="btn main" data-cp="${i}">Копировать</button></div></div>`).join('')}
  <div class="row" style="direction:ltr"><button class="btn ghost" id="hwClose">Закрыть</button></div>`;
  $('#hwClose').onclick=()=>$('#hwModal').classList.remove('on');
  $$('[data-cp]').forEach(b=>b.onclick=async()=>{const inp=$('#hwU'+b.dataset.cp);try{await navigator.clipboard.writeText(inp.value);b.textContent='Скопировано ✓'}catch(e){inp.focus();inp.select();b.textContent='Выделено, скопируйте'}});

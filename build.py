@@ -18,7 +18,9 @@ for n, d in lessons:
     data.append(open(f'{d}/data.js', encoding='utf-8').read())
 s = open(f'{root}/src/template.html', encoding='utf-8').read()
 s = s.replace('/*DATA*/', '\n'.join(data))
-s = s.replace('/*ASSETS*/', 'const ASSETS=' + json.dumps(ASSETS) + ';')
+import time
+# HW_V: меняется при каждой сборке, чтобы Telegram не показывал старое (закешированное) превью ссылки
+s = s.replace('/*ASSETS*/', 'const ASSETS=' + json.dumps(ASSETS) + ';const HW_V="' + time.strftime('%m%d%H%M') + '";')
 os.makedirs(f'{root}/docs', exist_ok=True)
 
 # страницы-ссылки на домашку с превью (картинки рисует tools/make_previews.js → docs/hw/*.jpg)

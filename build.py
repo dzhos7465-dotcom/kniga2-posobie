@@ -36,9 +36,9 @@ def hw_page(slug, target, title, desc):
 <meta property="og:title" content="{title}"><meta property="og:description" content="{desc}">
 <meta property="og:image" content="{img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:url" content="{SITE}hw/{slug}.html"><meta name="twitter:card" content="summary_large_image">
-<script>location.replace('../{target}')</script>
 <style>body{{font:18px system-ui;text-align:center;padding:40px;color:#8c2d55}}</style></head>
-<body><a href="../{target}">Открыть домашнее задание</a></body></html>''')
+<body data-go="../{target}"><a href="../{target}">Открыть домашнее задание</a>
+<script>var b=document.body;location.replace(b.getAttribute("data-go"))</script></body></html>''')
 for n, d in lessons:
     src = open(f'{d}/data.js', encoding='utf-8').read()
     mm = meta_re.search(src); ln, lt = (mm.group(1), mm.group(2)) if mm else (AR(n), '')

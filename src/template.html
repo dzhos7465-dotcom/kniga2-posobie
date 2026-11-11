@@ -27,6 +27,23 @@ body{font-family:var(--fr);color:var(--ink);background:var(--bg);overflow:hidden
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .ar{font-family:var(--fa);direction:rtl;line-height:1.8}
+.stabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;direction:rtl;align-items:start}
+.stab{background:#fff;border:3px solid #cfe6e2;border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.stab .sh{font:700 24px var(--fa);text-align:center;color:#fff;background:var(--u);border-radius:10px;padding:2px 8px}
+.stab .sl,.stab .sr{display:grid;gap:6px}.stab .sl span{font:700 22px var(--fa);color:#fff;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;justify-self:center}
+.stab .sr .tile{font-size:22px;padding:2px 4px;text-align:center}
+.stchoice button{font:700 52px var(--fa);min-width:110px}
+.nashidimg{max-height:calc(100vh - 230px);max-width:100%;border-radius:18px}
+.lnk{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:110px;direction:rtl;width:min(100%,860px);align-self:center;margin-top:8px}
+.lnk .col{display:flex;flex-direction:column;gap:12px;justify-content:center}
+.lnk .it{min-height:76px;background:#fff;border:3px solid var(--line);border-radius:18px;font:700 28px/1.35 var(--fa);padding:6px 16px;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;z-index:2;direction:rtl}
+.lnk .it img{max-height:104px;max-width:100%;object-fit:contain}.lnk.pics .dst{padding:4px}.lnk.sent .it.src{font-size:26px}.lnk.sent .dst img{max-height:130px}
+.lnk .it .tg{position:absolute;top:-12px;right:-10px;width:36px;height:36px;border-radius:50%;background:#fff;border:3px solid var(--u);color:var(--u);display:grid;place-items:center;font:700 19px var(--fa)}
+.lnk.txt .it{justify-content:flex-start;font-size:25px;padding-right:34px}
+.lnk .it.sel{border-color:var(--u);background:var(--uLL);transform:scale(1.03)}.lnk .it.ok{border-color:var(--ok);background:#f2fbf3}.lnk .it.bad{border-color:var(--no);animation:shake .35s}
+.lnk.pics:not(.sent) .it{min-height:90px;padding:3px 10px}.lnk.pics:not(.sent) .dst img{height:84px;max-height:none}
+.lnk .lbl{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible}
+.mt.qa{width:min(100%,760px)}.mt.qa .mcol{max-width:none}.mt.qa .mw{height:auto;min-height:72px;font-size:24px;line-height:1.35;padding:6px 10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* ---------- layout ---------- */
@@ -123,7 +140,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .ln:hover{background:var(--uLL)}
 .ln .who{font:700 21px var(--fa);color:var(--maroon);min-width:70px}
 .ln .tx{font:500 clamp(21px,2.1vw,29px)/1.75 var(--fa);flex:1}
-.ln.a .tx{color:#1f8a4c} .ln.b .tx{color:var(--blue)}
+.ln.a .tx{color:#1f8a4c} .ln.b .tx{color:var(--blue)} .ln.c .tx{color:#c4561c}
 .ln .pl{width:32px;height:32px;border-radius:50%;background:var(--uL);display:grid;place-items:center;color:var(--u);flex:none}
 .ln .pl svg{width:15px;height:15px}
 .ln.cur{background:#fff3c4}
@@ -358,12 +375,14 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
 .modal textarea{width:100%;min-height:200px;border:2px solid var(--line);border-radius:14px;padding:12px;font:16px var(--fr)}
 .modal input{width:100%;border:2px solid var(--line);border-radius:12px;padding:8px;font:14px var(--fr)}
 .lb{position:fixed;inset:0;background:rgba(25,15,25,.86);display:none;align-items:center;justify-content:center;z-index:45;cursor:zoom-out}
-.lb.on{display:flex} .lb img{max-width:92vw;max-height:88vh;border-radius:20px;border:6px solid #fff;background:#fff}
+.lnk.on{display:flex} .lnk img{max-width:92vw;max-height:88vh;border-radius:20px;border:6px solid #fff;background:#fff}
 .lb span{position:absolute;top:16px;right:26px;color:#fff;font:900 36px var(--fr)}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
 @media (max-width:900px){.app.side{grid-template-columns:1fr}.app.side .foot{grid-column:1;grid-row:auto;flex-direction:row}.app.side .band,.app.side .subtabs,.app.side .view{grid-column:1}
  .dlg,.pairs,.readwrap{grid-template-columns:1fr}.opts.n4{grid-template-columns:repeat(2,1fr)}.memo,.conc{grid-template-columns:repeat(3,1fr)}.letters{grid-template-columns:repeat(2,1fr)}.band h1{font-size:30px}.gstage{padding:16px}.deco{display:none}.towers{grid-template-columns:1fr}}
 @media (max-width:600px){ /* телефон */
+ .lnk{gap:34px}.lnk.pics:not(.sent) .it{min-height:64px}.lnk.pics:not(.sent) .dst img{height:58px}.lnk .it{font-size:20px;min-height:58px;padding:4px 8px}.lnk.txt .it{font-size:17px;padding-right:22px}.lnk .it img{max-height:64px}.lnk.sent .dst img{max-height:78px}.lnk.sent .it.src{font-size:18px}.lnk .it .tg{width:28px;height:28px;font-size:15px}.mt.qa{gap:22px}.mt.qa .mw{font-size:17px;min-height:56px}
+ .book{grid-template-columns:1fr;gap:8px}.book .pg2{border-radius:12px!important;border-left:0!important} .stabs{grid-template-columns:1fr}.stab .sr .tile{font-size:20px}.stchoice button{font-size:40px;min-width:80px}.nashidimg{max-height:none}
  .tq{gap:12px}.tq .prompt{font-size:16px;text-align:center}.tq .ask{font-size:26px}
  .tq .sheet.text{font-size:22px;line-height:1.9;max-height:46vh;overflow:auto}
  .pips{flex-wrap:wrap;justify-content:center}.pips i{width:11px;height:11px}
@@ -518,7 +537,7 @@ function wireStamp(onShow,onNext){if(!UI.stamp)return;$('#sbShow').onclick=onSho
 
 // ================= home =================
 function home(){
- $('#view').innerHTML=`<div class="lead" style="align-self:flex-end;text-align:right">Внутри каждого урока всё как в книге: диалог с голосом диктора, слова, слушание, пары, звуки, чтение и игра «نَشَاط». Плюс игры на закрепление и тест. Готовы уроки ${BOOK.filter(b=>b.ready).map(b=>b.n).join(' и ')}, остальные делаются по тому же образцу.</div>
+ $('#view').innerHTML=`<div class="lead" style="align-self:flex-end;text-align:right">Внутри каждого урока всё как в книге: диалог с голосом диктора, слова, слушание, пары, звуки, чтение и игра «نَشَاط». Плюс игры на закрепление и тест. Готовы уроки ${(r=>r.length>1?r.slice(0,-1).join(', ')+' и '+r[r.length-1]:r.join(''))(BOOK.filter(b=>b.ready).map(b=>b.n))}, остальные делаются по тому же образцу.</div>
  <div class="lessons" style="direction:rtl">${BOOK.map((b,i)=>`<button class="lt" style="--c:${b.c}" ${b.ready?`data-open="${i+1}"`:'disabled'}><div class="top"><span class="n">${b.n}</span>${PALM}</div><div class="t">${b.t}</div><div class="s ${b.ready?'ready':''}">${b.p} · ${b.ready?'готов':'скоро'}</div></button>`).join('')}</div>`;
  $$('[data-open]').forEach(b=>b.onclick=()=>{useLesson(+b.dataset.open);go('dialog')});
 }
@@ -527,7 +546,7 @@ function home(){
 let dBlur=false,seqOn=false,rep=0;
 function dialog(){
  $('#view').innerHTML=`<div class="hrow">${LAB('١','أُنْظُرْ وَاسْتَمِعْ وَأَعِدْ')}<button class="btn main" id="dAll">${I.play}Весь диалог</button><div class="seg"><button id="dT" class="${dBlur?'':'on'}">С текстом</button><button id="dB" class="${dBlur?'on':''}">Только слушать</button></div><button class="btn ghost" id="dRep"></button></div>
- <div class="dlg"><div class="paper lines ${dBlur?'blur':''}">${LD.dialog.map((d,i)=>`<button class="ln ${i%2?'b':'a'}" data-l="${i}"><span class="who">${d[0]}:</span><span class="tx">${d[1]}</span><span class="pl">${I.play}</span></button>`).join('')}</div>
+ <div class="dlg"><div class="paper lines ${dBlur?'blur':''}">${LD.dialog.map((d,i)=>`<button class="ln ${CUR.dialogCls?CUR.dialogCls[i]:(i%2?'b':'a')}" data-l="${i}"><span class="who">${d[0]}:</span><span class="tx">${d[1]}</span><span class="pl">${I.play}</span></button>`).join('')}</div>
  <div class="pic"><img class="zoom" src="${A.scene}" alt="${CUR.meta.sceneAlt}"><span class="hintz">Нажмите, чтобы увеличить</span></div></div>`;
  $$('.ln').forEach(b=>b.onclick=()=>{seqOn=false;mark(+b.dataset.l);play('d_'+b.dataset.l)});
  $('#dT').onclick=()=>{dBlur=false;dialog()};$('#dB').onclick=()=>{dBlur=true;dialog()};
@@ -556,7 +575,7 @@ let T={mode:'who',i:0,ans:null};
 const pct=(b)=>`left:${b[0]/TREE_W*100}%;top:${b[1]/TREE_H*100}%;width:${(b[2]-b[0])/TREE_W*100}%;height:${(b[3]-b[1])/TREE_H*100}%`;
 function lift(k,cls,tag){const b=TREE[k];const wB=b[2]-b[0],hB=b[3]-b[1];
  return `<div class="lift ${cls||''}" style="${pct(b)}"><img src="${A.b_tree}" style="width:${TREE_W/wB*100}%;height:${TREE_H/hB*100}%;left:${-b[0]/wB*100}%;top:${-b[1]/hB*100}%"></div>`+(tag?`<div class="ttag" style="left:${(b[0]+b[2])/2/TREE_W*100}%;top:${b[1]/TREE_H*100}%">${tag}</div>`:'')}
-function tree(){if(!CUR.TREE)return treePics();treeFamily()}
+function tree(){if(!CUR.TREE||T.mode==='m1')return treePics();treeFamily()}
 function treeFamily(){
  const list=T.mode==='who'?WHO:TF;const q=list[T.i];let hs='';
  if(T.mode==='who'){
@@ -565,10 +584,10 @@ function treeFamily(){
   if(T.ans){q.ans.forEach(a=>hs+=lift(a,'ok','هَذَا'));if(T.ans!=='ok')hs+=lift(T.ans,'bad')}
  }else{hs=lift(q.spk,'','أَنَا')+lift(q.pt,T.ans?(q.ok?'ok':'bad'):'','هَذَا')}
  const bubble=T.mode==='who'?(T.ans?`<div class="bubble r">${q.after}</div>`:`<div class="bubble q">${q.line}</div>`):(`<div class="bubble q">${q.line}</div>`+(T.ans?`<div class="bubble r">${q.fix}</div>`:''));
- $('#view').innerHTML=`<div class="hrow">${LAB('١','شَجَرَةُ الْعَائِلَةِ')}<div class="seg"><button id="tw" class="${T.mode==='who'?'on':''}">Где мой…?</button><button id="tt" class="${T.mode==='tf'?'on':''}">Правда или нет?</button></div><span style="font-weight:900;color:var(--mut)">${T.i+1} / ${list.length}</span><button class="btn main" id="tn">${I.left}Дальше</button><button class="btn ghost" id="tp" aria-label="Назад">${I.right}</button></div>
+ $('#view').innerHTML=`<div class="hrow">${LAB('١','شَجَرَةُ الْعَائِلَةِ')}<div class="seg"><button id="tw" class="${T.mode==='who'?'on':''}">Где мой…?</button><button id="tt" class="${T.mode==='tf'?'on':''}">Правда или нет?</button>${CUR.MATCH1?`<button id="tm">Соедини · стр. ${CUR.MATCH1.page}</button>`:''}</div><span style="font-weight:900;color:var(--mut)">${T.i+1} / ${list.length}</span><button class="btn main" id="tn">${I.left}Дальше</button><button class="btn ghost" id="tp" aria-label="Назад">${I.right}</button></div>
  <div class="say">${bubble}${T.mode==='tf'&&!T.ans?`<div class="tf"><button id="ty" aria-label="Правда">👍</button><button id="tno" aria-label="Нет">👎</button></div>`:''}</div>
  <div class="tw"><img src="${A.b_tree}" alt="Дерево семьи Мухаммада"><div class="dim"></div>${hs}</div>`;
- $('#tw').onclick=()=>{T={mode:'who',i:0,ans:null};tree()};$('#tt').onclick=()=>{T={mode:'tf',i:0,ans:null};tree()};
+ $('#tw').onclick=()=>{T={mode:'who',i:0,ans:null};tree()};$('#tt').onclick=()=>{T={mode:'tf',i:0,ans:null};tree()};if($('#tm'))$('#tm').onclick=()=>{T={mode:'m1',i:0,ans:null};T6={mode:'m1',i:0,ans:null};tree()};
  $('#tn').onclick=()=>{T.i=(T.i+1)%list.length;T.ans=null;tree()};$('#tp').onclick=()=>{T.i=(T.i+list.length-1)%list.length;T.ans=null;tree()};
  if(T.mode==='who')$$('button.hot').forEach(b=>b.onclick=()=>{const ok=q.ans.includes(b.dataset.p);tone(ok);T.ans=ok?'ok':b.dataset.p;tree()});
  else{const h=v=>{tone(v===q.ok);T.ans=1;tree()};$('#ty').onclick=()=>h(true);$('#tno').onclick=()=>h(false)}
@@ -578,17 +597,37 @@ function treeFamily(){
 // часть ٢ без дерева семьи (урок ٦): «Соедини» стр. ٥٤ и «Правда или нет?» по сцене
 let T6={mode:'m1',i:0,ans:null};
 function treePics(){
- const M=CUR.MATCH1.items,TFL=CUR.TFS;let body='';const list=T6.mode==='m1'?M:TFL;const q=list[T6.i];
+ if(CUR.TREE&&CUR.MATCH1.pics)return tree64();
+ const M=CUR.MATCH1.items,TFL=CUR.TFS;let body='';if(CUR.TREE)T6.mode='m1';const list=T6.mode==='m1'?M:TFL;const q=list[T6.i];
  if(T6.mode==='m1'){const [w,a,b,key]=q;
   body=`<div class="say"><button class="bubble q" id="mw" style="cursor:pointer">${W(w).w}</button></div><div class="opts n2">${[['أ',a,'a'],['ب',b,'b']].map(([l,k,s])=>`<button class="op ${T6.ans===s?(s===key?'good':'bad'):(T6.ans&&s===key?'good':'')}" data-m="${s}"><span class="tag">${l}</span><img src="${PIC(k)}" alt=""></button>`).join('')}</div>`}
  else body=`<div class="say"><div class="bubble q">${q.line}</div>${T6.ans?`<div class="bubble r">${q.fix}</div>`:`<div class="tf"><button id="ty" aria-label="Правда">👍</button><button id="tno" aria-label="Нет">👎</button></div>`}</div><img class="zoom" src="${A[q.img]}" alt="" style="max-height:calc(100vh - 430px);max-width:100%;border-radius:18px;align-self:center">`;
- $('#view').innerHTML=`<div class="hrow">${LAB(CUR.MATCH1.n,'صِلْ')}<div class="seg"><button id="tw" class="${T6.mode==='m1'?'on':''}">Соедини · стр. ${CUR.MATCH1.page}</button><button id="tt" class="${T6.mode==='tf'?'on':''}">Правда или нет?</button></div><span style="font-weight:900;color:var(--mut)">${T6.i+1} / ${list.length}</span><button class="btn main" id="tn">${I.left}Дальше</button><button class="btn ghost" id="tp" aria-label="Назад">${I.right}</button></div><div style="display:flex;flex-direction:column;gap:16px;align-items:center;padding-top:10px">${body}</div>`;
- $('#tw').onclick=()=>{T6={mode:'m1',i:0,ans:null};treePics()};$('#tt').onclick=()=>{T6={mode:'tf',i:0,ans:null};treePics()};
+ $('#view').innerHTML=`<div class="hrow">${LAB(CUR.MATCH1.n,'صِلْ')}<div class="seg">${CUR.TREE?`<button id="tfw">Где мой…?</button><button id="tft">Правда или нет?</button><button class="on">Соедини · стр. ${CUR.MATCH1.page}</button>`:`<button id="tw" class="${T6.mode==='m1'?'on':''}">Соедини · стр. ${CUR.MATCH1.page}</button><button id="tt" class="${T6.mode==='tf'?'on':''}">Правда или нет?</button>`}</div><span style="font-weight:900;color:var(--mut)">${T6.i+1} / ${list.length}</span><button class="btn main" id="tn">${I.left}Дальше</button><button class="btn ghost" id="tp" aria-label="Назад">${I.right}</button></div><div style="display:flex;flex-direction:column;gap:16px;align-items:center;padding-top:10px">${body}</div>`;
+ if(CUR.TREE){$('#tfw').onclick=()=>{T={mode:'who',i:0,ans:null};tree()};$('#tft').onclick=()=>{T={mode:'tf',i:0,ans:null};tree()}}else{$('#tw').onclick=()=>{T6={mode:'m1',i:0,ans:null};treePics()};$('#tt').onclick=()=>{T6={mode:'tf',i:0,ans:null};treePics()}};
  $('#tn').onclick=()=>{T6.i=(T6.i+1)%list.length;T6.ans=null;treePics();if(T6.mode==='m1')play('a_'+list[T6.i][0])};$('#tp').onclick=()=>{T6.i=(T6.i+list.length-1)%list.length;T6.ans=null;treePics()};
  if(T6.mode==='m1'){$('#mw').onclick=()=>play('a_'+q[0]);$$('[data-m]').forEach(b=>b.onclick=()=>{if(T6.ans)return;T6.ans=b.dataset.m;tone(T6.ans===q[3]);treePics()})}
  else if(!T6.ans){const h=v=>{tone(v===q.ok);T6.ans=1;treePics()};$('#ty').onclick=()=>h(true);$('#tno').onclick=()=>h(false)}
 }
 
+
+// ================= «Соедини линиями» как в книге (урок ٧): правый столбец ↔ левый, верёвочка =================
+// cfg: {id, src:[{k,html,snd}], dst:[{k,html}], cls}; совпадение по k. Состояние LB[id] живёт, пока открыт урок.
+let LB={};
+function linkBoard(cfg){const st=LB[cfg.id]=LB[cfg.id]||{sel:null,got:{}};
+ return `<div class="lnk ${cfg.cls||''}" id="lb_${cfg.id}"><div class="col">${cfg.src.map((x,i)=>`<button class="it src ${st.got[x.k]?'ok':''} ${st.sel===i?'sel':''}" data-ls="${i}">${x.html}</button>`).join('')}</div><div class="col">${cfg.dst.map((x,j)=>`<button class="it dst ${st.got[x.k]?'ok':''}" data-ld="${j}">${x.html}</button>`).join('')}</div><svg class="lbl"></svg></div>`}
+function wireBoard(cfg,redraw){const st=LB[cfg.id],box=$('#lb_'+cfg.id);if(!box)return;const COL=['#ef6c00','#3cae4a','#2f80d1','#d6337a','#8e44ad','#c08a3e','#1f9c8f','#e04a4a','#5a7fc0'];
+ const draw=()=>{if(!box.isConnected)return;const r0=box.getBoundingClientRect();box.querySelector('svg').innerHTML=cfg.src.map((x,i)=>{if(!st.got[x.k])return '';const j=cfg.dst.findIndex(d=>d.k===x.k);const a=box.querySelector(`[data-ls="${i}"]`).getBoundingClientRect(),b=box.querySelector(`[data-ld="${j}"]`).getBoundingClientRect();const x1=a.left-r0.left,y1=a.top+a.height/2-r0.top,x2=b.right-r0.left,y2=b.top+b.height/2-r0.top,mx=(x1+x2)/2;return `<path d="M${x1} ${y1} C${mx} ${y1},${mx} ${y2},${x2} ${y2}" stroke="${COL[i%COL.length]}" stroke-width="5" fill="none" stroke-linecap="round"/>`}).join('')};
+ requestAnimationFrame(draw);box._draw=draw;
+ box.querySelectorAll('[data-ls]').forEach(b=>b.onclick=()=>{const i=+b.dataset.ls;const x=cfg.src[i];if(st.got[x.k])return;st.sel=i;if(x.snd)play(x.snd);redraw()});
+ box.querySelectorAll('[data-ld]').forEach(b=>b.onclick=()=>{const j=+b.dataset.ld;if(st.sel===null)return;const x=cfg.src[st.sel],d=cfg.dst[j];if(st.got[d.k])return;
+  if(x.k===d.k){st.got[x.k]=1;st.sel=null;tone(true);redraw();if(cfg.src.every(s=>st.got[s.k]))confetti()}else{tone(false);b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),400)}})}
+window.addEventListener('resize',()=>$$('.lnk').forEach(b=>b._draw&&b._draw()));
+
+// дерево + صِلْ линиями (урок ٧ стр. ٦٤)
+function tree64(){const M=CUR.MATCH1;const cfg={id:'m'+LN,cls:'pics',src:M.words.map(k=>({k,html:W(k).w,snd:'a_'+k})),dst:M.pics.map(([l,k,img])=>({k,html:`<span class="tg">${l}</span><img src="${PIC(img||k)}" alt="">`}))};
+ $('#view').innerHTML=`<div class="hrow">${LAB(M.n,'صِلْ')}<div class="seg"><button id="tfw">Где мой…?</button><button id="tft">Правда или нет?</button><button class="on">Соедини · стр. ${M.page}</button></div><button class="btn ghost" id="lbRe">Заново</button><span class="lead">Нажмите на слово (оно прозвучит), потом на его картинку.</span></div>`+linkBoard(cfg);
+ $('#tfw').onclick=()=>{T={mode:'who',i:0,ans:null};tree()};$('#tft').onclick=()=>{T={mode:'tf',i:0,ans:null};tree()};
+ $('#lbRe').onclick=()=>{delete LB[cfg.id];tree64()};wireBoard(cfg,tree64)}
 // ================= listening (book style) =================
 let X={ex:{1:0,2:3},i:0,ans:{},checked:{},mode:'now',hint:false};
 function listen(part){
@@ -632,7 +671,7 @@ function listen(part){
 // ================= sounds =================
 // ayat: [text with <mark> on the word with ش, surah name, ayah number]
 let SX={tab:0,g:0,res:[],shown:false,twice:true};
-function sounds(){
+function sounds(){if(CUR.STAB)return soundTables();
  const SH=CUR.meta.snd[0],SS=CUR.meta.snd[1];
  const tabs=['Имена с '+SH,'Пары '+SH+' / '+SS,'Аяты','Подними руку'];let body='';
  const red=w=>w.replace(new RegExp('('+SH+'[ً-ْ]*)','g'),'<span style="color:var(--no)">$1</span>');
@@ -660,6 +699,41 @@ function sounds(){
  if($('#sAgain'))$('#sAgain').onclick=()=>{SX=Object.assign(SX,{tab:3,g:0,res:[],shown:false});sounds();setTimeout(()=>play('s4_0'),300)};
 }
 
+
+// ================= звуки таблицами (урок ٧ стр. ٦٨–٦٩): CUR.STAB =================
+// STAB:[{t,n,L:[буквы столбцов],C:[цвета столбцов],pre:'s1',secs:[[заголовок,[[слово для каждой буквы],…]],…]}]
+// звук: pre_0, pre_1 … по строкам (справа налево), раздел за разделом
+function stabHi(w,l){return w.replace(new RegExp('('+l+'[ً-ْ]*)','g'),'<span style="color:var(--no)">$1</span>')}
+function stabItems(t){const T=CUR.STAB[t],out=[];let k=0;T.secs.forEach(([h,rows])=>rows.forEach(r=>r.forEach((w,j)=>out.push({w,l:T.L[j],j,key:T.pre+'_'+(k++),opts:T.L}))));return out}
+function soundTables(){
+ const ST=CUR.STAB;const tabs=[...ST.map(t=>t.t),'Какой звук?'];let body='';
+ if(SX.tab<ST.length){const T=ST[SX.tab];let k=0;
+  body=`<div class="hrow">${LAB(T.n,'اِسْتَمِعْ وَأَعِدْ')}<button class="btn" id="stAll">${I.play}Слушать всё по порядку</button><button class="btn ghost" id="stStop">Стоп</button><span class="lead">Нажмите на слово. Дети повторяют хором.</span></div>
+  <div class="stabs">${T.secs.map(([h,rows])=>`<div class="stab"><div class="sh">${h}</div><div class="sl" style="grid-template-columns:repeat(${T.L.length},minmax(0,1fr))">${T.L.map((l,j)=>`<span style="background:${T.C[j]}">${l}</span>`).join('')}</div>${rows.map(r=>`<div class="sr" style="grid-template-columns:repeat(${T.L.length},minmax(0,1fr))">${r.map((w,j)=>`<button class="tile" data-p="${T.pre}_${k++}">${stabHi(w,T.L[j])}</button>`).join('')}</div>`).join('')}</div>`).join('')}</div>`}
+ else{const all=ST.flatMap((_,t)=>stabItems(t));
+  if(!SX.q){SX.q=shuffle(all).slice(0,10);SX.g=0;SX.res=[];SX.shown=false}
+  const i=SX.g;
+  if(i>=SX.q.length){const ok=SX.res.filter(Boolean).length;body=`<div class="stage"><div class="done"><div class="big5">${ok} / ${SX.q.length}</div><button class="btn main" id="sAgain">Ещё раз</button></div></div>`}
+  else{const q=SX.q[i];
+   body=`<div class="hrow">${LAB('','اِسْتَمِعْ: أَيُّ حَرْفٍ؟',['ear'])}<span class="lead">Звучит слово из таблиц. Какой звук? Ответ проверяется по таблице книги.</span></div><div class="stage"><div class="row" style="justify-content:center;gap:10px">${SX.q.map((v,j)=>`<span style="width:18px;height:18px;border-radius:50%;background:${j<i?(SX.res[j]?'var(--ok)':'var(--no)'):'#efdfe7'}"></span>`).join('')}</div>
+   <button class="speaker pulse" id="sSpk" aria-label="Повторить">${I.spk}</button>
+   ${SX.shown?`<div class="syl">${stabHi(q.w,q.l)}</div><div class="lead">${SX.res[i]?'Верно!':'Это был звук '+q.l}</div><button class="btn main" id="sNext">${I.left}Дальше</button>`
+   :`<div class="tf stchoice">${q.opts.map(l=>`<button data-sl="${l}">${l}</button>`).join('')}</div>`}</div>`}}
+ $('#view').innerHTML=`<div class="row"><div class="seg">${tabs.map((t,i)=>`<button data-st="${i}" class="${i===SX.tab?'on':''}">${t}</button>`).join('')}</div></div>`+body;
+ $$('[data-st]').forEach(b=>b.onclick=()=>{SX=Object.assign(SX,{tab:+b.dataset.st,g:0,res:[],shown:false,q:null,run:0});soundTables();if(SX.tab===ST.length)setTimeout(()=>SX.q&&play(SX.q[0].key),300)});
+ $$('[data-p]').forEach(b=>b.onclick=()=>{SX.run=0;play(b.dataset.p,b)});
+ if($('#stAll')){$('#stAll').onclick=()=>{const run=SX.run=Date.now();const els=[...$$('[data-p]')];let i=0;const nx=()=>{if(SX.run!==run||i>=els.length||S.view!=='sounds')return;const el=els[i++];el.scrollIntoView({block:'nearest'});const a=play(el.dataset.p,el);if(a)a.onended=()=>{el.classList.remove('playing');setTimeout(nx,Math.max(1400,(a.duration||1)*1500))}};nx()};$('#stStop').onclick=()=>{SX.run=0;if(cur)cur.pause()}}
+ if($('#sSpk'))$('#sSpk').onclick=()=>play(SX.q[SX.g].key);
+ $$('[data-sl]').forEach(b=>b.onclick=()=>{const q=SX.q[SX.g];const ok=b.dataset.sl===q.l;tone(ok);SX.res.push(ok);SX.shown=true;soundTables();play(q.key)});
+ if($('#sNext'))$('#sNext').onclick=()=>{SX.g++;SX.shown=false;soundTables();if(SX.g<SX.q.length)setTimeout(()=>play(SX.q[SX.g].key),400)};
+ if($('#sAgain'))$('#sAgain').onclick=()=>{SX.q=null;soundTables();setTimeout(()=>play(SX.q[0].key),300)};
+}
+// нашид из نَشَاط (урок ٧ стр. ٧٢): страница книги и запись издателя
+function nashid(){const N=CUR.nashid;
+ $('#view').innerHTML=`<div class="hrow">${LAB('',N.title,['ear','rep'])}<button class="btn main" id="nP">${I.play}Слушать</button><button class="btn ghost" id="nS">Стоп</button><button class="btn ghost" id="nB">${I.right}Игра со словами</button></div>
+ <div style="display:flex;justify-content:center"><img class="zoom nashidimg" src="${A[N.img]}" alt="Страница книги: нашид"></div>`;
+ $('#nP').onclick=()=>play(N.audio);$('#nS').onclick=()=>{if(cur)cur.pause()};$('#nB').onclick=()=>{AC.nashid=0;activity()}}
+
 // ================= pairs =================
 let P={ex:0,card:0,hide:false,sq:-1,cue:0,hint:false};
 function pairNow(){const n=Math.max(1,S.kids.length);return{KA:S.kids[S.chain%n],KB:S.kids[(S.chain+1)%n],ia:S.chain%n,ib:(S.chain+1)%n}}
@@ -669,20 +743,25 @@ function pairs(){
   if(P.sq<0)body=`<div class="pic" style="display:grid;place-items:center;aspect-ratio:1;background:var(--uLL);border-radius:20px"><div style="font-size:100px">🎁</div></div><div class="bubs"><button class="btn main" id="sq" style="font-size:18px">Вытянуть вопрос</button><span class="lead" style="direction:ltr">Вопрос выпадет вместе с картинкой: по ней ребёнок и отвечает.</span></div>`;
   else{const q=ex.items[P.sq];const [ci,ca]=q.cues[P.cue%q.cues.length];
    body=`<div class="pic"><img class="zoom" src="${PIC(ci)}" alt="" style="border:4px solid var(--gold);border-radius:18px"></div><div class="bubs"><span style="font:900 14px var(--fr);color:var(--u)">вопрос ${q.n}</span><div class="bubble q">${q.q[g]}</div>${P.hint?`<div class="bubble r">${g?femAns(ca):ca}</div>`:`<button class="btn ghost" id="hint" style="align-self:flex-end">Показать ответ</button>`}</div>`}
+ }else if(ex.fill){
+  const it=ex.items[P.card%ex.items.length];const done=P.fa===it.a;
+  body=`<div class="pic"><img class="zoom" src="${PIC(it.img)}" alt=""></div><div class="bubs"><div class="bubble ${done?'r':'q'}" style="font-size:34px">${done?it.full:it.s.replace('___','<span style="color:var(--u)">_____</span>')}</div>${done?'':`<div class="chs">${it.ch.map((c,j)=>`<button data-fc="${j}" class="${P.fa===j?'bad':''}">${c}</button>`).join('')}</div>`}</div>`;
+  chips=`<div class="chips">${ex.items.map((x,j)=>`<button class="chip ${j===P.card%ex.items.length?'on':''}" data-chip="${j}">${AN[j]}</button>`).join('')}</div>`;
  }else{
   const it=ex.items[P.card%ex.items.length];const hid=P.hide?' hid':'';
   const ans=it.a.length>1?it.a[g]:(g?femAns(it.a[0]):it.a[0]);
   body=`<div class="pic"><img class="zoom" src="${PIC(it.img)}" alt=""></div><div class="bubs"><div class="bubble q${hid}">${it.q[g]}</div><div class="bubble r${hid}">${ans}</div>${it.r?`<div class="bubble q${hid}">${it.r[g]}</div>`:''}</div>`;
   if(ex.items.length>1)chips=`<div class="chips">${ex.items.map((x,j)=>`<button class="chip ${j===P.card%ex.items.length?'on':''}" data-chip="${j}"><img src="${PIC(x.img)}" alt="">${SUBW[x.img]||''}</button>`).join('')}</div>`;
  }
- const lt=ex.items[0].surprise?'تَبَادَلِ الْحِوَارَ مَعَ زَمِيلِكَ':'تَبَادَلِ السُّؤَالَ وَالْجَوَابَ مَعَ زَمِيلِكَ';
+ const lt=ex.lab||(ex.items[0].surprise?'تَبَادَلِ الْحِوَارَ مَعَ زَمِيلِكَ':'تَبَادَلِ السُّؤَالَ وَالْجَوَابَ مَعَ زَمِيلِكَ');
  $('#view').innerHTML=`<div class="hrow">${LAB(AN[P.ex],lt)}<div class="seg">${PAIRS.map((p,i)=>`<button data-ex="${i}" class="${i===P.ex?'on':''}">Упр. ${AN[i]}</button>`).join('')}</div></div>
  <div class="who2"><span class="nm a">спрашивает: ${KA.n}</span>${I.left.replace('<svg','<svg style="width:24px;height:24px"')}<span class="nm b">отвечает: ${KB.n}</span></div>
  <div style="display:flex;justify-content:flex-end"><div class="frame pairs">${body}<span class="rep">${IC('rep')}</span>${chips}</div></div>
- <div class="row" style="margin-top:14px"><button class="btn go" id="ok">Пара справилась ★</button><button class="btn ghost" id="skip">Следующая пара</button>${ex.items[0].surprise?'':`<button class="btn ghost" id="hide">${P.hide?'Показать текст':'Размыть текст'}</button>`}</div>`;
- $$('[data-ex]').forEach(b=>b.onclick=()=>{P.ex=+b.dataset.ex;P.card=0;P.sq=-1;P.hint=false;pairs()});
- $$('[data-chip]').forEach(b=>b.onclick=()=>{P.card=+b.dataset.chip;pairs()});
- const next=star=>{if(star){S.kids[ia].t++;S.kids[ib].t++;saveKids();tone(true)}S.chain++;P.card++;P.sq=-1;P.hint=false;pairs()};
+ <div class="row" style="margin-top:14px"><button class="btn go" id="ok">Пара справилась ★</button><button class="btn ghost" id="skip">Следующая пара</button>${ex.items[0].surprise||ex.fill?'':`<button class="btn ghost" id="hide">${P.hide?'Показать текст':'Размыть текст'}</button>`}</div>`;
+ $$('[data-ex]').forEach(b=>b.onclick=()=>{P.ex=+b.dataset.ex;P.card=0;P.sq=-1;P.hint=false;P.fa=null;pairs()});
+ $$('[data-chip]').forEach(b=>b.onclick=()=>{P.card=+b.dataset.chip;P.fa=null;pairs()});
+ $$('[data-fc]').forEach(b=>b.onclick=()=>{const it=ex.items[P.card%ex.items.length];const j=+b.dataset.fc;P.fa=j;tone(j===it.a);if(j!==it.a){b.classList.add('bad');setTimeout(()=>{P.fa=null;pairs()},500)}else pairs()});
+ const next=star=>{if(star){S.kids[ia].t++;S.kids[ib].t++;saveKids();tone(true)}S.chain++;P.card++;P.sq=-1;P.hint=false;P.fa=null;pairs()};
  $('#ok').onclick=()=>next(true);$('#skip').onclick=()=>next(false);
  if($('#hide'))$('#hide').onclick=()=>{P.hide=!P.hide;pairs()};
  if($('#sq'))$('#sq').onclick=()=>{P.sq=Math.random()*ex.items.length|0;P.cue=Math.random()*9|0;pairs()};
@@ -693,6 +772,7 @@ function pairs(){
 // ================= reading =================
 let RD={tab:0,sel:null,got:{},qi:0,qa:{},shown:{},mode:'ch',cur:0};
 function read(){
+ if(CUR.R1S)return read7();
  const tabs=['Слово и картинка','Текст и вопросы','Читаем по очереди'];let body='';
  if(RD.tab===0){
   const order=shuffleFixed(R1.map((_,i)=>i),3);
@@ -713,7 +793,7 @@ function read(){
  if(RD.tab===2){
   const n=Math.max(1,S.kids.length);const kid=S.kids[RD.cur%n];
   body=`<div class="hrow">${LAB('٤','اِقْرَأْ')}<span class="nm a" style="font-weight:900">читает: ${kid.n}</span><button class="btn go" id="rOk">Прочитал(а) ★</button><button class="btn ghost" id="rNext2">Следующий</button></div>
-  <div class="book">${[0,3].map(s=>`<div class="pg2">${R4.slice(s,s+3).map(([l,t],i)=>`<div class="sent ${RD.cur%6===s+i?'cur':''}"><i>${l}</i>${t}</div>`).join('')}</div>`).join('')}</div>`;
+  <div class="book">${Array.from({length:Math.ceil(R4.length/3)},(_,p)=>p*3).map(s=>`<div class="pg2">${R4.slice(s,s+3).map(([l,t],i)=>`<div class="sent ${RD.cur%R4.length===s+i?'cur':''}"><i>${l}</i>${t}</div>`).join('')}</div>`).join('')}</div>`;
  }
  $('#view').innerHTML=`<div class="row"><div class="seg">${tabs.map((t,i)=>`<button data-rt="${i}" class="${i===RD.tab?'on':''}">${t}</button>`).join('')}</div></div>`+body;
  $$('[data-rt]').forEach(b=>b.onclick=()=>{RD.tab=+b.dataset.rt;read()});
@@ -733,6 +813,15 @@ function read(){
  }
  if(RD.tab===2){const n=Math.max(1,S.kids.length);$('#rOk').onclick=()=>{S.kids[RD.cur%n].t++;saveKids();tone(true);RD.cur++;read();foot()};$('#rNext2').onclick=()=>{RD.cur++;read()}}
 }
+// чтение урока ٧: упр. ١ «фраза и картинка», упр. ٢ «вопрос и ответ», текст, по очереди
+function read7(){const TB=[['s','Фраза и картинка · упр. ١'],['q','Вопрос и ответ · упр. ٢'],['t','Текст и вопросы'],['r','Читаем по очереди']];const k=TB[RD.tab]?TB[RD.tab][0]:'s';
+ if(k==='t'||k==='r'){const keep=RD.tab;RD.tab=k==='t'?1:2;const S0=CUR.R1S;CUR.R1S=null;read();CUR.R1S=S0;RD.tab=keep;
+  $('.row .seg').outerHTML=`<div class="seg">${TB.map(([_,t],i)=>`<button data-rt="${i}" class="${i===RD.tab?'on':''}">${t}</button>`).join('')}</div>`;$$('[data-rt]').forEach(b=>b.onclick=()=>{RD.tab=+b.dataset.rt;read()});return}
+ let cfg,lab;
+ if(k==='s'){lab=LAB('١','اِقْرَأْ');cfg={id:'r1s'+LN,cls:'pics sent',src:shuffleFixed(CUR.R1S.map((_,i)=>i),7).map(i=>({k:i,html:CUR.R1S[i][0]})),dst:CUR.R1S.map(([t,img,l],i)=>({k:i,html:`<span class="tg">${l}</span><img src="${PIC(img)}" alt="">`}))}}
+ else{const Q=CUR.QA;lab=LAB('٢','اِقْرَأْ، وَصِلْ بَيْنَ السُّؤَالِ وَالْجَوَابِ');cfg={id:'qa'+LN,cls:'txt',src:Q.q.map(([l,t])=>({k:Q.key[l],html:`<span class="tg">${l}</span>${t}`})),dst:Q.a.map(([l,t])=>({k:l,html:`<span class="tg">${l}</span>${t}`}))}}
+ $('#view').innerHTML=`<div class="row"><div class="seg">${TB.map(([_,t],i)=>`<button data-rt="${i}" class="${i===RD.tab?'on':''}">${t}</button>`).join('')}</div></div><div class="hrow">${lab}<button class="btn ghost" id="lbRe">Заново</button><span class="lead">${k==='s'?'Ребёнок читает фразу вслух и соединяет её с картинкой.':'Ребёнок читает вопрос вслух и находит ответ.'}</span></div>`+linkBoard(cfg);
+ $$('[data-rt]').forEach(b=>b.onclick=()=>{RD.tab=+b.dataset.rt;read()});$('#lbRe').onclick=()=>{delete LB[cfg.id];read()};wireBoard(cfg,read)}
 function drawRopes(){const bd=$('#board'),sv=$('#ropes');if(!bd||!sv)return;const r0=bd.getBoundingClientRect();sv.setAttribute('viewBox',`0 0 ${r0.width} ${r0.height}`);
  let p='';for(const i in RD.got){const a=document.querySelector(`[data-rw="${i}"]`).getBoundingClientRect(),b=document.querySelector(`[data-rp="${i}"]`).getBoundingClientRect();
   const x1=a.left+a.width/2-r0.left,y1=a.top-r0.top+4,x2=b.left+b.width/2-r0.left,y2=b.bottom-r0.top-4,my=(y1+y2)/2;
@@ -781,12 +870,12 @@ function letters(){
 
 // ================= activity (نَشَاط) =================
 let AC={sel:null,done:[],halves:null};
-function activity(){
+function activity(){if(CUR.nashid&&AC.nashid)return nashid();
  if(!AC.halves)AC.halves=shuffle(ACT.flatMap((p,i)=>[[i,0],[i,1]]));
- $('#view').innerHTML=`<div class="hrow">${LAB('','صِلْ بَيْنَ كُلِّ كَلِمَتَيْنِ',['link'])}<span class="lead">Сверху бледно видны фразы, которые нужно собрать. Нажмите на два слова снизу, и фраза «оживёт».</span><button class="btn ghost" id="acRe">Заново</button></div>
+ $('#view').innerHTML=`<div class="hrow">${LAB('','صِلْ بَيْنَ كُلِّ كَلِمَتَيْنِ',['link'])}<span class="lead">Сверху бледно видны фразы, которые нужно собрать. Нажмите на два слова снизу, и фраза «оживёт».</span><button class="btn ghost" id="acRe">Заново</button>${CUR.nashid?`<button class="btn main" id="acN">${I.play}${CUR.nashid.title} · стр. ${CUR.nashid.page}</button>`:''}</div>
  <div class="act"><div class="shapes">${ACT.map((a,i)=>`<span class="shape ${a[2]} ${AC.done.includes(i)?'done':'ghost'}">${a[0]} ${a[1]}</span>`).join('')}</div>
  <div class="tiles" style="gap:16px">${AC.halves.map(([i,h],j)=>`<button class="half ${AC.done.includes(i)?'used':''} ${AC.sel===j?'sel':''}" data-h="${j}" style="--c:${ACOL[(i*3+h*2)%7]}">${ACT[i][h]}</button>`).join('')}</div></div>`;
- $('#acRe').onclick=()=>{AC={sel:null,done:[],halves:null};activity()};
+ $('#acRe').onclick=()=>{AC={sel:null,done:[],halves:null};activity()};if($('#acN'))$('#acN').onclick=()=>{AC.nashid=1;activity()};
  $$('[data-h]').forEach(b=>b.onclick=()=>{const j=+b.dataset.h;if(AC.sel===null){AC.sel=j;activity();return}if(AC.sel===j){AC.sel=null;activity();return}
   const a=AC.halves[AC.sel],c=AC.halves[j];if(a[0]===c[0]){AC.done.push(a[0]);tone(true);AC.sel=null;activity();if(AC.done.length===ACT.length)confetti()}else{tone(false);b.classList.add('bad');AC.sel=null;setTimeout(activity,400)}});
 }
@@ -884,7 +973,7 @@ function makeTest(){
  const P=hwPart();const pool=(P&&P.words)||LD.words.map(w=>w.k);const n=pool.length;
  const gp=(P&&P.gaps)?P.gaps.map(i=>GAPS[i]):GAPS;const useRQ=!P||P.rq;
  const bl=(P&&P.build)?P.build.map(i=>LD.build[i]):LD.build;
- const lines=(P&&P.lines)||LD.dialog.map((_,i)=>i);
+ const lines=(P&&P.lines)||CUR.whoLines||LD.dialog.map((_,i)=>i);
  const qs=[],add=(st,q)=>qs.push([st*100+Math.random()*60,q]);
  const opts=(t,ks)=>shuffle([t,...shuffle(ks.filter(x=>x!==t)).slice(0,3)]);
  // 1) каждое слово один раз отдельно: слушай → картинка, читай → картинка, слушай → слово
@@ -895,13 +984,14 @@ function makeTest(){
  // 3) правда или нет — в части без текста
  if(!useRQ)for(let i=0;i<2;i++){const a=ws[i],same=i===0;add(2,{type:'tf',img:a,word:same?a:ws[(i+3)%n],ok:same})}
  // 4) кто это сказал? — реплика диалога на слух
- const sp=[...new Set(LD.dialog.map(d=>d[0]))];
+ const sp=[...new Set(lines.map(i=>LD.dialog[i][0]))];
  if(sp.length===2)shuffle(lines.slice()).slice(0,2).forEach(li=>add(2,{type:'who',li,sp,a:LD.dialog[li][0]}));
  // 5) собери фразу и вставь слово
  shuffle(bl.slice()).slice(0,useRQ?2:3).forEach(([s,li])=>{const w=s.split(' ');add(3,{type:'build',ws:w,li,order:shuffle(w.map((_,i)=>i)),got:[],err:0})});
  shuffle(gp).slice(0,useRQ?2:3).forEach(g=>add(3,{type:'gap',...g,ch:shuffle(g.ch.map((c,j)=>[c,j]))}));
  // 6) вопросы по тексту для чтения — только в части, где текст уже пройден
  if(useRQ)shuffle(RQ).slice(0,4).forEach(q=>add(4,{type:'readq',...q}));
+ if(useRQ&&CUR.QA){const Q=CUR.QA;const pr=shuffle(Q.q.map(([l,t])=>[t,Q.a.find(a=>a[0]===Q.key[l])[1]])).slice(0,4);add(4,{type:'match',qa:pr,w:[0,1,2,3],p:shuffle([0,1,2,3]),done:{},sel:null,err:0})}
  // 7) повторение: 2 слова прошлого урока
  const pv=LESSONS[LN-1];if(pv){const pks=pv.words.map(w=>w.k);shuffle(pks.slice()).slice(0,2).forEach((k,i)=>add(1,{type:i?'readpic':'listen',t:k,src:LN-1,opts:opts(k,pks)}))}
  return qs.sort((a,b)=>a[0]-b[0]).map(x=>x[1])}
@@ -949,7 +1039,9 @@ function test(){
  if(q.src)prompt='🔁 Вспомним урок '+q.src+' · '+prompt;
  if(q.retry)prompt='Второй шанс · '+prompt;
  const MC=['#ef6c00','#3cae4a','#2f80d1','#d6337a'];
- if(q.type==='match'){prompt='Соедини слово с картинкой';const usedP=Object.values(q.done);
+ if(q.type==='match'&&q.qa){prompt='Прочитай и соедини вопрос с ответом';const usedP=Object.values(q.done);
+  body=`<div class="mt qa" id="mt"><div class="mcol">${q.w.map((k,i)=>`<button class="mw ${q.done[i]!=null?'ok':''} ${q.sel===i?'sel':''}" data-mw="${i}">${q.qa[k][0]}</button>`).join('')}</div><div class="mcol">${q.p.map((k,j)=>`<button class="mw ${usedP.includes(j)?'ok':''}" data-mp="${j}">${q.qa[k][1]}</button>`).join('')}</div><svg class="mlines"></svg></div>`}
+ else if(q.type==='match'){prompt='Соедини слово с картинкой';const usedP=Object.values(q.done);
   body=`<div class="mt" id="mt"><div class="mcol">${q.w.map((k,i)=>`<button class="mw ${q.done[i]!=null?'ok':''} ${q.sel===i?'sel':''}" data-mw="${i}">${W(k).w}</button>`).join('')}</div><div class="mcol">${q.p.map((k,j)=>`<button class="mp ${usedP.includes(j)?'ok':''}" data-mp="${j}" aria-label="Картинка ${j+1}"><img src="${A['w_'+k]}" alt=""></button>`).join('')}</div><svg class="mlines"></svg></div>`}
  if(q.type==='build'){prompt='Собери фразу: нажимай слова по порядку';const full=q.got.length===q.ws.length;
   body=`<div class="bline ${full?'done':''}">${q.got.map(i=>`<span>${q.ws[i]}</span>`).join('')}${full?'':'<span class="ph">…</span>'}</div><div class="chs">${q.order.map(i=>`<button data-bw="${i}" ${q.got.includes(i)?'disabled':''}>${q.ws[i]}</button>`).join('')}</div>`}
@@ -961,7 +1053,7 @@ function test(){
  if(q.type==='match'){
   const box=$('#mt');const draw=()=>{if(!box.isConnected)return;const r0=box.getBoundingClientRect();box.querySelector('svg').innerHTML=Object.entries(q.done).map(([i,j])=>{const a=box.querySelector(`[data-mw="${i}"]`).getBoundingClientRect(),b=box.querySelector(`[data-mp="${j}"]`).getBoundingClientRect();return `<line x1="${a.left-r0.left}" y1="${a.top+a.height/2-r0.top}" x2="${b.right-r0.left}" y2="${b.top+b.height/2-r0.top}" stroke="${MC[i]}" stroke-width="6" stroke-linecap="round"/>`}).join('')};
   requestAnimationFrame(draw);
-  $$('[data-mw]').forEach(b=>b.onclick=()=>{const i=+b.dataset.mw;if(q.done[i]!=null)return;q.sel=i;play('a_'+q.w[i]);test()});
+  $$('[data-mw]').forEach(b=>b.onclick=()=>{const i=+b.dataset.mw;if(q.done[i]!=null)return;q.sel=i;if(!q.qa)play('a_'+q.w[i]);test()});
   $$('[data-mp]').forEach(b=>b.onclick=()=>{const j=+b.dataset.mp;if(q.sel==null||Object.values(q.done).includes(j))return;
    if(q.w[q.sel]===q.p[j]){q.done[q.sel]=j;q.sel=null;tone(true);test();if(Object.keys(q.done).length===4)fin(q.err<=1)}
    else{q.err++;tone(false);b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),400)}});

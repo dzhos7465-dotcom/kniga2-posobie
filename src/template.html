@@ -439,7 +439,11 @@ function setLesson(n){
  PAGE=CUR.meta.PAGE;
  PARTS=PSTRUCT.map(([id,c,tabs,o])=>Object.assign({id,c,tabs:tabs.map(k=>[k,...(FIXTABS[k]||CUR.meta.tabs[k])])},o||{}));
  NOTES=Object.assign({},CUR.NOTES);NOTES.test=NOTES.test||NOTE_TEST;NOTES.games=(NOTES.games||'')+NOTE_STAMP;
+ prefetchLesson(n);
 }
+// картинки и звук — отдельные файлы (docs/a/N/): после открытия урока тихо подкачиваем картинки слов, слова и реплики,
+// чтобы первый звук не ждал сети. Остальное браузер скачает, когда понадобится.
+let PF={};function prefetchLesson(n){if(PF[n]||location.protocol==='file:')return;PF[n]=1;const AA=ASSETS[n]||{};const q=Object.keys(AA).filter(k=>/^(w_|a_|d_\d|scene)/.test(k)).map(k=>AA[k]);let i=0;const go=()=>{if(i>=q.length)return;const u=q[i++];fetch(u).catch(()=>{}).finally(go)};setTimeout(()=>{go();go();go()},1200)}
 function useLesson(n){if(n===LN)return;setLesson(n);
  const f1=LX.findIndex(e=>e.part===1),f2=LX.findIndex(e=>e.part===2);
  T={mode:'who',i:0,ans:null};T6={mode:'m1',i:0,ans:null};X={ex:{1:f1,2:f2},i:0,ans:{},checked:{},mode:'now',hint:false};

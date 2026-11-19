@@ -378,6 +378,51 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
 .lnk.on{display:flex} .lnk img{max-width:92vw;max-height:88vh;border-radius:20px;border:6px solid #fff;background:#fff}
 .lb span{position:absolute;top:16px;right:26px;color:#fff;font:900 36px var(--fr)}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+/* ===== урок ٨: необязательные виды заданий (включаются ключами data.js) ===== */
+/* صِلْ стр. ٧٤: слово в кружке и две картинки на дуге, как в книге (MATCH1.ring) */
+.rings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 18px;direction:rtl;width:100%;max-width:1060px;align-self:center}
+.rg{position:relative;aspect-ratio:1/1.02;max-width:250px;width:100%;justify-self:center}
+.rg svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.rg .rp{position:absolute;top:0;width:43%;aspect-ratio:1;padding:3px;border:3px solid var(--line);border-radius:16px;background:#fff;z-index:2}
+.rg .rp.a{right:0}.rg .rp.b{left:0}.rg .rp img{width:100%;height:100%;object-fit:contain;border-radius:10px}
+.rg .rp .tag{position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;background:#fff;border:3px solid var(--u);color:var(--u);display:grid;place-items:center;font:700 16px var(--fa)}
+.rg .rp.ok{border-color:var(--ok);background:#f2fbf3}.rg .rp.ok .tag{background:var(--ok);border-color:var(--ok);color:#fff}.rg .rp.bad{border-color:var(--no);animation:shake .35s}
+.rg .rw{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:50%;aspect-ratio:1;border-radius:50%;background:#fff;border:5px solid var(--c);display:grid;place-items:center;font:700 25px/1.2 var(--fa);color:var(--ink);z-index:2;padding:4px}
+.rg.done .rw{background:var(--c);color:#fff}
+/* слушание стр. ٧٩: картинки по кругу часов (LX layout:'clock') */
+.clock{position:relative;width:min(640px,92vw);aspect-ratio:1;align-self:center;margin:6px auto 0}
+.clock .dial{position:absolute;inset:11%;border-radius:50%;border:26px solid #4db3e0;box-shadow:inset 0 0 0 6px #e5f4fb}
+.clock .hand{position:absolute;left:50%;top:50%;width:5.5%;height:28%;background:#c9c9c9;border-radius:10px;transform-origin:50% 0;box-shadow:0 2px 0 #aaa}
+.clock .hub{position:absolute;left:50%;top:50%;width:20%;aspect-ratio:1;border-radius:50%;border:16px solid #2c93bf;background:#fff;transform:translate(-50%,-50%)}
+.clock .op{position:absolute;width:22%;margin:-11% 0 0 -11%;padding:4px;border-radius:16px}
+.clock .op img{width:100%;aspect-ratio:1;object-fit:contain;display:block}
+.clock .op .bx{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);margin:0}
+/* звуки стр. ٧٨: «ال» الشَّمْسِيَّة و«ال» الْقَمَرِيَّة — змейка (SNAKE) */
+.snk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;direction:rtl;width:min(100%,1000px);align-self:center;background:#f3ebdd;border-radius:34px;padding:22px;box-shadow:inset 0 0 0 4px #e8dcc6}
+.snk .tl{position:relative;min-height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:7px solid;border-radius:14px;margin:-2px;font:700 25px/1.4 var(--fa);background:#fff;transition:.15s}
+.snk .tl.sun{border-color:#f2b72b;background:#fffaf0}.snk .tl.moon{border-color:#3b3f8f}
+.snk .tl .lt{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:700 20px var(--fa)}
+.snk .tl.sun .lt{background:#ffd451;color:#c2410c;box-shadow:0 0 0 4px #ffe9a0}.snk .tl.moon .lt{background:#eef0ff;color:#3b3f8f;box-shadow:0 0 0 3px #c7cbf3}
+.snk .tl .al{color:#b9b0a5}.snk .tl.moon .al b{color:#3b3f8f}.snk .tl.sun .al+i{color:#e8590c;font-style:normal}
+.snk .tl.playing{transform:scale(1.07);z-index:3;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.snk .tl{grid-row:var(--r);grid-column:var(--c)}
+.snk1 .al{color:#b9b0a5}.snk1 .al b{color:#3b3f8f}.snk1 i{color:#e8590c;font-style:normal}
+.sunkey{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font:800 15px var(--fr)}
+.sunkey span{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:12px;background:#fff;border:3px solid}
+.sunq{display:flex;gap:26px;justify-content:center}.sunq button{width:170px;height:120px;border-radius:24px;border:4px solid;background:#fff;font:800 22px var(--fr);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.sunq button.s{border-color:#f2b72b;color:#c2410c}.sunq button.m{border-color:#3b3f8f;color:#3b3f8f}.sunq button b{font-size:46px;line-height:1}
+.sunq button.good{background:#ecf8ee;border-color:var(--ok)}.sunq button.bad{background:#fde6e8;border-color:var(--no)}
+/* نَشَاط стр. ٨٢: «اِعْمَلْ جُمَلًا حَسَبَ الْخَطِّ» (LINES) */
+.lns{position:relative;width:min(100%,860px);align-self:center;background:#eef3fa;border-radius:30px;padding:10px;direction:ltr}
+.lns svg{width:100%;height:auto;display:block}
+.lns .pth{fill:none;stroke:#6b4c9a;stroke-width:5;stroke-dasharray:15 11;stroke-linecap:round;opacity:.75}
+.lns .pth.hi{stroke-dasharray:none;stroke-width:13;opacity:1}
+.lns .nd circle{fill:#fff;stroke-width:9}.lns .nd.r4 text{font-size:38px}.lns .nd text{font:700 44px var(--fa);text-anchor:middle;dominant-baseline:central;fill:#2b2b2b;pointer-events:none}
+.lns .nd{cursor:pointer}.lns .nd.on circle{stroke-width:14}.lns .nd.bad circle{stroke:#e04a4a!important;fill:#fde6e8}
+.lns .pp{cursor:pointer}.lns .pp rect.fr{fill:#7a3e8e}.lns .pp text{font:700 42px var(--fa);fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.lns .pp.sel rect.fr{fill:#f5b800}.lns .pp.sel text{fill:#3b2a00}.lns .pp.done rect.fr{fill:#2e8b57}
+.lnsay{display:flex;justify-content:center;min-height:62px}.lnsay .bubble{font-size:34px}
+@media (max-width:900px){.rings{grid-template-columns:repeat(3,minmax(0,1fr))}.snk .tl{font-size:20px;min-height:88px}}
 @media (max-width:900px){.app.side{grid-template-columns:1fr}.app.side .foot{grid-column:1;grid-row:auto;flex-direction:row}.app.side .band,.app.side .subtabs,.app.side .view{grid-column:1}
  .dlg,.pairs,.readwrap{grid-template-columns:1fr}.opts.n4{grid-template-columns:repeat(2,1fr)}.memo,.conc{grid-template-columns:repeat(3,1fr)}.letters{grid-template-columns:repeat(2,1fr)}.band h1{font-size:30px}.gstage{padding:16px}.deco{display:none}.towers{grid-template-columns:1fr}}
 @media (max-width:600px){ /* телефон */
@@ -388,7 +433,7 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
  .pips{flex-wrap:wrap;justify-content:center}.pips i{width:11px;height:11px}
  .cert{padding:20px 16px}.opts .op img{max-height:26vh;object-fit:contain}
  .row{flex-wrap:wrap}
- .mt{gap:44px}.mw,.mp{height:76px}.mw{font-size:24px}.mp img{max-height:66px}.bline{font-size:28px}.chs button{font-size:24px;padding:2px 16px}
+ .mt{gap:44px}.mw,.mp{height:76px}.mw{font-size:24px}.mp img{max-height:66px}.bline{font-size:28px;width:min(92vw,600px);gap:8px;padding:4px 6px}.chs button{font-size:24px;padding:2px 16px}
  /* страница листается целиком, шапка компактная, ничего не наезжает */
  body{overflow:auto}.app{height:auto;min-height:100%}.view{overflow:visible;padding:10px 12px 18px}
  .band{padding:6px 12px 26px}.band .in{gap:8px}.island{width:66px;height:50px}.island .n{font-size:48px;-webkit-text-stroke:4px var(--u)}.island svg{width:38px;height:48px;bottom:8px}
@@ -396,7 +441,12 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
  .parts{gap:5px;margin-inline-start:0}.pc{width:34px;height:34px;font-size:18px}.pc.wide{padding:0 10px;font-size:15px;border-radius:17px}.pc.rus{font-size:11px}
  .tb{padding:5px 8px;font-size:12px}.subtabs{padding:0 10px;gap:6px}.st{padding:6px 11px;font-size:13px}
  .opts .op img{max-height:19vh}.ay .t{font-size:24px;line-height:2}.ay{gap:6px}
- .board .rowp,.board .roww{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.board .roww{margin-top:70px}}
+ .board .rowp,.board .roww{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.board .roww{margin-top:70px}
+ .rings{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}.rg .rw{font-size:19px;border-width:4px}.rg .rp{border-radius:12px}.rg .rp .tag{width:26px;height:26px;font-size:14px;bottom:-11px}
+ .clock .dial{border-width:14px}.clock .hub{border-width:9px}.clock .op{width:24%;margin:-12% 0 0 -12%;padding:2px;border-radius:12px}.clock .op .tag{width:24px;height:24px;font-size:13px;top:-8px;right:-6px}.clock .op .bx{width:28px;height:28px;font-size:14px;bottom:-10px}
+ .snk{grid-template-columns:repeat(4,minmax(0,1fr));padding:10px;border-radius:20px;gap:6px}.snk .tl{margin:0;border-width:5px;min-height:76px;font-size:18px}.snk .tl .lt{width:28px;height:28px;font-size:16px}.snk .tl{grid-row:auto;grid-column:auto}
+ .sunq{gap:12px}.sunq button{width:46vw;max-width:170px;height:100px;font-size:17px}.sunq button b{font-size:38px}
+ .lns{padding:2px;border-radius:16px}.lns .nd text{font-size:60px}.lns .nd.r4 text{font-size:42px}.lns .pp text{font-size:52px}.lns .pth{stroke-width:8}.lnsay .bubble{font-size:24px}}
 </style>
 </head>
 <body>
@@ -449,7 +499,7 @@ function useLesson(n){if(n===LN)return;setLesson(n);
  T={mode:'who',i:0,ans:null};T6={mode:'m1',i:0,ans:null};X={ex:{1:f1,2:f2},i:0,ans:{},checked:{},mode:'now',hint:false};
  P={ex:0,card:0,hide:false,sq:-1,cue:0,hint:false};SX={tab:0,g:0,res:[],shown:false,twice:true};
  RD={tab:0,sel:null,got:{},qi:0,qa:{},shown:{},mode:'ch',cur:0};LT={mode:'hunt',li:0,found:{},q:null,res:[]};
- AC={sel:null,done:[],halves:null};GS=null;TS=null;TPART=0;wIdx=0;dBlur=false;S.chain=0}
+ AC={sel:null,done:[],halves:null};SN={tab:0,q:null,g:0,res:[],shown:false,run:0};LNS={sel:null,step:0,done:{},show:false,bad:null};GS=null;TS=null;TPART=0;wIdx=0;dBlur=false;S.chain=0}
 // ================= icons =================
 const I={
  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
@@ -588,10 +638,10 @@ function treeFamily(){
   if(T.ans){q.ans.forEach(a=>hs+=lift(a,'ok','هَذَا'));if(T.ans!=='ok')hs+=lift(T.ans,'bad')}
  }else{hs=lift(q.spk,'','أَنَا')+lift(q.pt,T.ans?(q.ok?'ok':'bad'):'','هَذَا')}
  const bubble=T.mode==='who'?(T.ans?`<div class="bubble r">${q.after}</div>`:`<div class="bubble q">${q.line}</div>`):(`<div class="bubble q">${q.line}</div>`+(T.ans?`<div class="bubble r">${q.fix}</div>`:''));
- $('#view').innerHTML=`<div class="hrow">${LAB('١','شَجَرَةُ الْعَائِلَةِ')}<div class="seg"><button id="tw" class="${T.mode==='who'?'on':''}">Где мой…?</button><button id="tt" class="${T.mode==='tf'?'on':''}">Правда или нет?</button>${CUR.MATCH1?`<button id="tm">Соедини · стр. ${CUR.MATCH1.page}</button>`:''}</div><span style="font-weight:900;color:var(--mut)">${T.i+1} / ${list.length}</span><button class="btn main" id="tn">${I.left}Дальше</button><button class="btn ghost" id="tp" aria-label="Назад">${I.right}</button></div>
+ $('#view').innerHTML=`<div class="hrow">${LAB('١','شَجَرَةُ الْعَائِلَةِ')}<div class="seg"><button id="tw" class="${T.mode==='who'?'on':''}">Где мой…?</button><button id="tt" class="${T.mode==='tf'?'on':''}">Правда или нет?</button>${CUR.MATCH1?`<button id="tm">Соедини · стр. ${CUR.MATCH1.page}</button>`:''}${CUR.TREEBOOK?`<button id="tbk">Стрелки · как в книге</button>`:''}</div><span style="font-weight:900;color:var(--mut)">${T.i+1} / ${list.length}</span><button class="btn main" id="tn">${I.left}Дальше</button><button class="btn ghost" id="tp" aria-label="Назад">${I.right}</button></div>
  <div class="say">${bubble}${T.mode==='tf'&&!T.ans?`<div class="tf"><button id="ty" aria-label="Правда">👍</button><button id="tno" aria-label="Нет">👎</button></div>`:''}</div>
  <div class="tw"><img src="${A.b_tree}" alt="Дерево семьи Мухаммада"><div class="dim"></div>${hs}</div>`;
- $('#tw').onclick=()=>{T={mode:'who',i:0,ans:null};tree()};$('#tt').onclick=()=>{T={mode:'tf',i:0,ans:null};tree()};if($('#tm'))$('#tm').onclick=()=>{T={mode:'m1',i:0,ans:null};T6={mode:'m1',i:0,ans:null};tree()};
+ $('#tw').onclick=()=>{T={mode:'who',i:0,ans:null};tree()};$('#tt').onclick=()=>{T={mode:'tf',i:0,ans:null};tree()};if($('#tm'))$('#tm').onclick=()=>{T={mode:'m1',i:0,ans:null};T6={mode:'m1',i:0,ans:null};tree()};if($('#tbk'))$('#tbk').onclick=()=>{$('#lbImg').src=A[CUR.TREEBOOK];$('#lb').classList.add('on')};
  $('#tn').onclick=()=>{T.i=(T.i+1)%list.length;T.ans=null;tree()};$('#tp').onclick=()=>{T.i=(T.i+list.length-1)%list.length;T.ans=null;tree()};
  if(T.mode==='who')$$('button.hot').forEach(b=>b.onclick=()=>{const ok=q.ans.includes(b.dataset.p);tone(ok);T.ans=ok?'ok':b.dataset.p;tree()});
  else{const h=v=>{tone(v===q.ok);T.ans=1;tree()};$('#ty').onclick=()=>h(true);$('#tno').onclick=()=>h(false)}
@@ -601,6 +651,7 @@ function treeFamily(){
 // часть ٢ без дерева семьи (урок ٦): «Соедини» стр. ٥٤ и «Правда или нет?» по сцене
 let T6={mode:'m1',i:0,ans:null};
 function treePics(){
+ if(CUR.MATCH1&&CUR.MATCH1.ring)return ring74();
  if(CUR.TREE&&CUR.MATCH1.pics)return tree64();
  const M=CUR.MATCH1.items,TFL=CUR.TFS;let body='';if(CUR.TREE)T6.mode='m1';const list=T6.mode==='m1'?M:TFL;const q=list[T6.i];
  if(T6.mode==='m1'){const [w,a,b,key]=q;
@@ -613,6 +664,19 @@ function treePics(){
  else if(!T6.ans){const h=v=>{tone(v===q.ok);T6.ans=1;treePics()};$('#ty').onclick=()=>h(true);$('#tno').onclick=()=>h(false)}
 }
 
+
+// صِلْ как в книге урока ٨ (стр. ٧٤): слово в кружке внизу, на дуге две картинки أ и ب; верная сторона дуги окрашивается
+// MATCH1:{ring:true,items:[[слово, картинка أ, картинка ب, 'a'|'b', цвет]…]}
+let RG={};
+function ring74(){const M=CUR.MATCH1;const st=RG[LN]=RG[LN]||{};const n=M.items.length,got=Object.keys(st).length;
+ const arc=s=>s==='a'?'M100 182 A74 74 0 0 0 100 34':'M100 182 A74 74 0 0 1 100 34';
+ $('#view').innerHTML=`<div class="hrow">${LAB(M.n,'صِلْ')}<div class="seg">${CUR.TREE?`<button id="tfw">Где мой…?</button><button id="tft">Правда или нет?</button>`:''}<button class="on">Соедини · стр. ${M.page}</button></div><span style="font-weight:900;color:var(--mut)">верно ${got} из ${n}</span><button class="btn ghost" id="rgRe">Заново</button><span class="lead">Нажмите на слово (оно прозвучит), потом на его картинку. В Zoom дети называют букву: أ или ب.</span></div>
+ <div class="rings">${M.items.map(([w,a,b,key,c],i)=>{const ok=st[i];c=c||'#e8794a';return `<div class="rg ${ok?'done':''}" style="--c:${c}"><svg viewBox="0 0 200 204" aria-hidden="true"><circle cx="100" cy="108" r="74" fill="none" stroke="#ece4d6" stroke-width="7"/>${ok?`<path d="${arc(key)}" fill="none" stroke="${c}" stroke-width="9" stroke-linecap="round"/>`:''}</svg>${[['أ',a,'a'],['ب',b,'b']].map(([l,k,x])=>`<button class="rp ${x} ${ok&&x===key?'ok':''}" data-rg="${i}" data-s="${x}" aria-label="${l}"><img src="${PIC(k)}" alt=""><span class="tag">${l}</span></button>`).join('')}<button class="rw" data-rw="${i}">${W(w).w}</button></div>`}).join('')}</div>`;
+ if(CUR.TREE){$('#tfw').onclick=()=>{T={mode:'who',i:0,ans:null};tree()};$('#tft').onclick=()=>{T={mode:'tf',i:0,ans:null};tree()}}
+ $('#rgRe').onclick=()=>{RG[LN]={};ring74()};
+ $$('[data-rw]').forEach(b=>b.onclick=()=>play('a_'+M.items[+b.dataset.rw][0],b));
+ $$('[data-rg]').forEach(b=>b.onclick=()=>{const i=+b.dataset.rg,it=M.items[i];if(st[i])return;
+  if(b.dataset.s===it[3]){st[i]=1;tone(true);play('a_'+it[0]);ring74();if(Object.keys(st).length===n)confetti()}else{tone(false);b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),450)}})}
 
 // ================= «Соедини линиями» как в книге (урок ٧): правый столбец ↔ левый, верёвочка =================
 // cfg: {id, src:[{k,html,snd}], dst:[{k,html}], cls}; совпадение по k. Состояние LB[id] живёт, пока открыт урок.
@@ -652,7 +716,8 @@ function listen(part){
  if(ex.type==='ab'){const [a,b]=ex.items[X.i];const cA=A_[X.i];
   body=`<div class="opts n2">${[['أ',a,'a'],['ب',b,'b']].map(([l,k,s])=>{const st=cA===s?(chk?(s===right(X.i)?'ok':'no'):''):'';return `<button class="op" data-ans="${s}"><span class="tag">${l}</span><img src="${PIC(k)}" alt="">${cA===s?`<span class="bx ${st}">✓</span>`:'<span class="bx"></span>'}</button>`}).join('')}</div>
   <div class="row" style="justify-content:center;gap:6px">${ex.items.map((_,i)=>`<span style="width:30px;height:30px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font:700 15px var(--fa);background:${A_[i]?(chk?(A_[i]===right(i)?'#ecf8ee':'#fde6e8'):'#fff7d6'):'#fff'}">${AN[i]}</span>`).join('')}</div>`}
- if(ex.type==='pic')body=`<div class="opts" style="grid-template-columns:repeat(${ex.pics.length},minmax(0,1fr));max-width:${ex.pics.length*200}px">${ex.pics.map(([l,k])=>`<button class="op" data-ans="${k}"><span class="tag">${l}</span><img src="${PIC(k)}" alt="">${bx(k)}</button>`).join('')}</div>`;
+ if(ex.type==='pic'&&ex.layout==='clock')body=`<div class="clock"><div class="dial"></div><div class="hand" style="transform:translateX(-50%) rotate(140deg)"></div><div class="hand" style="transform:translateX(-50%) rotate(220deg)"></div><div class="hub"></div>${ex.pics.map(([l,k,a])=>`<button class="op" data-ans="${k}" style="left:${(50+39*Math.cos(a*Math.PI/180)).toFixed(2)}%;top:${(50+39*Math.sin(a*Math.PI/180)).toFixed(2)}%"><span class="tag">${l}</span><img src="${PIC(k)}" alt="">${bx(k)}</button>`).join('')}</div>`;
+ else if(ex.type==='pic')body=`<div class="opts" style="grid-template-columns:repeat(${ex.pics.length},minmax(0,1fr));max-width:${ex.pics.length*200}px">${ex.pics.map(([l,k])=>`<button class="op" data-ans="${k}"><span class="tag">${l}</span><img src="${PIC(k)}" alt="">${bx(k)}</button>`).join('')}</div>`;
  if(ex.type==='word')body=`<div class="field">${BLOB.map(([k,c])=>`<button class="blob" style="--c:${c}" data-ans="${k}">${X.hint?`<img src="${A['w_'+k]}" alt="">`:''}${W(k).w}${bx(k)}</button>`).join('')}</div>`;
  const fb=(ex.key||ex.type==='ab')?'':`<div class="lead" style="text-align:center">В этом упражнении ответ проверяет учитель на слух.</div>`;
  $('#view').innerHTML=head+`<div class="stage">${body}${fb}</div>`;
@@ -675,7 +740,7 @@ function listen(part){
 // ================= sounds =================
 // ayat: [text with <mark> on the word with ش, surah name, ayah number]
 let SX={tab:0,g:0,res:[],shown:false,twice:true};
-function sounds(){if(CUR.STAB)return soundTables();
+function sounds(){if(CUR.SNAKE)return snake();if(CUR.STAB)return soundTables();
  const SH=CUR.meta.snd[0],SS=CUR.meta.snd[1];
  const tabs=['Имена с '+SH,'Пары '+SH+' / '+SS,'Аяты','Подними руку'];let body='';
  const red=w=>w.replace(new RegExp('('+SH+'[ً-ْ]*)','g'),'<span style="color:var(--no)">$1</span>');
@@ -732,6 +797,35 @@ function soundTables(){
  if($('#sNext'))$('#sNext').onclick=()=>{SX.g++;SX.shown=false;soundTables();if(SX.g<SX.q.length)setTimeout(()=>play(SX.q[SX.g].key),400)};
  if($('#sAgain'))$('#sAgain').onclick=()=>{SX.q=null;soundTables();setTimeout(()=>play(SX.q[0].key),300)};
 }
+// ================= «ال» الشَّمْسِيَّة و«ال» الْقَمَرِيَّة (урок ٨ стр. ٧٨): CUR.SNAKE =================
+// SNAKE:{n,page,title,pre:'s1',w:[[буква, слово с ال]…]} — 28 плиток змейкой по алфавиту; звук pre_0…pre_27
+const SUNL='تثدذرزسشصضطظلن';
+const isSun=w=>SUNL.includes(w[2]);
+function snkHtml(w){if(isSun(w)){let e=3;while(e<w.length&&/[ً-ْ]/.test(w[e]))e++;return `<span class="al">ال</span><i>${w.slice(2,e)}</i>${w.slice(e)}`}return `<span class="al">ا<b>${w.slice(1,3)}</b></span>${w.slice(3)}`}
+function snkPos(i){if(i<7)return[1,i+1];if(i===7)return[2,7];if(i<15)return[3,7-(i-8)];if(i===15)return[4,1];if(i<23)return[5,1+(i-16)];if(i===23)return[6,7];return[7,7-(i-24)]}
+let SN={tab:0,q:null,g:0,res:[],shown:false,run:0};
+function snake(){const Z=CUR.SNAKE;const tabs=['Змейка «ال» · стр. '+Z.page,'☀️ или 🌙?'];let body='';
+ if(SN.tab===0)body=`<div class="hrow">${LAB(Z.n,'اِسْتَمِعْ وَرَدِّدْ')}<button class="btn" id="snAll">${I.play}Слушать всё по порядку</button><button class="btn ghost" id="snStop">Стоп</button><span class="lead">Нажмите на слово. Дети повторяют хором.</span></div>
+  <div class="ar" style="text-align:center;font:700 34px var(--fa);color:var(--u)">${Z.title}</div>
+  <div class="sunkey"><span style="border-color:#f2b72b">☀️ солнечная: <b class="ar" style="font-size:20px">ل</b> не читается, буква после неё с шаддой</span><span style="border-color:#3b3f8f">🌙 лунная: <b class="ar" style="font-size:20px">لْ</b> читается</span></div>
+  <div class="snk">${Z.w.map(([l,w],i)=>{const [r,c]=snkPos(i);return `<button class="tl ${isSun(w)?'sun':'moon'}" style="--r:${r};--c:${c}" data-p="${Z.pre}_${i}"><span class="lt">${l}</span><span>${snkHtml(w)}</span></button>`}).join('')}</div>`;
+ else{if(!SN.q){SN.q=shuffle(Z.w.map((_,i)=>i)).slice(0,10);SN.g=0;SN.res=[];SN.shown=false}
+  const i=SN.g;
+  if(i>=SN.q.length){const ok=SN.res.filter(Boolean).length;body=`<div class="stage"><div class="done"><div class="big5">${ok} / ${SN.q.length}</div><button class="btn main" id="snAgain">Ещё раз</button></div></div>`}
+  else{const k=SN.q[i],w=Z.w[k][1],sun=isSun(w);
+   body=`<div class="hrow">${LAB('','اِسْتَمِعْ: شَمْسِيَّةٌ أَمْ قَمَرِيَّةٌ؟',['ear'])}<span class="lead">Звучит слово со змейки. «ال» в нём солнечная или лунная? Ответ проверяется по букве, ключ точный.</span></div><div class="stage"><div class="row" style="justify-content:center;gap:10px">${SN.q.map((v,j)=>`<span style="width:18px;height:18px;border-radius:50%;background:${j<i?(SN.res[j]?'var(--ok)':'var(--no)'):'#efdfe7'}"></span>`).join('')}</div>
+   <button class="speaker pulse" id="snSpk" aria-label="Повторить">${I.spk}</button>
+   ${SN.shown?`<div class="syl snk1">${snkHtml(w)}</div><div class="lead">${SN.res[i]?'Верно!':(sun?'Это солнечная: ل не читается.':'Это лунная: لْ читается.')}</div><button class="btn main" id="snNext">${I.left}Дальше</button>`
+   :`<div class="sunq"><button class="s" data-sun="1"><b>☀️</b>солнечная</button><button class="m" data-sun="0"><b>🌙</b>лунная</button></div>`}</div>`}}
+ $('#view').innerHTML=`<div class="row"><div class="seg">${tabs.map((t,i)=>`<button data-st="${i}" class="${i===SN.tab?'on':''}">${t}</button>`).join('')}</div></div>`+body;
+ $$('[data-st]').forEach(b=>b.onclick=()=>{SN={tab:+b.dataset.st,q:null,g:0,res:[],shown:false,run:0};snake();if(SN.tab===1)setTimeout(()=>SN.q&&play(Z.pre+'_'+SN.q[0]),300)});
+ $$('.snk [data-p]').forEach(b=>b.onclick=()=>{SN.run=0;play(b.dataset.p,b)});
+ if($('#snAll')){$('#snAll').onclick=()=>{const run=SN.run=Date.now();const els=[...$$('.snk [data-p]')];let i=0;const nx=()=>{if(SN.run!==run||i>=els.length||S.view!=='sounds')return;const el=els[i++];el.scrollIntoView({block:'nearest'});const a=play(el.dataset.p,el);if(a)a.onended=()=>{el.classList.remove('playing');setTimeout(nx,Math.max(1500,(a.duration||1)*1600))}};nx()};$('#snStop').onclick=()=>{SN.run=0;if(cur)cur.pause()}}
+ if($('#snSpk'))$('#snSpk').onclick=()=>play(Z.pre+'_'+SN.q[SN.g]);
+ $$('[data-sun]').forEach(b=>b.onclick=()=>{const k=SN.q[SN.g];const ok=(b.dataset.sun==='1')===isSun(Z.w[k][1]);tone(ok);SN.res.push(ok);SN.shown=true;snake();play(Z.pre+'_'+k)});
+ if($('#snNext'))$('#snNext').onclick=()=>{SN.g++;SN.shown=false;snake();if(SN.g<SN.q.length)setTimeout(()=>play(Z.pre+'_'+SN.q[SN.g]),400)};
+ if($('#snAgain'))$('#snAgain').onclick=()=>{SN.q=null;snake();setTimeout(()=>play(Z.pre+'_'+SN.q[0]),300)};
+}
 // нашид из نَشَاط (урок ٧ стр. ٧٢): страница книги и запись издателя
 function nashid(){const N=CUR.nashid;
  $('#view').innerHTML=`<div class="hrow">${LAB('',N.title,['ear','rep'])}<button class="btn main" id="nP">${I.play}Слушать</button><button class="btn ghost" id="nS">Стоп</button><button class="btn ghost" id="nB">${I.right}Игра со словами</button></div>
@@ -754,8 +848,8 @@ function pairs(){
  }else{
   const it=ex.items[P.card%ex.items.length];const hid=P.hide?' hid':'';
   const ans=it.a.length>1?it.a[g]:(g?femAns(it.a[0]):it.a[0]);
-  body=`<div class="pic"><img class="zoom" src="${PIC(it.img)}" alt=""></div><div class="bubs"><div class="bubble q${hid}">${it.q[g]}</div><div class="bubble r${hid}">${ans}</div>${it.r?`<div class="bubble q${hid}">${it.r[g]}</div>`:''}</div>`;
-  if(ex.items.length>1)chips=`<div class="chips">${ex.items.map((x,j)=>`<button class="chip ${j===P.card%ex.items.length?'on':''}" data-chip="${j}"><img src="${PIC(x.img)}" alt="">${SUBW[x.img]||''}</button>`).join('')}</div>`;
+  body=`<div class="pic"><img class="zoom" src="${PIC(it.img)}" alt=""></div><div class="bubs"><div class="bubble q${hid}">${it.q[g]}</div><div class="bubble r${hid}">${ans}</div>${it.r?`<div class="bubble q${hid}">${it.r[g]}</div>`:''}${it.r2?`<div class="bubble r${hid}">${it.r2}</div>`:''}</div>`;
+  if(ex.items.length>1)chips=`<div class="chips">${ex.items.map((x,j)=>`<button class="chip ${j===P.card%ex.items.length?'on':''}" data-chip="${j}"><img src="${PIC(x.img)}" alt="">${x.lab||SUBW[x.img]||''}</button>`).join('')}</div>`;
  }
  const lt=ex.lab||(ex.items[0].surprise?'تَبَادَلِ الْحِوَارَ مَعَ زَمِيلِكَ':'تَبَادَلِ السُّؤَالَ وَالْجَوَابَ مَعَ زَمِيلِكَ');
  $('#view').innerHTML=`<div class="hrow">${LAB(AN[P.ex],lt)}<div class="seg">${PAIRS.map((p,i)=>`<button data-ex="${i}" class="${i===P.ex?'on':''}">Упр. ${AN[i]}</button>`).join('')}</div></div>
@@ -874,14 +968,44 @@ function letters(){
 
 // ================= activity (نَشَاط) =================
 let AC={sel:null,done:[],halves:null};
-function activity(){if(CUR.nashid&&AC.nashid)return nashid();
+function activity(){if(CUR.LINES&&!AC.pairs)return lines8();if(CUR.nashid&&AC.nashid)return nashid();
  if(!AC.halves)AC.halves=shuffle(ACT.flatMap((p,i)=>[[i,0],[i,1]]));
- $('#view').innerHTML=`<div class="hrow">${LAB('','صِلْ بَيْنَ كُلِّ كَلِمَتَيْنِ',['link'])}<span class="lead">Сверху бледно видны фразы, которые нужно собрать. Нажмите на два слова снизу, и фраза «оживёт».</span><button class="btn ghost" id="acRe">Заново</button>${CUR.nashid?`<button class="btn main" id="acN">${I.play}${CUR.nashid.title} · стр. ${CUR.nashid.page}</button>`:''}</div>
+ $('#view').innerHTML=`<div class="hrow">${LAB('','صِلْ بَيْنَ كُلِّ كَلِمَتَيْنِ',['link'])}<span class="lead">Сверху бледно видны фразы, которые нужно собрать. Нажмите на два слова снизу, и фраза «оживёт».</span><button class="btn ghost" id="acRe">Заново</button>${CUR.nashid?`<button class="btn main" id="acN">${I.play}${CUR.nashid.title} · стр. ${CUR.nashid.page}</button>`:''}${CUR.LINES?`<button class="btn main" id="acL">${I.right}Линии · стр. ${CUR.LINES.page}</button>`:''}</div>
  <div class="act"><div class="shapes">${ACT.map((a,i)=>`<span class="shape ${a[2]} ${AC.done.includes(i)?'done':'ghost'}">${a[0]} ${a[1]}</span>`).join('')}</div>
  <div class="tiles" style="gap:16px">${AC.halves.map(([i,h],j)=>`<button class="half ${AC.done.includes(i)?'used':''} ${AC.sel===j?'sel':''}" data-h="${j}" style="--c:${ACOL[(i*3+h*2)%7]}">${ACT[i][h]}</button>`).join('')}</div></div>`;
- $('#acRe').onclick=()=>{AC={sel:null,done:[],halves:null};activity()};if($('#acN'))$('#acN').onclick=()=>{AC.nashid=1;activity()};
+ $('#acRe').onclick=()=>{AC={sel:null,done:[],halves:null};activity()};if($('#acN'))$('#acN').onclick=()=>{AC.nashid=1;activity()};if($('#acL'))$('#acL').onclick=()=>{AC.pairs=0;activity()};
  $$('[data-h]').forEach(b=>b.onclick=()=>{const j=+b.dataset.h;if(AC.sel===null){AC.sel=j;activity();return}if(AC.sel===j){AC.sel=null;activity();return}
   const a=AC.halves[AC.sel],c=AC.halves[j];if(a[0]===c[0]){AC.done.push(a[0]);tone(true);AC.sel=null;activity();if(AC.done.length===ACT.length)confetti()}else{tone(false);b.classList.add('bad');AC.sel=null;setTimeout(activity,400)}});
+}
+
+// نَشَاط урока ٨ (стр. ٨٢) «اِعْمَلْ جُمَلًا حَسَبَ الْخَطِّ»: от портрета идёт пунктир через кружки слов.
+// LINES:{page,W,H,rows:[цвета рядов],people:[[ключ,имя,картинка,x]…],nodes:{ключ:[слово,x,y,ряд]},paths:[{p,c,via:[узлы],pts:[[x,y]…],s}]}
+// Ребёнок (или учитель по подсказке детей) нажимает слова по линии по порядку; в конце — предложение-образец.
+let LNS={sel:null,step:0,done:{},show:false,bad:null};
+function lnCurve(pts){let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=0;i<pts.length-1;i++){const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;d+=` C${(p1[0]+(p2[0]-p0[0])/6).toFixed(1)} ${(p1[1]+(p2[1]-p0[1])/6).toFixed(1)},${(p2[0]-(p3[0]-p1[0])/6).toFixed(1)} ${(p2[1]-(p3[1]-p1[1])/6).toFixed(1)},${p2[0]} ${p2[1]}`}return d}
+function lines8(){const Z=CUR.LINES,P=Z.paths;const sp=LNS.sel?P.find(p=>p.p===LNS.sel):null;
+ const upTo=(p,n)=>{if(!n)return null;const c=Z.nodes[p.via[n-1]];const j=p.pts.findIndex(q=>q[0]===c[1]&&q[1]===c[2]);return p.pts.slice(0,j+1)};
+ const nOn=sp?sp.via.slice(0,LNS.show?sp.via.length:LNS.step):[];
+ const fin=sp&&(LNS.show||LNS.step===sp.via.length);
+ const said=sp?(fin?sp.s:[Z.people.find(x=>x[0]===sp.p)[1],...nOn.map(k=>Z.nodes[k][0])].join(' ')+' …'):'';
+ let svg=`<svg viewBox="0 0 ${Z.W} ${Z.H}" role="img" aria-label="Линии от детей к словам">`;
+ svg+=P.map(p=>`<path class="pth" d="${lnCurve(p.pts)}"/>`).join('');
+ svg+=P.filter(p=>LNS.done[p.p]&&p!==sp).map(p=>`<path class="pth hi" style="stroke:${p.c};opacity:.35" d="${lnCurve(p.pts)}"/>`).join('');
+ const hp=sp&&upTo(sp,nOn.length);if(sp)svg+=hp?`<path class="pth hi" style="stroke:${sp.c}" d="${lnCurve(hp)}"/>`:'';
+ svg+=Object.entries(Z.nodes).map(([k,[t,x,y,r]])=>{const on=nOn.includes(k);return `<g class="nd r${r} ${on?'on':''} ${LNS.bad===k?'bad':''}" data-nd="${k}"><circle cx="${x}" cy="${y}" r="80" style="stroke:${on?sp.c:Z.rows[r]}"/><text x="${x}" y="${y+4}">${t}</text></g>`}).join('');
+ svg+=Z.people.map(([k,nm,img,x])=>`<g class="pp ${LNS.sel===k?'sel':''} ${LNS.done[k]?'done':''}" data-pp="${k}"><rect class="fr" x="${x-104}" y="14" width="208" height="262" rx="24"/><image href="${A[img]}" x="${x-96}" y="22" width="192" height="182" preserveAspectRatio="xMidYMid slice"/><text x="${x}" y="240">${nm}</text>${LNS.done[k]?`<text x="${x+80}" y="38" style="font-size:40px">✓</text>`:''}</g>`).join('');
+ svg+='</svg>';
+ $('#view').innerHTML=`<div class="hrow">${LAB('','اِعْمَلْ جُمَلًا حَسَبَ الْخَطِّ',['talk'])}<button class="btn ghost" id="lnShow">Показать путь</button><button class="btn ghost" id="lnRe">Заново</button>${CUR.ACT?`<button class="btn ghost" id="lnA">${I.left}Фразы урока</button>`:''}<span style="font-weight:900;color:var(--mut)">${Object.keys(LNS.done).length} из ${P.length}</span></div>
+ <div class="lead" style="align-self:flex-end;text-align:right">Как в книге: первый игрок называет человека и нажимает на его портрет. Второй ведёт по пунктиру от портрета и нажимает слова по порядку, потом говорит предложение.</div>
+ <div class="lnsay">${sp?`<div class="bubble ${fin?'r':'q'}">${said}</div>`:`<div class="bubble q" style="font:800 20px var(--fr);direction:ltr">Выберите человека наверху</div>`}</div>
+ <div class="lns">${svg}</div>`;
+ $$('[data-pp]').forEach(g=>g.onclick=()=>{LNS={sel:g.dataset.pp,step:0,done:LNS.done,show:false,bad:null};lines8()});
+ $$('[data-nd]').forEach(g=>g.onclick=()=>{const k=g.dataset.nd;if(!sp||fin)return;
+  if(sp.via[LNS.step]===k){LNS.step++;tone(true);if(LNS.step===sp.via.length){LNS.done[sp.p]=1;if(Object.keys(LNS.done).length===P.length)confetti()}lines8()}
+  else{tone(false);LNS.bad=k;lines8();setTimeout(()=>{if(LNS.bad===k){LNS.bad=null;if(S.view==='activity')lines8()}},500)}});
+ $('#lnShow').onclick=()=>{if(!sp)return;LNS.show=true;lines8()};
+ $('#lnRe').onclick=()=>{LNS={sel:null,step:0,done:{},show:false,bad:null};lines8()};
+ if($('#lnA'))$('#lnA').onclick=()=>{AC.pairs=1;activity()};
 }
 
 // ================= games =================
@@ -995,6 +1119,7 @@ function makeTest(){
  shuffle(gp).slice(0,useRQ?2:3).forEach(g=>add(3,{type:'gap',...g,ch:shuffle(g.ch.map((c,j)=>[c,j]))}));
  // 6) вопросы по тексту для чтения — только в части, где текст уже пройден
  if(useRQ)shuffle(RQ).slice(0,4).forEach(q=>add(4,{type:'readq',...q}));
+ if(useRQ&&CUR.SNAKE)shuffle(CUR.SNAKE.w.map((_,i)=>i)).slice(0,2).forEach(i=>add(4,{type:'sun',i,w:CUR.SNAKE.w[i][1]}));
  if(useRQ&&CUR.QA){const Q=CUR.QA;const pr=shuffle(Q.q.map(([l,t])=>[t,Q.a.find(a=>a[0]===Q.key[l])[1]])).slice(0,4);add(4,{type:'match',qa:pr,w:[0,1,2,3],p:shuffle([0,1,2,3]),done:{},sel:null,err:0})}
  // 7) повторение: 2 слова прошлого урока
  const pv=LESSONS[LN-1];if(pv){const pks=pv.words.map(w=>w.k);shuffle(pks.slice()).slice(0,2).forEach((k,i)=>add(1,{type:i?'readpic':'listen',t:k,src:LN-1,opts:opts(k,pks)}))}
@@ -1006,7 +1131,8 @@ function afterAns(q,ok){
  if(!ok)retryQ(q);
  const k=q.type==='tf'?q.word:q.t;
  if(['listen','readpic','lword','tf'].includes(q.type))setTimeout(()=>playQ(q,'a_'+k),450);
- if(q.type==='who'){const c=$('.tq .chs');if(c)c.insertAdjacentHTML('beforebegin',`<div class="ask" style="font-size:30px">${LD.dialog[q.li][1]}</div>`)}}
+ if(q.type==='who'){const c=$('.tq .chs');if(c)c.insertAdjacentHTML('beforebegin',`<div class="ask" style="font-size:30px">${LD.dialog[q.li][1]}</div>`)}
+ if(q.type==='sun'){const c=$('.tq .sunq');if(c)c.insertAdjacentHTML('beforebegin',`<div class="ask snk1">${snkHtml(q.w)}</div>`);setTimeout(()=>playQ(q,CUR.SNAKE.pre+'_'+q.i),450)}}
 function test(){
  if(!TS){const q=makeTest();TS={q,base:q.length,i:-1,res:[],name:'',kid:-1}}
  const R=TS.base;
@@ -1039,6 +1165,7 @@ function test(){
  if(q.type==='tf'){prompt='Подходит слово к картинке?';body=`<div class="row" style="gap:24px;justify-content:center"><div class="op tfcard"><img src="${QA['w_'+q.img]}" alt=""></div><div class="ask">${QW(q.word).w}</div></div><div class="tf"><button data-a="${q.ok?1:0}" aria-label="Да">👍</button><button data-a="${q.ok?0:1}" aria-label="Нет">👎</button></div>`}
  if(q.type==='gap'){prompt='Вставь пропущенное слово';body=`<div class="ask">${q.s.replace('___','<span style="color:var(--u)">_____</span>')}</div><div class="chs">${q.ch.map(([c,j])=>`<button data-a="${j===q.a?1:0}">${c}</button>`).join('')}</div>`}
  if(q.type==='lword'){prompt='Послушай и выбери слово';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="chs">${q.opts.map(k=>`<button data-a="${k===q.t?1:0}">${QW(k).w}</button>`).join('')}</div>`}
+ if(q.type==='sun'){prompt='Послушай: «ال» солнечная или лунная?';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="sunq"><button class="s" data-a="${isSun(q.w)?1:0}"><b>☀️</b>солнечная</button><button class="m" data-a="${isSun(q.w)?0:1}"><b>🌙</b>лунная</button></div>`}
  if(q.type==='who'){prompt='Послушай: кто это сказал?';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="chs">${q.sp.map((s,j)=>`<button data-a="${s===q.a?1:0}" style="color:${j?'var(--blue)':'#2e7d32'}">${s}</button>`).join('')}</div>`}
  if(q.src)prompt='🔁 Вспомним урок '+q.src+' · '+prompt;
  if(q.retry)prompt='Второй шанс · '+prompt;
@@ -1051,7 +1178,7 @@ function test(){
   body=`<div class="bline ${full?'done':''}">${q.got.map(i=>`<span>${q.ws[i]}</span>`).join('')}${full?'':'<span class="ph">…</span>'}</div><div class="chs">${q.order.map(i=>`<button data-bw="${i}" ${q.got.includes(i)?'disabled':''}>${q.ws[i]}</button>`).join('')}</div>`}
  if(q.type==='readq'){prompt='Прочитай текст и ответь';body=`<div class="sheet text" style="max-width:820px"><div class="holes"><i></i><i></i><i></i></div>${RTEXT.map(r=>r[1]).join(' ')}</div><div class="ask" style="font-size:32px">${q.q}</div><div class="chs">${q.ch.map((c,j)=>`<button data-a="${j===q.a?1:0}">${c}</button>`).join('')}</div>`}
  $('#view').innerHTML=`<div class="row" style="direction:ltr"><b style="font-size:20px">Тест · урок ${LN}${TS.name?' · '+TS.name:''}</b>${pips}<span style="font-weight:900;color:var(--mut)">${TS.i<R?(TS.i+1)+' / '+R:'Второй шанс'}</span></div><div class="stage"><div class="tq"><div class="prompt">${prompt}</div>${body}${stampBar()}</div></div>`;
- if($('#tSpk')){const s=()=>playQ(q,q.type==='who'?'d_'+q.li:'a_'+q.t);$('#tSpk').onclick=s;setTimeout(s,350)}
+ if($('#tSpk')){const s=()=>playQ(q,q.type==='who'?'d_'+q.li:q.type==='sun'?CUR.SNAKE.pre+'_'+q.i:'a_'+q.t);$('#tSpk').onclick=s;setTimeout(s,350)}
  const nxt=()=>{TS.lock=false;TS.i++;test()};
  const fin=ok=>{if(TS.res.length>TS.i)return;TS.res.push(ok);if(!ok)retryQ(q);const t0=TS;if(!UI.stamp)setTimeout(()=>{if(TS!==t0||S.view!=='test')return;nxt()},1700)};
  if(q.type==='match'){

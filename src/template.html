@@ -422,6 +422,33 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
 .lns .pp{cursor:pointer}.lns .pp rect.fr{fill:#7a3e8e}.lns .pp text{font:700 42px var(--fa);fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none}
 .lns .pp.sel rect.fr{fill:#f5b800}.lns .pp.sel text{fill:#3b2a00}.lns .pp.done rect.fr{fill:#2e8b57}
 .lnsay{display:flex;justify-content:center;min-height:62px}.lnsay .bubble{font-size:34px}
+/* урок ٨: дневник недели (CUR.DIARY) — день ☀ и вечер 🌙 каждого дня, число в названии */
+.dia{display:flex;flex-direction:column;gap:7px;width:100%;max-width:760px;direction:rtl;align-self:center;margin:0 auto}
+.dia .dr{display:grid;grid-template-columns:minmax(0,48fr) minmax(0,18fr) minmax(0,34fr);gap:6px;align-items:stretch;width:100%}
+.dia .dn,.dia .dd,.dia .de,.dia .du{border-radius:14px;min-height:58px;display:flex;align-items:center;justify-content:center;position:relative}
+.dia .dn{background:#fff;border:3px solid var(--dc);border-right-width:12px;gap:8px;justify-content:flex-start;padding:0 10px;font:700 27px/1.2 var(--fa)}
+.dia .dn b{font-weight:700;color:var(--dc)}
+.dia .bd{min-width:36px;height:36px;border-radius:50%;background:var(--dc);color:#fff;display:grid;place-items:center;font:700 22px var(--fa);flex:none;padding:0 4px}
+.dia .bd.t{background:none;color:var(--dc);border:2px solid var(--dc);border-radius:10px;font:800 12px/1.1 var(--fr);width:auto;padding:2px 5px;height:auto;min-height:30px}
+.dia .dd{background:#fff8dc;border:3px solid #f2c94c;font-size:26px}
+.dia .de{background:#1d2b53;border:3px solid #3b4f8f;color:#fff;font-size:22px;flex-direction:column;gap:0}
+.dia .de small{font:700 15px/1.25 var(--fa);color:#ffe08a;display:none}
+.dia.lab .de small,.dia .de.rev small{display:block}
+.dia .de::after{content:'↙';position:absolute;bottom:-17px;right:-4px;font:900 20px var(--fr);color:#3b4f8f;z-index:2}
+.dia .dr:last-child .de::after{display:none}
+.dia .du{font:800 15px var(--fr);color:var(--mut);margin-right:auto;direction:ltr;min-height:0!important}
+.dia button{cursor:pointer}.dia .good{box-shadow:0 0 0 5px var(--ok)}.dia .bad{box-shadow:0 0 0 5px var(--no)}
+.dia.q .du{display:none}
+.diakey{font:800 17px/1.5 var(--fr);color:var(--mut);text-align:center;max-width:720px}.diakey b{font:700 22px var(--fa);color:var(--ink)}
+.numq{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:min(94vw,640px)}
+.numq button{border-radius:18px;border:3px solid var(--line);background:#fff;padding:10px 4px;display:flex;flex-direction:column;align-items:center;font:700 22px/1.3 var(--fa)}
+.numq button i{font:700 40px/1 var(--fa);font-style:normal;color:var(--u)}
+.numq button.good{border-color:var(--ok);background:#ecf8ee}.numq button.bad{border-color:var(--no);background:#fde6e8}
+.dayhl b,.numexp b{color:#e8590c;font-weight:700}
+.numexp{font:800 20px/1.5 var(--fr);text-align:center;background:#fff3e6;border-radius:16px;padding:10px 16px}.numexp .ar{font-size:30px}
+.trq{font:900 34px var(--fr);color:var(--ink);text-align:center}
+.chs.ru button{font:800 22px var(--fr)}
+@media (max-width:600px){.dia .dr{gap:4px}.dia .bd.t{display:none}.dia .dn{flex-wrap:wrap;row-gap:0;padding:2px 6px}.dia .du{flex-basis:100%;text-align:left;margin:0;font-size:12px!important;line-height:1.1}.dia .dn{font-size:21px;border-right-width:8px;padding:0 5px;gap:5px}.dia .bd{min-width:28px;height:28px;font-size:17px}.dia .bd.t{font-size:10px}.dia .dd{font-size:20px}.dia .de{font-size:18px}.dia .de small{font-size:12px}.dia .du{font-size:12px}.dia .de small{font-size:11px}.dia .dn,.dia .dd,.dia .de,.dia .du{min-height:50px}.numq{grid-template-columns:repeat(2,minmax(0,1fr))}.chs.ru button{font-size:18px}.trq{font-size:28px}}
 /* урок ٨: «لَيْلَةَ …» — ночь перед днём (тест, CUR.LAYLA) */
 .lyl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:min(96vw,760px);direction:ltr}
 .lyl button{position:relative;border-radius:20px;border:4px solid #f2c94c;background:#fff8dc;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;font:900 19px/1.15 var(--fr);color:#5b4a1c}
@@ -622,14 +649,23 @@ function seq(i){seqOn=true;if(i>=LD.dialog.length||S.view!=='dialog'){mark(-1);s
 
 // ================= words =================
 let wHide=false,wOne=false,wIdx=0;
-function words(){
- const head=`<div class="hrow">${LAB('٢','أُنْظُرْ وَاسْتَمِعْ وَأَعِدْ')}<div class="seg"><button id="wg" class="${wOne?'':'on'}">Все карточки</button><button id="wo" class="${wOne?'on':''}">По одной</button></div><div class="seg"><button id="ws" class="${wHide?'':'on'}">Слова видны</button><button id="wh" class="${wHide?'on':''}">Скрыть слова</button></div><button class="btn" id="wAll">${I.play}Прослушать все</button></div>`;
+// дневник недели урока ٨: строки السَّبْت…الْجُمُعَة, у каждой ☀ день и 🌙 вечер (= لَيْلَةَ следующего дня)
+function diaHtml(cls,cell){const Z=CUR.LAYLA,D=CUR.DIARY;return `<div class="dia ${cls}">${D.rows.map((k,i)=>{const h=D.hl[k];const w=LD.words.find(x=>x.k===k);
+ return `<div class="dr" style="--dc:${D.col[i]}"><button class="dn" data-dw="${k}"><span class="bd ${h.d?'':'t'}">${h.d?'٠١٢٣٤٥'[+h.d]:h.tag}</span><span class="dayhl">${h.day||w.w}</span><span class="du">${Z.ru[i]}</span></button>${cell(i,0,`☀️`)}${cell(i,1,`🌙<small>لَيْلَةَ ${Z.g[(i+1)%7]}</small>`)}</div>`}).join('')}</div>`}
+let wDia=false;
+function diaryView(){const head=`<div class="hrow">${LAB('','أَيَّامُ الْأُسْبُوعِ')}<button class="btn ghost" id="dBack">${I.right}Карточки слов</button><span class="lead">Нажмите на день — звучит диктор. Вечер каждого дня — это <b class="ar">لَيْلَةُ</b> следующего дня.</span></div>`;
+ $('#view').innerHTML=head+`<div class="diakey">Числа в названиях: <b>أَحَد</b> 1 · <b>اثْنَانِ</b> 2 · <b>ثَلَاثَة</b> 3 · <b>أَرْبَعَة</b> 4 · <b>خَمْسَة</b> 5. У арабов неделя считается с воскресенья, поэтому арабское число на один больше русского: <b>الْخَمِيس</b> (5) — четверг.</div>`+diaHtml('lab',(i,ev,h)=>`<button class="${ev?'de':'dd'}" data-di="${i}">${h}</button>`);
+ $('#dBack').onclick=()=>{wDia=false;words()};
+ $$('[data-dw]').forEach(b=>b.onclick=()=>play('a_'+b.dataset.dw,b));
+ $$('[data-di]').forEach(b=>b.onclick=()=>{if(b.classList.contains('dd'))play('a_'+CUR.DIARY.rows[+b.dataset.di],b)})}
+function words(){if(CUR.DIARY&&wDia)return diaryView();
+ const head=`<div class="hrow">${LAB('٢','أُنْظُرْ وَاسْتَمِعْ وَأَعِدْ')}<div class="seg"><button id="wg" class="${wOne?'':'on'}">Все карточки</button><button id="wo" class="${wOne?'on':''}">По одной</button></div><div class="seg"><button id="ws" class="${wHide?'':'on'}">Слова видны</button><button id="wh" class="${wHide?'on':''}">Скрыть слова</button></div>${CUR.DIARY?`<button class="btn main" id="wDia">📒 Дневник недели</button>`:''}<button class="btn" id="wAll">${I.play}Прослушать все</button></div>`;
  if(!wOne){$('#view').innerHTML=head+`<div class="frame cards">${LD.words.map((w,i)=>`<button class="wc ${wHide?'hideword':''} ${(CUR.blueWords||[]).includes(w.k)?'blue':''}" data-w="${i}"><img src="${A['w_'+w.k]}" alt="${w.ru}"><span class="w ar">${w.w}</span></button>`).join('')}<span class="rep">${IC('rep')}</span></div>`;
   $$('.wc').forEach(b=>b.onclick=()=>{b.classList.remove('hideword');play('a_'+LD.words[+b.dataset.w].k,b)});}
  else{const w=LD.words[wIdx];$('#view').innerHTML=head+`<div class="big"><button class="arrow" id="wr" aria-label="Дальше">${I.right}</button><div class="frame card"><img class="zoom" src="${A['w_'+w.k]}" alt="${w.ru}"><button class="w ar" id="wcw" style="${wHide?'color:transparent;background:var(--uL);border-radius:12px':''}">${w.w}</button><span style="color:var(--mut);font-weight:800">${wIdx+1} / ${LD.words.length}</span></div><button class="arrow" id="wl" aria-label="Назад">${I.left}</button></div>`;
   $('#wl').onclick=()=>{wIdx=(wIdx+LD.words.length-1)%LD.words.length;words();play('a_'+LD.words[wIdx].k)};$('#wr').onclick=()=>{wIdx=(wIdx+1)%LD.words.length;words();play('a_'+LD.words[wIdx].k)};
   $('#wcw').onclick=()=>{$('#wcw').style.cssText='';play('a_'+w.k)};}
- $('#wg').onclick=()=>{wOne=false;words()};$('#wo').onclick=()=>{wOne=true;words()};$('#ws').onclick=()=>{wHide=false;words()};$('#wh').onclick=()=>{wHide=true;words()};
+ if($('#wDia'))$('#wDia').onclick=()=>{wDia=true;words()};$('#wg').onclick=()=>{wOne=false;words()};$('#wo').onclick=()=>{wOne=true;words()};$('#ws').onclick=()=>{wHide=false;words()};$('#wh').onclick=()=>{wHide=true;words()};
  $('#wAll').onclick=()=>{let i=0;const nx=()=>{if(i>=LD.words.length||S.view!=='words')return;const el=document.querySelector(`[data-w="${i}"]`);const a=play('a_'+LD.words[i].k,el);i++;if(a)a.onended=()=>{el&&el.classList.remove('playing');setTimeout(nx,700)}};nx()};
 }
 document.addEventListener('keydown',e=>{if(S.view==='words'&&wOne){if(e.key==='ArrowRight')$('#wr').click();if(e.key==='ArrowLeft')$('#wl').click()}});
@@ -1114,6 +1150,16 @@ function makeTest(){
  const lines=(P&&P.lines)||CUR.whoLines||LD.dialog.map((_,i)=>i);
  const qs=[],add=(st,q)=>qs.push([st*100+Math.random()*60,q]);
  const opts=(t,ks)=>shuffle([t,...shuffle(ks.filter(x=>x!==t)).slice(0,3)]);
+ if(P&&P.mix){const M=P.mix,ws=shuffle(pool.slice()),Z=CUR.LAYLA,D=CUR.DIARY;let c=0;
+  ws.slice(c,c+=M.lru).forEach(k=>add(0,{type:'lru',t:k,opts:opts(k,pool)}));
+  ws.slice(c,c+=M.rul).forEach(k=>add(1,{type:'rul',t:k,opts:opts(k,pool)}));
+  const pr=shuffle(pool.slice());for(let i=0;i<M.match*4;i+=4){let w=pr.slice(i%n,i%n+4);if(w.length<4)w=w.concat(shuffle(pool.filter(x=>!w.includes(x))).slice(0,4-w.length));add(1,{type:'match',w,p:shuffle(w.slice()),done:{},sel:null,err:0})}
+  const nd=D.rows.filter(k=>D.hl[k].d);shuffle(nd).slice(0,M.num).forEach(k=>add(2,{type:'num',t:k,opts:shuffle(['1','2','3','4','5'].filter(x=>x!==D.hl[k].d)).slice(0,3).concat(D.hl[k].d).sort()}));
+  const ds=shuffle([0,1,2,3,4,5,6]);for(let j=0;j<M.dia;j++){const t=ds[j],yawm=j===M.dia-1;add(2,{type:'dia',t,yawm,hint:j===0,ar:(yawm?'يَوْمَ ':'لَيْلَةَ ')+Z.g[t],row:yawm?t:(t+6)%7,ev:yawm?0:1})}
+  shuffle(bl.slice()).slice(0,M.build).forEach(([s,li])=>{const w=s.split(' ');add(3,{type:'build',ws:w,li,order:shuffle(w.map((_,i)=>i)),got:[],err:0})});
+  shuffle(gp).slice(0,M.gap).forEach(g=>add(3,{type:'gap',...g,ch:shuffle(g.ch.map((c,j)=>[c,j]))}));
+  const pv=LESSONS[LN-1];if(pv&&M.prev){const pks=pv.words.map(w=>w.k);shuffle(pks.slice()).slice(0,M.prev).forEach((k,i)=>add(1,{type:i?'readpic':'listen',t:k,src:LN-1,opts:opts(k,pks)}))}
+  return qs.sort((a,b)=>a[0]-b[0]).map(x=>x[1])}
  // 1) каждое слово один раз отдельно: слушай → картинка, читай → картинка, слушай → слово
  const ws=shuffle(pool.slice()),T=['listen','readpic','lword'];
  ws.forEach((k,i)=>add(T[i%3]==='listen'?0:1,{type:T[i%3],t:k,opts:opts(k,pool)}));
@@ -1123,7 +1169,7 @@ function makeTest(){
  if(!useRQ)for(let i=0;i<2;i++){const a=ws[i],same=i===0;add(2,{type:'tf',img:a,word:same?a:ws[(i+3)%n],ok:same})}
  // 4) кто это сказал? — реплика диалога на слух
  const sp=[...new Set(lines.map(i=>LD.dialog[i][0]))];
- if(sp.length===2)shuffle(lines.slice()).slice(0,2).forEach(li=>add(2,{type:'who',li,sp,a:LD.dialog[li][0]}));
+ if(sp.length===2&&!CUR.noWho)shuffle(lines.slice()).slice(0,2).forEach(li=>add(2,{type:'who',li,sp,a:LD.dialog[li][0]}));
  // 5) собери фразу и вставь слово
  shuffle(bl.slice()).slice(0,useRQ?2:3).forEach(([s,li])=>{const w=s.split(' ');add(3,{type:'build',ws:w,li,order:shuffle(w.map((_,i)=>i)),got:[],err:0})});
  shuffle(gp).slice(0,useRQ?2:3).forEach(g=>add(3,{type:'gap',...g,ch:shuffle(g.ch.map((c,j)=>[c,j]))}));
@@ -1138,6 +1184,7 @@ function makeTest(){
    add(j===0?0:2,{type:'lyl',t,yawm,hint:j===0,ar:(yawm?'يَوْمَ ':'لَيْلَةَ ')+Z.g[t],tiles,ans:yawm?2:1})}}
  // 7) повторение: 2 слова прошлого урока
  const pv=LESSONS[LN-1];if(pv){const pks=pv.words.map(w=>w.k);shuffle(pks.slice()).slice(0,2).forEach((k,i)=>add(1,{type:i?'readpic':'listen',t:k,src:LN-1,opts:opts(k,pks)}))}
+ const MX=(P&&P.max)||(!P&&CUR.testMax);if(MX)while(qs.length>MX){const c=qs.map((x,i)=>[x,i]).filter(([x])=>['listen','readpic','lword'].includes(x[1].type)&&!x[1].src);if(!c.length)break;qs.splice(c[Math.floor(Math.random()*c.length)][1],1)}
  return qs.sort((a,b)=>a[0]-b[0]).map(x=>x[1])}
 function retryQ(q){if(q.retry)return;const c=JSON.parse(JSON.stringify(q));c.retry=true;
  if(c.type==='match'){c.done={};c.sel=null;c.err=0;c.p=shuffle(c.p)}if(c.type==='build'){c.got=[];c.err=0;c.order=shuffle(c.order)}if(c.opts)c.opts=shuffle(c.opts);
@@ -1145,7 +1192,10 @@ function retryQ(q){if(q.retry)return;const c=JSON.parse(JSON.stringify(q));c.ret
 function afterAns(q,ok){
  if(!ok)retryQ(q);
  const k=q.type==='tf'?q.word:q.t;
- if(['listen','readpic','lword','tf'].includes(q.type))setTimeout(()=>playQ(q,'a_'+k),450);
+ if(['listen','readpic','lword','tf','rul'].includes(q.type))setTimeout(()=>playQ(q,'a_'+k),450);
+ if(q.type==='lru'){const c=$('.tq .chs');if(c)c.insertAdjacentHTML('beforebegin',`<div class="ask">${qW(q,q.t).w}</div>`);setTimeout(()=>playQ(q,'a_'+q.t),450)}
+ if(q.type==='num'){const D=CUR.DIARY,h=D.hl[q.t],i=D.rows.indexOf(q.t),c=$('.tq .numq');if(c)c.insertAdjacentHTML('afterend',`<div class="numexp"><span class="ar">${h.num}</span> = ${h.d}<br>${h.d}-й день у арабов (неделя с воскресенья) → ${CUR.LAYLA.ru[i]}</div>`);setTimeout(()=>playQ(q,'a_'+q.t),450)}
+ if(q.type==='dia'){const c=$('.tq .dia');if(c){c.classList.add('lab');c.insertAdjacentHTML('afterend',q.yawm?`<div class="lylexp"><b>${q.ar}</b> — днём, ${CUR.LAYLA.v[q.t]}</div>`:`<div class="lylexp"><b>${q.ar}</b> — ночь перед ${CUR.LAYLA.p[q.t]}.<br>Это ${CUR.LAYLA.v[q.row]} вечером 🌙</div>`)}}
  if(q.type==='who'){const c=$('.tq .chs');if(c)c.insertAdjacentHTML('beforebegin',`<div class="ask" style="font-size:30px">${LD.dialog[q.li][1]}</div>`)}
  if(q.type==='lyl'){const Z=CUR.LAYLA,c=$('.tq .lyl'),p=(q.t+6)%7;if(c)c.insertAdjacentHTML('afterend',q.yawm?`<div class="lylexp"><b>${q.ar}</b> — днём, ${Z.v[q.t]}</div>`:`<div class="lylexp"><b>${q.ar}</b> — ночь перед ${Z.p[q.t]}.<br>Это ${Z.v[p]} вечером 🌙</div>`)}
  if(q.type==='sun'){const c=$('.tq .sunq');if(c)c.insertAdjacentHTML('beforebegin',`<div class="ask snk1">${snkHtml(q.w)}</div>`);setTimeout(()=>playQ(q,CUR.SNAKE.pre+'_'+q.i),450)}}
@@ -1181,6 +1231,10 @@ function test(){
  if(q.type==='tf'){prompt='Подходит слово к картинке?';body=`<div class="row" style="gap:24px;justify-content:center"><div class="op tfcard"><img src="${QA['w_'+q.img]}" alt=""></div><div class="ask">${QW(q.word).w}</div></div><div class="tf"><button data-a="${q.ok?1:0}" aria-label="Да">👍</button><button data-a="${q.ok?0:1}" aria-label="Нет">👎</button></div>`}
  if(q.type==='gap'){prompt='Вставь пропущенное слово';body=`<div class="ask">${q.s.replace('___','<span style="color:var(--u)">_____</span>')}</div><div class="chs">${q.ch.map(([c,j])=>`<button data-a="${j===q.a?1:0}">${c}</button>`).join('')}</div>`}
  if(q.type==='lword'){prompt='Послушай и выбери слово';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="chs">${q.opts.map(k=>`<button data-a="${k===q.t?1:0}">${QW(k).w}</button>`).join('')}</div>`}
+ if(q.type==='lru'){prompt='Послушай и выбери перевод';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="chs ru">${q.opts.map(k=>`<button data-a="${k===q.t?1:0}">${QW(k).ru}</button>`).join('')}</div>`}
+ if(q.type==='rul'){prompt='Выбери арабское слово';body=`<div class="trq">${QW(q.t).ru}</div><div class="chs">${q.opts.map(k=>`<button data-a="${k===q.t?1:0}">${QW(k).w}</button>`).join('')}</div>`}
+ if(q.type==='num'){const h=CUR.DIARY.hl[q.t],N={'1':'وَاحِدٌ','2':'اثْنَانِ','3':'ثَلَاثَةٌ','4':'أَرْبَعَةٌ','5':'خَمْسَةٌ'},AD={'1':'١','2':'٢','3':'٣','4':'٤','5':'٥'};prompt='Какое число спрятано в названии дня?';body=`<div class="ask">${QW(q.t).w}</div><div class="numq">${q.opts.map(d=>`<button data-a="${d===h.d?1:0}"><i>${AD[d]}</i>${N[d]}</button>`).join('')}</div>`}
+ if(q.type==='dia'){prompt='Найди в дневнике недели';body=`<div class="ask" style="font-size:42px">${q.ar}</div>${q.hint?`<div class="lylhint">☀️ — день · 🌙 — вечер. <b>لَيْلَةٌ</b> — ночь перед днём, она ещё во вчерашней строке</div>`:''}`+diaHtml('q',(i,ev,h)=>`<button class="${ev?'de':'dd'}" data-a="${i===q.row&&ev===q.ev?1:0}">${h}</button>`)}
  if(q.type==='lyl'){const Z=CUR.LAYLA;prompt='Когда это? Нажми на нужную клетку';body=`<div class="ask" style="font-size:44px">${q.ar}</div>${q.hint?`<div class="lylhint">☾ <b>لَيْلَةٌ</b> — ночь перед днём. Сутки начинаются с заката</div>`:''}<div class="lyl">${q.tiles.map(([d,ev],i)=>`<button class="${ev?'ev':''}" data-a="${i===q.ans?1:0}"><i>${ev?'🌙':'☀️'}</i>${Z.ru[d]}<small>${ev?'вечер':'день'}</small></button>`).join('')}</div>`}
  if(q.type==='sun'){prompt='Послушай: «ال» солнечная или лунная?';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="sunq"><button class="s" data-a="${isSun(q.w)?1:0}"><b>☀️</b>солнечная</button><button class="m" data-a="${isSun(q.w)?0:1}"><b>🌙</b>лунная</button></div>`}
  if(q.type==='who'){prompt='Послушай: кто это сказал?';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="chs">${q.sp.map((s,j)=>`<button data-a="${s===q.a?1:0}" style="color:${j?'var(--blue)':'#2e7d32'}">${s}</button>`).join('')}</div>`}
@@ -1211,7 +1265,7 @@ function test(){
    if(q.ws[i]===q.ws[q.got.length]){q.got.push(i);tone(true);test();if(q.got.length===q.ws.length){play('d_'+q.li);fin(q.err<=1)}}
    else{q.err++;tone(false);b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),400)}});
   wireStamp(()=>{q.got=q.ws.map((_,i)=>i);test()},()=>{if(TS.res.length<=TS.i)TS.res.push(null);nxt()});return}
- $$('[data-a]').forEach(b=>b.onclick=()=>{if(TS.lock)return;TS.lock=true;const ok=b.dataset.a==='1';tone(ok);b.classList.add(ok?'good':'bad');if(!ok){const g=document.querySelector('[data-a="1"]');setTimeout(()=>g&&g.classList.add('good'),300)}TS.res.push(ok);afterAns(q,ok);const t0=TS;if(!UI.stamp)setTimeout(()=>{if(TS!==t0||S.view!=='test')return;nxt()},q.type==='who'?2200:q.type==='lyl'?3800:1800)});
+ $$('[data-a]').forEach(b=>b.onclick=()=>{if(TS.lock)return;TS.lock=true;const ok=b.dataset.a==='1';tone(ok);b.classList.add(ok?'good':'bad');if(!ok){const g=document.querySelector('[data-a="1"]');setTimeout(()=>g&&g.classList.add('good'),300)}TS.res.push(ok);afterAns(q,ok);const t0=TS;if(!UI.stamp)setTimeout(()=>{if(TS!==t0||S.view!=='test')return;nxt()},q.type==='who'?2200:['lyl','dia','num'].includes(q.type)?3800:1800)});
  wireStamp(()=>{const g=document.querySelector('[data-a="1"]');g&&g.classList.add('good')},()=>{if(TS.res.length<=TS.i)TS.res.push(null);nxt()});
 }
 function hwLink(){const base=location.href.split('#')[0].split('?')[0];

@@ -422,6 +422,16 @@ body.hw .app.side{grid-template-columns:1fr} body.hw .app.side .band,body.hw .ap
 .lns .pp{cursor:pointer}.lns .pp rect.fr{fill:#7a3e8e}.lns .pp text{font:700 42px var(--fa);fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none}
 .lns .pp.sel rect.fr{fill:#f5b800}.lns .pp.sel text{fill:#3b2a00}.lns .pp.done rect.fr{fill:#2e8b57}
 .lnsay{display:flex;justify-content:center;min-height:62px}.lnsay .bubble{font-size:34px}
+/* урок ٨: «لَيْلَةَ …» — ночь перед днём (тест, CUR.LAYLA) */
+.lyl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:min(96vw,760px);direction:ltr}
+.lyl button{position:relative;border-radius:20px;border:4px solid #f2c94c;background:#fff8dc;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;font:900 19px/1.15 var(--fr);color:#5b4a1c}
+.lyl button i{font-style:normal;font-size:40px;line-height:1}.lyl button small{font:800 15px var(--fr);opacity:.8}
+.lyl button.ev{background:#1d2b53;border-color:#3b4f8f;color:#fff}.lyl button.ev small{opacity:.85}
+.lyl button.good{box-shadow:0 0 0 5px var(--ok)}.lyl button.bad{box-shadow:0 0 0 5px var(--no)}
+.lyl button+button::before{content:'→';position:absolute;left:-12px;top:50%;transform:translateY(-50%);font:900 18px var(--fr);color:#b9a8b0}
+.lylhint{font:800 18px var(--fr);color:var(--mut);text-align:center}.lylhint b{font-family:var(--fa);font-size:24px;color:var(--ink)}
+.lylexp{font:800 20px/1.4 var(--fr);text-align:center;background:#eef3ff;border-radius:16px;padding:10px 16px}.lylexp b{font-family:var(--fa);font-size:28px}
+@media (max-width:600px){.lyl{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}.lyl button+button::before{display:none}.lyl button i{font-size:32px}.lyl button{font-size:17px}}
 @media (max-width:900px){.rings{grid-template-columns:repeat(3,minmax(0,1fr))}.snk .tl{font-size:20px;min-height:88px}}
 @media (max-width:900px){.app.side{grid-template-columns:1fr}.app.side .foot{grid-column:1;grid-row:auto;flex-direction:row}.app.side .band,.app.side .subtabs,.app.side .view{grid-column:1}
  .dlg,.pairs,.readwrap{grid-template-columns:1fr}.opts.n4{grid-template-columns:repeat(2,1fr)}.memo,.conc{grid-template-columns:repeat(3,1fr)}.letters{grid-template-columns:repeat(2,1fr)}.band h1{font-size:30px}.gstage{padding:16px}.deco{display:none}.towers{grid-template-columns:1fr}}
@@ -1108,7 +1118,7 @@ function makeTest(){
  const ws=shuffle(pool.slice()),T=['listen','readpic','lword'];
  ws.forEach((k,i)=>add(T[i%3]==='listen'?0:1,{type:T[i%3],t:k,opts:opts(k,pool)}));
  // 2) соедини линиями по 4: каждое слово ещё дважды (при 9+ словах — один раз)
- let mi=0;for(let r=0;r<(n<=8?2:1);r++){const pr=shuffle(pool.slice());for(let i=0;i<n;i+=4){let w=pr.slice(i,i+4);if(w.length<4)w=w.concat(shuffle(pool.filter(x=>!w.includes(x))).slice(0,4-w.length));qs.push([100+mi*17+Math.random()*8,{type:'match',w,p:shuffle(w.slice()),done:{},sel:null,err:0}]);mi++}}
+ let mi=0;for(let r=0;r<((P&&P.rounds)||(n<=8?2:1));r++){const pr=shuffle(pool.slice());for(let i=0;i<n;i+=4){let w=pr.slice(i,i+4);if(w.length<4)w=w.concat(shuffle(pool.filter(x=>!w.includes(x))).slice(0,4-w.length));qs.push([100+mi*17+Math.random()*8,{type:'match',w,p:shuffle(w.slice()),done:{},sel:null,err:0}]);mi++}}
  // 3) правда или нет — в части без текста
  if(!useRQ)for(let i=0;i<2;i++){const a=ws[i],same=i===0;add(2,{type:'tf',img:a,word:same?a:ws[(i+3)%n],ok:same})}
  // 4) кто это сказал? — реплика диалога на слух
@@ -1121,6 +1131,11 @@ function makeTest(){
  if(useRQ)shuffle(RQ).slice(0,4).forEach(q=>add(4,{type:'readq',...q}));
  if(useRQ&&CUR.SNAKE)shuffle(CUR.SNAKE.w.map((_,i)=>i)).slice(0,2).forEach(i=>add(4,{type:'sun',i,w:CUR.SNAKE.w[i][1]}));
  if(useRQ&&CUR.QA){const Q=CUR.QA;const pr=shuffle(Q.q.map(([l,t])=>[t,Q.a.find(a=>a[0]===Q.key[l])[1]])).slice(0,4);add(4,{type:'match',qa:pr,w:[0,1,2,3],p:shuffle([0,1,2,3]),done:{},sel:null,err:0})}
+ // урок ٨: «لَيْلَةَ + день» — ночь ПЕРЕД этим днём (P.layla — сколько вопросов, по умолчанию 2)
+ if(CUR.LAYLA){const Z=CUR.LAYLA,m=(P&&P.layla!=null)?P.layla:2;const ds=shuffle([0,1,2,3,4,5,6]);
+  for(let j=0;j<m;j++){const d=ds[j],t=(d+1)%7,yawm=j===m-1&&m>2;
+   const tiles=[[d,0],[d,1],[t,0],[t,1]];
+   add(j===0?0:2,{type:'lyl',t,yawm,hint:j===0,ar:(yawm?'يَوْمَ ':'لَيْلَةَ ')+Z.g[t],tiles,ans:yawm?2:1})}}
  // 7) повторение: 2 слова прошлого урока
  const pv=LESSONS[LN-1];if(pv){const pks=pv.words.map(w=>w.k);shuffle(pks.slice()).slice(0,2).forEach((k,i)=>add(1,{type:i?'readpic':'listen',t:k,src:LN-1,opts:opts(k,pks)}))}
  return qs.sort((a,b)=>a[0]-b[0]).map(x=>x[1])}
@@ -1132,6 +1147,7 @@ function afterAns(q,ok){
  const k=q.type==='tf'?q.word:q.t;
  if(['listen','readpic','lword','tf'].includes(q.type))setTimeout(()=>playQ(q,'a_'+k),450);
  if(q.type==='who'){const c=$('.tq .chs');if(c)c.insertAdjacentHTML('beforebegin',`<div class="ask" style="font-size:30px">${LD.dialog[q.li][1]}</div>`)}
+ if(q.type==='lyl'){const Z=CUR.LAYLA,c=$('.tq .lyl'),p=(q.t+6)%7;if(c)c.insertAdjacentHTML('afterend',q.yawm?`<div class="lylexp"><b>${q.ar}</b> — днём, ${Z.v[q.t]}</div>`:`<div class="lylexp"><b>${q.ar}</b> — ночь перед ${Z.p[q.t]}.<br>Это ${Z.v[p]} вечером 🌙</div>`)}
  if(q.type==='sun'){const c=$('.tq .sunq');if(c)c.insertAdjacentHTML('beforebegin',`<div class="ask snk1">${snkHtml(q.w)}</div>`);setTimeout(()=>playQ(q,CUR.SNAKE.pre+'_'+q.i),450)}}
 function test(){
  if(!TS){const q=makeTest();TS={q,base:q.length,i:-1,res:[],name:'',kid:-1}}
@@ -1165,6 +1181,7 @@ function test(){
  if(q.type==='tf'){prompt='Подходит слово к картинке?';body=`<div class="row" style="gap:24px;justify-content:center"><div class="op tfcard"><img src="${QA['w_'+q.img]}" alt=""></div><div class="ask">${QW(q.word).w}</div></div><div class="tf"><button data-a="${q.ok?1:0}" aria-label="Да">👍</button><button data-a="${q.ok?0:1}" aria-label="Нет">👎</button></div>`}
  if(q.type==='gap'){prompt='Вставь пропущенное слово';body=`<div class="ask">${q.s.replace('___','<span style="color:var(--u)">_____</span>')}</div><div class="chs">${q.ch.map(([c,j])=>`<button data-a="${j===q.a?1:0}">${c}</button>`).join('')}</div>`}
  if(q.type==='lword'){prompt='Послушай и выбери слово';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="chs">${q.opts.map(k=>`<button data-a="${k===q.t?1:0}">${QW(k).w}</button>`).join('')}</div>`}
+ if(q.type==='lyl'){const Z=CUR.LAYLA;prompt='Когда это? Нажми на нужную клетку';body=`<div class="ask" style="font-size:44px">${q.ar}</div>${q.hint?`<div class="lylhint">☾ <b>لَيْلَةٌ</b> — ночь перед днём. Сутки начинаются с заката</div>`:''}<div class="lyl">${q.tiles.map(([d,ev],i)=>`<button class="${ev?'ev':''}" data-a="${i===q.ans?1:0}"><i>${ev?'🌙':'☀️'}</i>${Z.ru[d]}<small>${ev?'вечер':'день'}</small></button>`).join('')}</div>`}
  if(q.type==='sun'){prompt='Послушай: «ال» солнечная или лунная?';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="sunq"><button class="s" data-a="${isSun(q.w)?1:0}"><b>☀️</b>солнечная</button><button class="m" data-a="${isSun(q.w)?0:1}"><b>🌙</b>лунная</button></div>`}
  if(q.type==='who'){prompt='Послушай: кто это сказал?';body=`<button class="speaker pulse" id="tSpk" aria-label="Послушать">${I.spk}</button><div class="chs">${q.sp.map((s,j)=>`<button data-a="${s===q.a?1:0}" style="color:${j?'var(--blue)':'#2e7d32'}">${s}</button>`).join('')}</div>`}
  if(q.src)prompt='🔁 Вспомним урок '+q.src+' · '+prompt;
@@ -1194,7 +1211,7 @@ function test(){
    if(q.ws[i]===q.ws[q.got.length]){q.got.push(i);tone(true);test();if(q.got.length===q.ws.length){play('d_'+q.li);fin(q.err<=1)}}
    else{q.err++;tone(false);b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),400)}});
   wireStamp(()=>{q.got=q.ws.map((_,i)=>i);test()},()=>{if(TS.res.length<=TS.i)TS.res.push(null);nxt()});return}
- $$('[data-a]').forEach(b=>b.onclick=()=>{if(TS.lock)return;TS.lock=true;const ok=b.dataset.a==='1';tone(ok);b.classList.add(ok?'good':'bad');if(!ok){const g=document.querySelector('[data-a="1"]');setTimeout(()=>g&&g.classList.add('good'),300)}TS.res.push(ok);afterAns(q,ok);const t0=TS;if(!UI.stamp)setTimeout(()=>{if(TS!==t0||S.view!=='test')return;nxt()},q.type==='who'?2200:1800)});
+ $$('[data-a]').forEach(b=>b.onclick=()=>{if(TS.lock)return;TS.lock=true;const ok=b.dataset.a==='1';tone(ok);b.classList.add(ok?'good':'bad');if(!ok){const g=document.querySelector('[data-a="1"]');setTimeout(()=>g&&g.classList.add('good'),300)}TS.res.push(ok);afterAns(q,ok);const t0=TS;if(!UI.stamp)setTimeout(()=>{if(TS!==t0||S.view!=='test')return;nxt()},q.type==='who'?2200:q.type==='lyl'?3800:1800)});
  wireStamp(()=>{const g=document.querySelector('[data-a="1"]');g&&g.classList.add('good')},()=>{if(TS.res.length<=TS.i)TS.res.push(null);nxt()});
 }
 function hwLink(){const base=location.href.split('#')[0].split('?')[0];

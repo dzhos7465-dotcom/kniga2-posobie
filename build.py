@@ -37,7 +37,7 @@ os.makedirs(f'{root}/docs', exist_ok=True)
 SITE = 'https://dzhos7465-dotcom.github.io/kniga2-posobie/'
 AR = lambda n: ''.join('٠١٢٣٤٥٦٧٨٩'[int(c)] if c.isdigit() else c for c in str(n))
 meta_re = re.compile(r"meta:\{n:'([^']*)',t:'([^']*)'")
-hw_re = re.compile(r"\{t:'([^']*)'[^}]*?rq:(?:true|false)\}")
+hw_re = re.compile(r"\{t:'([^']*)'(?:[^{}]|\{[^{}]*\})*?rq:(?:true|false)\}")  # внутри части допускается один уровень {…} (mix)
 os.makedirs(f'{root}/docs/hw', exist_ok=True)
 def hw_page(slug, target, title, desc):
     img = f'{SITE}hw/{slug}.jpg' if os.path.exists(f'{root}/docs/hw/{slug}.jpg') else f'{SITE}hw/book.jpg'

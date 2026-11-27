@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Живая книга · урок 8 · الْأَيَّامُ</title>
+<meta name="theme-color" content="#14361d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Lalezar';src:url(fonts/lalezar-arabic-400-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:'Lalezar';src:url(fonts/lalezar-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Noto Naskh Arabic';font-weight:700;src:url(fonts/noto-naskh-arabic-arabic-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-weight:800;src:url(fonts/nunito-cyrillic-800-normal.woff2) format('woff2');unicode-range:U+0400-04FF}
+@font-face{font-family:'Nunito';font-weight:900;src:url(fonts/nunito-cyrillic-900-normal.woff2) format('woff2');unicode-range:U+0400-04FF}
+:root{
+ --g:#2f9a45;--g2:#22803a;--gd:#1d4a28;--gdd:#0c2414;--gl:#e7f4e3;
+ --gold:#ffc21a;--gold2:#f2a100;--goldl:#fff4cf;
+ --paper:#fffaf0;--paper2:#f8f0de;--ink:#1d2a1f;--mute:#7d8a7a;--line:#ece2cc;
+ --ok:#2bb673;--okl:#dcf7e8;--bad:#e5484d;--badl:#fde4e4;
+ --spk1:#2f9a45;--spk2:#2f6fd1;
+ --fa:'Noto Naskh Arabic','Amiri',serif;--fh:'Lalezar','Noto Naskh Arabic',serif;--fr:'Nunito',system-ui,sans-serif;
+ --r1:12px;--r2:18px;--r3:28px;
+ --sh:0 1px 1px rgba(40,30,10,.06),0 4px 10px rgba(40,30,10,.07),0 14px 30px rgba(40,30,10,.08);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:var(--fr);font-weight:800;color:var(--ink);background:radial-gradient(120% 90% at 30% 0%,#24592f 0%,var(--gd) 38%,var(--gdd) 100%);overflow:hidden}
+.bt,.chip,.sc,.big,.hint,.teach,.tg{direction:ltr;unicode-bidi:isolate}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+.ar{font-family:var(--fa);font-weight:700;direction:rtl;unicode-bidi:isolate}
+img{display:block;max-width:100%}
+
+/* ---------- каркас ---------- */
+#app{display:grid;grid-template-columns:92px 1fr;grid-template-rows:1fr auto;height:100vh;height:100dvh;padding:18px 22px 16px 0;gap:14px 0}
+#rail{grid-row:1/3;display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:2px;overflow:auto}
+.badge{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;font:34px var(--fh);color:#2a1d00;
+ background:linear-gradient(180deg,#ffd75a,var(--gold) 45%,var(--gold2));box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 4px 0 #c98400,0 10px 22px rgba(0,0,0,.35);text-decoration:none;margin-bottom:6px}
+.pgb{position:relative;width:58px;height:46px;border-radius:14px;font:20px var(--fa);font-weight:700;color:#cfe6cf;
+ background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 6px rgba(0,0,0,.25);transition:.2s}
+.pgb:hover{color:#fff}
+.pgb.on{background:linear-gradient(180deg,#fff,#f1ead7);color:var(--g2);box-shadow:inset 0 2px 0 #fff,0 3px 0 #cdbf9c,0 8px 18px rgba(0,0,0,.35)}
+.pgb.done::after{content:'';position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 2px rgba(0,0,0,.25),0 0 8px var(--gold)}
+#top{display:none}
+#stage{position:relative;min-height:0;display:flex}
+#book{flex:1;display:flex;flex-direction:row-reverse;min-height:0;border-radius:var(--r3);
+ box-shadow:0 2px 0 rgba(255,255,255,.08) inset,0 20px 50px rgba(0,0,0,.45),0 4px 12px rgba(0,0,0,.3);position:relative}
+.pg{flex:1;min-width:0;position:relative;background:linear-gradient(180deg,var(--paper),#fdf6e6);overflow:auto;padding:26px 30px 46px;direction:rtl;scrollbar-width:thin;scrollbar-color:#e2d6b8 transparent}
+.pg.r{border-radius:0 var(--r3) var(--r3) 0;background:linear-gradient(270deg,var(--paper) 88%,#efe4cb)}
+.pg.l{border-radius:var(--r3) 0 0 var(--r3);background:linear-gradient(90deg,var(--paper) 88%,#efe4cb)}
+.pg.full{border-radius:var(--r3);background:linear-gradient(180deg,var(--paper),#fbf2df)}
+.spine{width:2px;background:linear-gradient(180deg,#e2d4b4,#cdbb92,#e2d4b4);box-shadow:0 0 14px 4px rgba(120,90,30,.18)}
+.pno{position:sticky;top:100%;height:0;font:20px var(--fa);font-weight:700;color:#b4a986}
+.pg.r .pno{text-align:left}.pg.l .pno{text-align:right}
+.pno span{position:relative;top:14px}
+
+/* ---------- задание ---------- */
+.ex{position:relative;margin-bottom:30px;border-radius:var(--r2);padding:4px;transition:box-shadow .25s}
+.ex.act{box-shadow:0 0 0 2px rgba(47,154,69,.0)}
+.exh{display:flex;align-items:center;gap:12px;margin:0 0 14px;flex-wrap:wrap}
+.exn{min-width:44px;height:40px;padding:0 10px;border-radius:13px;display:grid;place-items:center;font:24px var(--fh);color:#fff;
+ background:linear-gradient(180deg,#46b25b,var(--g) 50%,var(--g2));box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 3px 0 #17642a,0 6px 14px rgba(34,128,58,.3)}
+.exh h2{margin:0;font:30px/1.25 var(--fh);font-weight:400;color:var(--g2);letter-spacing:0}
+.exh .sub{font:20px var(--fh);color:#b07a00}
+.exh .tag{font:16px var(--fh);background:var(--g);color:#fff;border-radius:999px;padding:4px 14px}
+.exh .sc{margin-inline-start:auto;font:14px var(--fr);font-weight:900;color:var(--g2);background:var(--gl);border-radius:999px;padding:5px 12px;direction:ltr}
+.hint{direction:ltr;text-align:right;font-size:14px;color:var(--mute);margin:-6px 0 12px}
+.acts{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.chip{font-size:14px;font-weight:900;padding:8px 14px;border-radius:12px;color:var(--g2);background:linear-gradient(180deg,#fff,#f3eee0);
+ box-shadow:inset 0 1px 0 #fff,0 2px 0 #ddd2b5,0 4px 10px rgba(60,40,0,.07)}
+.chip.on{color:#fff;background:linear-gradient(180deg,#46b25b,var(--g2));box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 2px 0 #17642a}
+
+/* ---------- кнопки звука и перевода ---------- */
+.pl{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;
+ background:radial-gradient(circle at 35% 30%,#5cc56f,var(--g) 55%,var(--g2));box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 3px 0 #17642a,0 6px 12px rgba(34,128,58,.3);transition:.2s}
+.pl svg{width:15px;height:15px;margin-left:2px}
+.pl.on{box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 3px 0 #17642a,0 0 0 6px rgba(255,194,26,.35),0 0 22px 6px rgba(255,194,26,.55)}
+.rub{flex:none;height:30px;min-width:38px;border-radius:999px;font-size:13px;font-weight:900;color:var(--g2);background:linear-gradient(180deg,#fff,#f1ecdf);
+ box-shadow:inset 0 1px 0 #fff,0 2px 0 #dcd1b3,0 3px 8px rgba(60,40,0,.08)}
+.rub.on{background:linear-gradient(180deg,#26402b,#16281a);color:#fff;box-shadow:0 2px 0 #0a150c}
+.ru{display:none;direction:ltr;text-align:right;font-size:14px;color:#5d6b5a;margin-top:4px;font-weight:800}
+.ru.show,body.ruon .ru{display:block}
+
+/* ---------- диалог ---------- */
+.scene{border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh);margin-bottom:18px;background:#fff;position:relative}
+.scene img{width:100%;max-height:240px;object-fit:cover}
+.ln{display:flex;align-items:center;gap:10px;margin:0 0 10px}
+.ln .who{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:19px var(--fa);font-weight:700;color:#fff;
+ box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 3px 8px rgba(0,0,0,.15)}
+.ln.s1 .who{background:linear-gradient(180deg,#4fb862,var(--spk1))}
+.ln.s2 .who{background:linear-gradient(180deg,#5b93e6,var(--spk2))}
+.bub{min-width:0;padding:9px 18px 10px;border-radius:18px;transition:.25s;position:relative}
+.bub .ar{font-size:25px;line-height:1.55;display:block}
+.ln.s1 .bub{background:linear-gradient(180deg,#eef8ea,#e1f2db);color:#1c6a2e;box-shadow:inset 0 1px 0 #fff,0 2px 0 #cfe5c7}
+.ln.s2 .bub{background:linear-gradient(180deg,#edf3fd,#dfe9fb);color:#1f4f9e;box-shadow:inset 0 1px 0 #fff,0 2px 0 #c9d8f2}
+.ln.on .bub,.glow{box-shadow:0 0 0 3px var(--gold),0 0 0 7px rgba(255,194,26,.28),0 0 26px 6px rgba(255,194,26,.45)!important}
+.blur .bub .ar{filter:blur(7px);opacity:.7}
+
+/* ---------- карточки слов ---------- */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.wc{position:relative;border-radius:var(--r2);background:linear-gradient(180deg,#fff,#fbf7ee);box-shadow:var(--sh);padding:10px 8px 10px;text-align:center;transition:transform .2s,box-shadow .2s}
+.wc img{width:100%;aspect-ratio:1/1.02;object-fit:contain;border-radius:14px}
+.wc .ar{display:block;font-size:24px;margin-top:4px;color:var(--ink)}
+.wc.on{transform:translateY(-4px);background:linear-gradient(180deg,#fff8dd,#ffe9a8)}
+.hidew .wc .ar{visibility:hidden}
+.wc .rub{position:absolute;top:8px;left:8px;height:26px;min-width:32px;font-size:12px}
+.wc .ru{text-align:center}
+
+/* ---------- состояния ответа ---------- */
+.ok{background:linear-gradient(180deg,#eafbf1,var(--okl))!important;box-shadow:0 0 0 2px #9fe3bf,0 0 18px 2px rgba(43,182,115,.35),0 4px 10px rgba(0,0,0,.06)!important}
+.bad{background:linear-gradient(180deg,#fff1f1,var(--badl))!important;box-shadow:0 0 0 2px #f6b3b5,0 0 16px 2px rgba(229,72,77,.25)!important;animation:shk .35s}
+.ok::before,.bad::before{position:absolute;top:-9px;left:-9px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:900 14px var(--fr);color:#fff;z-index:3;box-shadow:0 0 0 3px #fff,0 3px 8px rgba(0,0,0,.2)}
+.ok::before{content:'✓';background:linear-gradient(180deg,#3fcf86,#1f9c5f)}
+.bad::before{content:'✕';background:linear-gradient(180deg,#f2686c,#cf2f35)}
+@keyframes shk{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ---------- дерево ---------- */
+.treew{position:relative;border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh);background:#fff}
+.treew img{width:100%}
+.hs{position:absolute;border-radius:14px;transition:.25s}
+.hs:hover{background:rgba(255,255,255,.18)}
+.hs.spot{box-shadow:0 0 0 4px var(--gold),0 0 0 2000px rgba(10,30,15,.28),0 0 24px 8px rgba(255,194,26,.6)}
+.hs.ok,.hs.bad{background:transparent!important}
+.hs.ok{box-shadow:0 0 0 4px var(--ok),0 0 24px 6px rgba(43,182,115,.6)!important}
+.hs.bad{box-shadow:0 0 0 4px var(--bad)!important}
+.prompt{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 12px;padding:12px 16px;border-radius:var(--r2);background:linear-gradient(180deg,#fff,#f7f1e2);box-shadow:var(--sh)}
+.prompt .ar{font-size:26px;flex:1}
+.tfb{width:64px;height:52px;border-radius:14px;font:900 26px var(--fr);position:relative}
+.tfb.y{color:var(--g2);background:linear-gradient(180deg,#fff,#eef7ea);box-shadow:inset 0 1px 0 #fff,0 3px 0 #cfe3c6}
+.tfb.n{color:#b23a3e;background:linear-gradient(180deg,#fff,#fbeeee);box-shadow:inset 0 1px 0 #fff,0 3px 0 #ecd0d0}
+.after{width:100%;font-size:22px;color:var(--g2)}
+
+/* ---------- صِلْ кольцами ---------- */
+.rings{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px}
+.ring{position:relative;aspect-ratio:160/170}
+.ring svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ring .pc{position:absolute;top:0;width:42%;aspect-ratio:1;border-radius:14px;background:#fff;box-shadow:var(--sh);padding:4px}
+.ring .pc img{width:100%;height:100%;object-fit:contain;border-radius:10px}
+.ring .pc.a{right:2%}.ring .pc.b{left:2%}
+.ring .lt{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px var(--c),0 2px 6px rgba(0,0,0,.15);font:15px var(--fa);font-weight:700;line-height:24px;color:var(--c)}
+.ring .wd{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:56%;aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--c),0 6px 14px rgba(0,0,0,.12);font:21px var(--fa);font-weight:700;color:var(--ink);transition:.25s}
+.ring .wd.on{box-shadow:0 0 0 4px var(--c),0 0 0 9px rgba(255,194,26,.35),0 0 24px 6px rgba(255,194,26,.5)}
+.ring.solved .wd{background:var(--c);color:#fff}
+.ring path{fill:none;stroke:#e7decb;stroke-width:9;stroke-linecap:round;transition:stroke .3s}
+.ring.solved path.win{stroke:var(--c)}
+
+/* ---------- слушание с номерами ---------- */
+.abrow{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.num{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:20px var(--fa);font-weight:700;color:#3d2a00;
+ background:linear-gradient(180deg,#ffd75a,var(--gold) 50%,var(--gold2));box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 3px 0 #c98400}
+.pick{position:relative;width:118px;border-radius:var(--r2);background:linear-gradient(180deg,#fff,#fbf7ee);box-shadow:var(--sh);padding:6px;transition:.2s}
+.pick img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:12px}
+.pick .lt{position:absolute;top:6px;right:9px;font:17px var(--fa);font-weight:700;color:var(--mute)}
+.pgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.pgrid .pick{width:auto}
+.slot{margin:6px auto 0;width:46px;height:40px;border-radius:12px;border:2px dashed #d8cba8;display:grid;place-items:center;font:22px var(--fa);font-weight:700;color:var(--g2)}
+.slot.f{border:0;background:linear-gradient(180deg,#fff,#f2efe4);box-shadow:inset 0 0 0 2px var(--g)}
+.nums{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.nb{width:46px;height:44px;border-radius:13px;font:21px var(--fa);font-weight:700;color:var(--g2);background:linear-gradient(180deg,#fff,#f3eee0);box-shadow:inset 0 1px 0 #fff,0 3px 0 #ddd2b5,0 5px 10px rgba(60,40,0,.08);transition:.2s}
+.nb.on{color:#3d2a00;background:linear-gradient(180deg,#ffd75a,var(--gold) 50%,var(--gold2));box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 3px 0 #c98400,0 0 18px 4px rgba(255,194,26,.5)}
+.nb.used{opacity:.4}
+.blob{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 10px;padding:18px;border-radius:40px;background:linear-gradient(180deg,#f6f0ff,#efe6fb)}
+.wchip{position:relative;padding:8px 14px 6px;border-radius:22px 22px 22px 6px;background:#fff;box-shadow:0 0 0 3px var(--c),0 4px 10px rgba(0,0,0,.08);text-align:center;min-width:96px}
+.wchip .ar{font-size:22px}
+.wchip .slot{width:38px;height:32px;font-size:18px;margin-top:4px}
+.clock{position:relative;width:min(100%,520px);aspect-ratio:1;margin:6px auto 0}
+.clock .dial{position:absolute;inset:12%;border-radius:50%;border:16px solid #29a8d8;box-shadow:inset 0 0 0 4px #fff}
+.clock .hand{position:absolute;left:50%;top:50%;width:6%;height:6%;margin:-3%;border-radius:50%;background:#29a8d8;box-shadow:0 0 0 10px #fff,0 0 0 18px #29a8d8}
+.clock .pick{position:absolute;width:24%;transform:translate(-50%,-50%)}
+.clock .pick .slot{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);margin:0;background:#fff}
+.teach{direction:ltr;text-align:right;font-size:13px;color:#8a6a00;background:var(--goldl);border-radius:10px;padding:6px 10px;margin-top:8px}
+
+/* ---------- пары ---------- */
+.model{padding:16px;border-radius:var(--r2);background:linear-gradient(180deg,#fff,#f8f3e6);box-shadow:var(--sh);margin-bottom:14px}
+.model .ln .who{width:30px;height:30px;font-size:15px}
+.model .ln.s2 .who{background:linear-gradient(180deg,#f4a24c,#e27b18)}
+.model .ln.s2 .bub{background:linear-gradient(180deg,#fff4e6,#ffe6c8);color:#9a4c00;box-shadow:inset 0 1px 0 #fff,0 2px 0 #f0d2a8}
+.frame{display:flex;flex-wrap:wrap;gap:10px;padding:14px;border-radius:var(--r2);border:2px solid #cfe6c8;background:#f6fbf3}
+.fc{width:96px;border-radius:14px;background:#fff;box-shadow:var(--sh);padding:5px 5px 6px;text-align:center;transition:.2s;position:relative}
+.fc img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:10px}
+.fc .ar{font-size:17px;display:block}
+.fc.on{transform:translateY(-3px);background:linear-gradient(180deg,#fff8dd,#ffe9a8);box-shadow:0 0 0 3px var(--gold),0 0 20px 4px rgba(255,194,26,.45)}
+.gen{display:flex;gap:6px;margin-inline-start:auto}
+.pic76{border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh);margin-bottom:22px}
+.pic76 img{width:100%;max-height:260px;object-fit:cover}
+.surp{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.cue{width:150px;border-radius:var(--r2);background:#fff;box-shadow:var(--sh);padding:8px;text-align:center;position:relative}
+.cue img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:12px}
+.cue .ar{font-size:18px;display:block;min-height:30px}
+.cue .ar.hid{filter:blur(6px);opacity:.6}
+.big{padding:14px 22px;border-radius:16px;font-size:17px;font-weight:900;color:#3d2a00;background:linear-gradient(180deg,#ffd75a,var(--gold) 50%,var(--gold2));box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 4px 0 #c98400,0 10px 20px rgba(200,130,0,.3)}
+
+/* ---------- змейка ---------- */
+.snake{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:16px;border-radius:30px;background:linear-gradient(180deg,#f4ecdc,#eadfc6);box-shadow:inset 0 2px 8px rgba(120,90,30,.15)}
+.tile{position:relative;border-radius:16px;padding:6px 2px 8px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 3px 0 rgba(0,0,0,.12),0 6px 12px rgba(0,0,0,.08);transition:.2s}
+.tile.sun{background:linear-gradient(180deg,#fff6c8,#ffe27a)}
+.tile.moon{background:linear-gradient(180deg,#eaf2ff,#c9dcfb)}
+.tile .l{font:24px var(--fa);font-weight:700;display:block;line-height:1.3}
+.tile .ar{font-size:15px;display:block}
+.tile .ic{position:absolute;top:2px;left:5px;font-size:11px}
+.tile.on{box-shadow:0 0 0 3px var(--gold),0 0 20px 5px rgba(255,194,26,.55)}
+
+/* ---------- чтение ---------- */
+.r1s{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.rc{position:relative;text-align:center;padding:12px;border-radius:var(--r2);background:#fff;box-shadow:var(--sh)}
+.rc .ci{width:120px;height:120px;margin:0 auto 8px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 5px var(--c),0 6px 14px rgba(0,0,0,.12);background:#fff}
+.rc .ci img{width:100%;height:100%;object-fit:contain}
+.rc .lt{position:absolute;top:10px;right:14px;font:20px var(--fa);font-weight:700;color:var(--mute)}
+.rc .ar{font-size:21px;display:block}
+.qa{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:12px 70px}
+.qa svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.qcol,.acol{display:flex;flex-direction:column;gap:10px}
+.qb{position:relative;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:14px;text-align:right;transition:.2s}
+.qcol .qb{background:linear-gradient(180deg,#fff3e6,#ffe4c6);box-shadow:inset 0 1px 0 #fff,0 2px 0 #f0cfa2}
+.acol .qb{background:linear-gradient(180deg,#f0f8e6,#e0efcf);box-shadow:inset 0 1px 0 #fff,0 2px 0 #c9e0b0}
+.qb .ar{font-size:19px;flex:1}
+.qb .lt{flex:none;width:26px;height:26px;border-radius:50%;background:#fff;display:grid;place-items:center;font:15px var(--fa);font-weight:700;color:var(--mute)}
+.qb.on{box-shadow:0 0 0 3px var(--gold),0 0 18px 4px rgba(255,194,26,.5)}
+.qb.ok::before,.qb.bad::before{display:none}
+.rtext{display:flex;gap:16px;align-items:flex-start}
+.rtext .im{flex:0 0 38%;border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh);background:#fff}
+.rtext .tx{flex:1}
+.rl{display:block;padding:6px 12px;border-radius:12px;margin-bottom:4px;transition:.25s}
+.rl .ar{font-size:24px;line-height:1.7}
+.rl.ev{background:var(--goldl);box-shadow:0 0 0 2px var(--gold)}
+.tfq{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 10px 8px 12px;border-radius:14px;background:#fff;box-shadow:var(--sh);position:relative}
+.tfq .ar{font-size:19px;flex:1}
+.tfq .tfb{width:48px;height:42px;font-size:20px}
+.lets{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lcol{border-radius:var(--r2);background:#fff;box-shadow:var(--sh);padding:10px 8px;text-align:center}
+.lcol .big1{width:56px;height:56px;margin:0 auto 8px;border-radius:50%;display:grid;place-items:center;color:#fff;font:30px var(--fa);font-weight:700;background:var(--c);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 4px 10px rgba(0,0,0,.15)}
+.lcol .w{font:24px var(--fa);font-weight:700;display:block;padding:4px 0 2px}
+.lcol .w b{color:var(--c)}
+.lcol .wr{height:26px;border-bottom:2px dashed #d9ccb0;margin:0 6px 8px}
+
+/* ---------- نَشَاط по линиям ---------- */
+.field{position:relative;border-radius:var(--r2);background:linear-gradient(180deg,#f3f8ff,#eef4fb);box-shadow:inset 0 2px 10px rgba(0,40,80,.06)}
+.field{max-width:calc((100vh - 190px) * 1.15);margin:0 auto}
+.field svg{display:block;width:100%;height:auto}
+.field .nd{cursor:pointer}
+.field .nd circle{transition:.25s}
+.field .pp{cursor:pointer}
+.sent{position:sticky;bottom:8px;z-index:5;margin-top:12px;padding:12px 18px;border-radius:var(--r2);background:linear-gradient(180deg,#fff8dd,#ffeeb5);box-shadow:var(--sh);display:none;align-items:center;gap:12px;flex-wrap:wrap}
+.sent.show{display:flex}
+.sent .ar{font-size:26px;flex:1}
+
+/* ---------- заметка учителю ---------- */
+#note{position:fixed;z-index:30;width:270px;left:116px;bottom:96px;padding:14px 16px 12px;border-radius:6px 6px 16px 6px;background:linear-gradient(170deg,#fffbe0,#fff1b0);color:#4a3b00;
+ box-shadow:0 1px 0 #fff inset,0 10px 28px rgba(0,0,0,.35);transform:rotate(-1.2deg);font-size:13px;line-height:1.45;transition:.25s}
+#note h5{margin:0 0 6px;font:900 11px var(--fr);letter-spacing:.08em;text-transform:uppercase;color:#a07800;display:flex;align-items:center;gap:6px}
+#note h5 button{margin-inline-start:auto;font-size:15px;color:#a07800}
+#note .tp{margin-bottom:8px}
+#note .tp .ar{font-size:15px}
+#note .cn{display:flex;flex-wrap:wrap;gap:5px}
+#note .cn button{font-size:12px;font-weight:900;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.7);box-shadow:0 1px 0 rgba(160,120,0,.25);display:flex;gap:4px;align-items:center;direction:ltr}
+#note .cn button .ar{font-size:14px}
+#note .cn button.full{background:linear-gradient(180deg,#c9f2d8,#9fe3bf)}
+#note .rs{font-size:11px;color:#a07800;margin-top:6px;text-decoration:underline}
+#note.min{width:auto;padding:8px 12px}
+#note.min .tp,#note.min .cn,#note.min .rs{display:none}
+body.kids #note{display:none}
+
+/* ---------- панель учителя ---------- */
+#bar{grid-column:2;display:flex;align-items:center;gap:10px;padding:10px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 8px 20px rgba(0,0,0,.25)}
+#ctx{display:flex;gap:8px;flex-wrap:nowrap;min-width:0;overflow:hidden}
+.sp{flex:1}
+.bt{height:48px;padding:0 16px;border-radius:14px;font-size:15px;font-weight:900;color:#e9f5e7;white-space:nowrap;
+ background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 3px 0 rgba(0,0,0,.3),0 6px 14px rgba(0,0,0,.2);transition:.15s}
+.bt:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 1px 0 rgba(0,0,0,.3)}
+.bt.gold{color:#2a1d00;background:linear-gradient(180deg,#ffd75a,var(--gold) 50%,var(--gold2));box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 4px 0 #b97900,0 8px 18px rgba(255,170,0,.3)}
+.bt.on{color:#2a1d00;background:linear-gradient(180deg,#fff,#f1ead7);box-shadow:inset 0 2px 0 #fff,0 3px 0 #b9ab85}
+.bt.done{color:#2a1d00;background:linear-gradient(180deg,#fff3c4,#ffd75a);box-shadow:inset 0 2px 0 rgba(255,255,255,.7),0 4px 0 #c98400,0 0 18px rgba(255,194,26,.4)}
+.bt.ar2{width:48px;padding:0;font-size:20px}
+.tg{display:flex;align-items:center;gap:10px;color:#cfe6cf;font-size:14px;font-weight:900;white-space:nowrap}
+.sw{width:50px;height:28px;border-radius:999px;background:rgba(0,0,0,.35);box-shadow:inset 0 2px 4px rgba(0,0,0,.4);position:relative;transition:.2s}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:linear-gradient(180deg,#fff,#e8e2d0);box-shadow:0 2px 4px rgba(0,0,0,.3);transition:.2s}
+.sw.on{background:linear-gradient(180deg,var(--gold),var(--gold2))}
+.sw.on::after{left:25px}
+
+/* ---------- окна ---------- */
+#ov{position:fixed;inset:0;z-index:50;background:rgba(5,18,9,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px}
+#ov.show{display:flex}
+.win{width:min(760px,100%);max-height:92vh;overflow:auto;border-radius:var(--r3);background:linear-gradient(180deg,var(--paper),#fbf2df);box-shadow:0 30px 80px rgba(0,0,0,.5);padding:24px;position:relative}
+.win h3{margin:0 0 14px;padding-left:52px;font:900 22px var(--fr);color:var(--g2)}
+.win .x{position:absolute;top:14px;left:14px;width:40px;height:40px;border-radius:12px;font-size:18px;background:#fff;box-shadow:var(--sh)}
+.win .n{margin:0 0 10px;font-size:15px;line-height:1.5;font-weight:800}
+.win h4{margin:16px 0 6px;color:var(--g2)}
+.win .ar{font-size:1.15em}
+.game{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.game .wc{cursor:pointer}
+.gtop{display:flex;align-items:center;gap:14px}
+.gtop .pl{width:64px;height:64px}
+.gtop .pl svg{width:24px;height:24px}
+.hwl{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:#fff;box-shadow:var(--sh);margin-bottom:10px}
+.hwl a{flex:1;color:var(--g2);font-weight:900;text-decoration:none}
+.hwl small{display:block;color:var(--mute)}
+
+/* ---------- телефон ---------- */
+@media (max-width:820px){
+ body{overflow:auto;background:var(--gdd)}
+ #app{display:block;height:auto;padding:0}
+ #rail,#note{display:none!important}
+ #top{display:block;position:sticky;top:0;z-index:20;padding:calc(env(safe-area-inset-top) + 12px) 16px 14px;border-radius:0 0 26px 26px;background:linear-gradient(180deg,#24592f,var(--gd));box-shadow:0 8px 20px rgba(0,0,0,.3)}
+ .trow{display:flex;align-items:center;gap:12px;direction:rtl}
+ .trow .badge{width:46px;height:46px;font-size:26px;border-radius:14px;margin:0}
+ .trow .tt{font:26px var(--fh);color:#fff}
+ .trow .pp2{margin-inline-start:auto;direction:ltr;color:#b9d8b9;font-size:13px}
+ .strip{display:flex;gap:6px;direction:rtl;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+ .strip .pgb{flex:none;width:44px;height:36px;font-size:16px;border-radius:11px}
+ #stage{display:block;padding:14px 10px 120px}
+ #book{display:block;border-radius:24px;overflow:hidden}
+ .spine{display:none}
+ .pg,.pg.r,.pg.l{border-radius:0;overflow:visible;padding:20px 14px 30px;background:var(--paper)}
+ .pg+.pg{border-top:2px dashed var(--line)}
+ .pno{display:none}
+ .exh h2{font-size:24px}
+ .acts{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 14px}
+ .acts .bt{height:40px;font-size:13px;padding:0 12px;color:var(--g2);background:linear-gradient(180deg,#fff,#f3eee0);box-shadow:inset 0 1px 0 #fff,0 2px 0 #ddd2b5}
+ .acts .bt.gold{color:#2a1d00;background:linear-gradient(180deg,#ffd75a,var(--gold) 50%,var(--gold2));box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 3px 0 #b97900}
+ .acts .bt.on{color:#fff;background:linear-gradient(180deg,#46b25b,var(--g2))}
+ #bar{position:fixed;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 10px);z-index:25;padding:8px;gap:8px;background:rgba(20,54,29,.92);backdrop-filter:blur(10px)}
+ #ctx,.bz,.bh{display:none!important}
+ .bt{height:44px;font-size:14px;padding:0 12px}
+ .tg span{display:none}
+ .bub .ar{font-size:21px}
+ .ln{gap:7px}.ln .who{width:32px;height:32px;font-size:16px}.pl{width:34px;height:34px}
+ .cards{grid-template-columns:repeat(3,1fr);gap:10px}
+ .wc .ar{font-size:20px}
+ .rings{grid-template-columns:repeat(2,1fr);gap:22px 14px}
+ .ring .wd{font-size:19px}
+ .pgrid{grid-template-columns:repeat(3,1fr)}
+ .pick{width:104px}
+ .snake{grid-template-columns:repeat(4,1fr);padding:10px}
+ .r1s{grid-template-columns:1fr 1fr;gap:10px}.rc .ci{width:92px;height:92px}.rc .ar{font-size:17px}
+ .qa{grid-template-columns:1fr;gap:10px}
+ .qa svg{display:none}
+ .field{max-width:none}
+ .acol{border-top:2px dashed var(--line);padding-top:10px}
+ .rtext{flex-direction:column}.rtext .im{flex:none;width:100%}
+ .lets{grid-template-columns:repeat(2,1fr)}
+ .fc{width:84px}
+ .game{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div id="app">
+ <aside id="rail"></aside>
+ <header id="top"></header>
+ <main id="stage"><div id="book"></div></main>
+ <footer id="bar">
+  <div id="ctx"></div><div class="sp"></div>
+  <button class="bt ar2" id="prev" title="Назад">‹</button>
+  <label class="tg"><span>Перевод детям</span><button class="sw" id="ruSw" aria-label="Перевод детям"></button></label>
+  <button class="bt bz" id="zak">🎯 Закрепить</button>
+  <button class="bt bh" id="tch">📖 Учителю</button>
+  <button class="bt" id="done">✓ Пройдено</button>
+  <button class="bt ar2" id="next" title="Дальше">›</button>
+ </footer>
+</div>
+<div id="note"></div>
+<div id="ov"><div class="win" id="win"></div></div>
+<script>
+const LESSONS={},KNIGA={};
+// ================= book map =================
+const BOOK=[
+ {n:'١',t:'تَعَارُفٌ «١»',c:'#2f8fd0',p:'стр. 1–10'},
+ {n:'٢',t:'مَنِ الْأَوَّلُ؟',c:'#3fa34d',p:'стр. 11–20'},
+ {n:'٣',t:'مَنِ الْأُولَى؟',c:'#ef8a2c',p:'стр. 21–30'},
+ {n:'٤',t:'تَعَارُفٌ «٢»',c:'#6a3d9a',p:'стр. 31–40'},
+ {n:'٥',t:'أُسْرَةُ مُحَمَّدٍ',c:'#b23a72',p:'стр. 43–52',ready:true},
+ {n:'٦',t:'حِذَائِي',c:'#8a5a3c',p:'стр. 53–62',ready:true},
+ {n:'٧',t:'أُسْرَةُ بَتُولَ',c:'#1f9c8f',p:'стр. 63–72',ready:true},
+ {n:'٨',t:'الْأَيَّامُ',c:'#8f9a2f',p:'стр. 73–82',ready:true}];
+
+// ================= lesson 8 · الْأَيَّامُ · стр. ٧٣–٨٢ =================
+// Всё содержимое урока: шаблон берёт его из LESSONS[8], ключи как у уроков ٥–٧.
+// Новое в шаблоне (необязательные ветки, старые уроки не меняются):
+//   MATCH1.ring — صِلْ стр. ٧٤ кольцами, как в книге; TREEBOOK — дерево со стрелками из книги;
+//   LX layout:'clock' — слушание стр. ٧٩ по кругу часов; SNAKE — «ال» شَمْسِيَّة / قَمَرِيَّة стр. ٧٨ змейкой + игра;
+//   LINES — نَشَاط стр. ٨٢ «اِعْمَلْ جُمَلًا حَسَبَ الْخَطِّ»; PAIRS[].items[].lab и .r2 — подпись карточки и четвёртая реплика.
+// Картинки: w_* слова (кадры видео), scene (видео), b_* из книги и из уроков ٥–٧.
+// Звук: d_0…d_7 реплики (второй, построчный проход без музыки), a_* слова, x3_/x4_/x5_ слушание стр. ٧٥,
+//   x9_ слушание стр. ٧٩, s1_0…s1_27 змейка стр. ٧٨.
+
+LESSONS[8]=(()=>{
+const L8={
+ // ---------- домашка частями: hw/l8-1.html, hw/l8-2.html, hw/l8-3.html (весь урок — hw/l8.html) ----------
+ // 12 новых слов: в каждой части не больше 8, чтобы каждое слово встретилось 3 раза (отдельный вопрос + дважды «соедини»)
+ // часть 1 — ровно 25: 5 «слушай → перевод», 5 «перевод → арабское», 3 «соедини», 3 «число в дне», 3 «дневник», 2 «собери», 2 «вставь», 2 прошлый урок
+ HW:[{t:'Слова и диалог (стр. 73)',mix:{lru:5,rul:5,match:3,num:3,dia:3,build:2,gap:2,prev:2},gaps:[0,1,2,3,4,5,9],rq:false},
+     {t:'Навещаем родных (стр. 73–77)',words:['yazur','khala','layla','wasat','usbu','sabt','jumua','khamis'],gaps:[3,6,7,8],build:[2,4,6,7],layla:2,max:25,rq:false},
+     {t:'Весь урок (стр. 73–82)',max:25,rq:true}],
+ testMax:25, noWho:true, // «Кто это сказал?» в тестах урока 8 не нужен (решение Джо 24.11)
+ // дневник недели: число, спрятанное в названии дня (корень выделен цветом), цвет строки как на листке календаря
+ DIARY:{rows:['sabt','ahad','ithnayn','thulatha','arbia','khamis','jumua'],
+  col:['#1e88e5','#2e8b3c','#f08c00','#e53b2a','#4b4fa3','#a0614b','#b8860b'],
+  hl:{sabt:{tag:'≈ суббота'},ahad:{d:'1',day:'الْ<b>أَحَدُ</b>',num:'<b>أَحَدٌ</b> · وَاحِدٌ'},ithnayn:{d:'2',day:'الْإِ<b>ثْنَيْ</b>نِ',num:'<b>اثْنَا</b>نِ'},
+   thulatha:{d:'3',day:'ال<b>ثُّلَاثَ</b>اءُ',num:'<b>ثَلَاثَ</b>ةٌ'},arbia:{d:'4',day:'الْ<b>أَرْبِعَ</b>اءُ',num:'<b>أَرْبَعَ</b>ةٌ'},khamis:{d:'5',day:'الْ<b>خَمِ</b>ي<b>سُ</b>',num:'<b>خَمْسَ</b>ةٌ'},jumua:{tag:'🕌 джума'}}},
+ // «لَيْلَةَ + день» в тесте: родительный падеж дней и русские названия (0 — суббота)
+ LAYLA:{g:['السَّبْتِ','الْأَحَدِ','الْإِثْنَيْنِ','الثُّلَاثَاءِ','الْأَرْبِعَاءِ','الْخَمِيسِ','الْجُمُعَةِ'],
+  ru:['суббота','воскресенье','понедельник','вторник','среда','четверг','пятница'],
+  p:['субботой','воскресеньем','понедельником','вторником','средой','четвергом','пятницей'],
+  v:['в субботу','в воскресенье','в понедельник','во вторник','в среду','в четверг','в пятницу']},
+ // ---------- шапка урока ----------
+ meta:{n:'٨',t:'الْأَيَّامُ',ru:'Урок 8 · страницы 73–82',c:'#8f9a2f',
+  PAGE:{dialog:'٧٣',words:'٧٣',tree:'٧٤',listen:'٧٥',pairs:'٧٦',sounds:'٧٨',listen2:'٧٩',read:'٨٠',letters:'٨١',activity:'٨٢'},
+  tabs:{dialog:['Диалог','73'],words:['Слова','73'],tree:['Дерево семьи · صِلْ','74'],listen:['Слушание','75'],pairs:['Говорим в парах','76–77'],sounds:['«ال» солнечная и лунная','78'],listen2:['Слушание · часы','79'],read:['Читаем','80–81'],letters:['Буквы','81'],activity:['Игра по линиям','82'],},
+  snd:['ش','س'],concPage:'٨٠',
+  sceneAlt:'Фадль и Мухаммад едут на паровозике по дороге из дней недели'},
+
+ // ---------- ١ слова и диалог ----------
+ words:[
+  {k:'sabt',w:'السَّبْتُ',ru:'суббота'},{k:'ahad',w:'الْأَحَدُ',ru:'воскресенье'},{k:'ithnayn',w:'الْإِثْنَيْنُ',ru:'понедельник'},
+  {k:'thulatha',w:'الثُّلَاثَاءُ',ru:'вторник'},{k:'arbia',w:'الْأَرْبِعَاءُ',ru:'среда'},{k:'khamis',w:'الْخَمِيسُ',ru:'четверг'},
+  {k:'jumua',w:'الْجُمُعَةُ',ru:'пятница'},{k:'yazur',w:'يَزُورُ',ru:'навещает'},{k:'khala',w:'خَالَةٌ',ru:'тётя (сестра мамы)'},
+  {k:'layla',w:'لَيْلَةٌ',ru:'ночь, вечер накануне'},{k:'wasat',w:'وَسَطٌ',ru:'середина'},{k:'usbu',w:'الْأُسْبُوعُ',ru:'неделя'}],
+ blueWords:['yazur'],
+ dialog:[
+  ['فَضْل','مَتَى تَزُورُ عَمَّكَ؟'],
+  ['مُحَمَّد','يَوْمَ السَّبْتِ، وَيَوْمَ الْإِثْنَيْنِ.'],
+  ['فَضْل','وَمَتَى تَزُورُ جَدَّكَ؟'],
+  ['مُحَمَّد','يَوْمَ الْجُمُعَةِ، وَيَوْمَ الْأَحَدِ، وَلَيْلَةَ الثُّلَاثَاءِ.'],
+  ['فَضْل','وَمَتَى تَزُورُ خَالَتَكَ؟'],
+  ['مُحَمَّد','يَوْمَ الْخَمِيسِ، وَلَيْلَةَ الْأَرْبِعَاءِ.'],
+  ['فَضْل','وَمَتَى تَزُورُ خَالَكَ؟'],
+  ['مُحَمَّد','أَزُورُهُ وَسَطَ الْأُسْبُوعِ.']],
+ dialogRu:['Когда ты навещаешь своего дядю (брата папы)?','В субботу и в понедельник.','А когда ты навещаешь дедушку?','В пятницу, в воскресенье и вечером накануне вторника.','А когда ты навещаешь тётю (сестру мамы)?','В четверг и вечером накануне среды.','А когда ты навещаешь дядю (брата мамы)?','Навещаю его в середине недели.'],
+ build:[['مَتَى تَزُورُ عَمَّكَ؟',0],['يَوْمَ السَّبْتِ، وَيَوْمَ الْإِثْنَيْنِ.',1],['وَمَتَى تَزُورُ جَدَّكَ؟',2],['يَوْمَ الْجُمُعَةِ، وَيَوْمَ الْأَحَدِ، وَلَيْلَةَ الثُّلَاثَاءِ.',3],['وَمَتَى تَزُورُ خَالَتَكَ؟',4],['يَوْمَ الْخَمِيسِ، وَلَيْلَةَ الْأَرْبِعَاءِ.',5],['وَمَتَى تَزُورُ خَالَكَ؟',6],['أَزُورُهُ وَسَطَ الْأُسْبُوعِ.',7]],
+ // в диалоге и рамках, но не в рамке слов стр. ٧٣
+ extraWords:[{w:'أَزُورُهُ / أَزُورُهَا',ru:'навещаю его / её'},{w:'عَمَّةٌ',ru:'тётя (сестра папы), только узнавание'},{w:'تَزُورِينَ',ru:'ты навещаешь (девочке)'}],
+
+ // ---------- ٢ дерево семьи стр. ٧٤ (то же дерево, что в уроках ٥ и ٧) + صِلْ ----------
+ TREE_W:1610,TREE_H:1310,
+ TREE:{hafsa:[480,75,683,353],mutie:[792,82,975,353],suha:[68,500,248,750],hala:[348,500,518,750],khalid:[660,500,833,750],qasim:[972,500,1155,750],fatima:[1283,500,1463,750],nuha:[218,938,390,1178],basim:[465,938,645,1178],isa:[830,938,1005,1178],khawla:[1103,938,1275,1178],muhammad:[1373,938,1568,1178]},
+ NAME:{mutie:'مُطِيع',suha:'سُهَى',hala:'هَالَة',khalid:'خَالِد',qasim:'قَاسِم',fatima:'فَاطِمَة',hafsa:'حَفْصَة',nuha:'نُهَى',basim:'بَاسِم',isa:'عِيسَى',khawla:'خَوْلَة',muhammad:'مُحَمَّد'},
+ TREEBOOK:'b_tree8', // страница ٧٤ со стрелками: خَالَة — от نُهَى к سُهَى, عَمَّة — от عِيسَى к هَالَة
+ // главное слово дерева в этом уроке — خَالَتِي: у نُهَى и بَاسِم это سُهَى (сестра мамы هَالَة)
+ WHO:[
+  {spk:'nuha',line:'أَنَا نُهَى. أَيْنَ خَالَتِي؟',ans:['suha'],after:'هَذِهِ خَالَتِي سُهَى.'},
+  {spk:'basim',line:'أَنَا بَاسِمٌ. أَيْنَ خَالِي؟',ans:['khalid','qasim'],after:'هَذَا خَالِي خَالِدٌ، وَهَذَا خَالِي قَاسِمٌ.'},
+  {spk:'basim',line:'أَنَا بَاسِمٌ. أَيْنَ خَالَتِي؟',ans:['suha'],after:'هَذِهِ خَالَتِي سُهَى.'},
+  {spk:'isa',line:'أَنَا عِيسَى. أَيْنَ عَمِّي؟',ans:['khalid'],after:'هَذَا عَمِّي خَالِدٌ.'},
+  {spk:'nuha',line:'أَنَا نُهَى. أَيْنَ جَدَّتِي؟',ans:['hafsa'],after:'هَذِهِ جَدَّتِي حَفْصَةُ.'},
+  {spk:'muhammad',line:'أَنَا مُحَمَّدٌ. أَيْنَ جَدِّي؟',ans:['mutie'],after:'هَذَا جَدِّي مُطِيعٌ.'}],
+ TF:[
+  {spk:'nuha',pt:'suha',line:'أَنَا نُهَى. هَذِهِ خَالَتِي سُهَى.',ok:true,fix:'نَعَمْ! هَذِهِ خَالَتِي سُهَى.'},
+  {spk:'basim',pt:'fatima',line:'أَنَا بَاسِمٌ. هَذِهِ خَالَتِي فَاطِمَةُ.',ok:false,fix:'لَا! هَذِهِ خَالَتِي سُهَى.'},
+  {spk:'isa',pt:'khalid',line:'أَنَا عِيسَى. هَذَا عَمِّي خَالِدٌ.',ok:true,fix:'نَعَمْ! هَذَا عَمِّي خَالِدٌ.'},
+  {spk:'basim',pt:'khalid',line:'أَنَا بَاسِمٌ. هَذَا خَالِي خَالِدٌ.',ok:true,fix:'نَعَمْ! هَذَا خَالِي خَالِدٌ.'},
+  {spk:'isa',pt:'hala',line:'أَنَا عِيسَى. هَذِهِ خَالَتِي هَالَةُ.',ok:false,fix:'لَا! هَذِهِ عَمَّتِي هَالَةُ.'},
+  {spk:'nuha',pt:'hafsa',line:'أَنَا نُهَى. هَذِهِ جَدَّتِي حَفْصَةُ.',ok:true,fix:'نَعَمْ! هَذِهِ جَدَّتِي حَفْصَةُ.'},
+  {spk:'muhammad',pt:'qasim',line:'أَنَا مُحَمَّدٌ. هَذَا جَدِّي قَاسِمٌ.',ok:false,fix:'لَا! هَذَا وَالِدِي قَاسِمٌ.'}],
+ // упр. ٢ صِلْ стр. ٧٤ кольцами, как в книге: [слово, картинка أ, картинка ب, верная сторона, цвет дуги] — порядок книги, по рядам справа налево
+ MATCH1:{n:'٢',title:'صِلْ',page:'٧٤',ring:true,items:[
+  ['khamis','khamis','ahad','a','#e8794a'],['ahad','arbia','ahad','b','#555b66'],['ithnayn','ithnayn','khamis','a','#22a6b3'],['jumua','thulatha','jumua','b','#6c4ba3'],
+  ['sabt','ithnayn','sabt','b','#e58a9b'],['layla','layla','wasat','a','#3fb4d8'],['thulatha','sabt','thulatha','b','#2f80d1'],['usbu','ithnayn','usbu','b','#ef6c00'],
+  ['yazur','yazur','usbu','a','#e04a4a'],['arbia','arbia','jumua','a','#3cae4a'],['khala','ithnayn','khala','b','#d8b26a'],['wasat','wasat','khamis','a','#666']]},
+
+ // ---------- слушание ----------
+ LX:[
+  {id:'x3',n:'٣',part:1,title:'اِسْتَمِعْ، وَضَعْ (✓)',type:'ab',items:[['arbia','khamis','a'],['jumua','khala','b'],['layla','yazur','a'],['jumua','arbia','a'],['khamis','khala','a'],['ithnayn','yazur','b'],['arbia','usbu','b']]},
+  {id:'x4',n:'٤',part:1,title:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ',type:'pic',pics:[['أ','khamis'],['ب','yazur'],['ت','layla'],['ث','jumua'],['ج','khala'],['ح','wasat']],key:['layla','khala','khamis','jumua','yazur','wasat']},
+  {id:'x5',n:'٥',part:1,title:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ',type:'word',key:['sabt','ahad','ithnayn','thulatha','arbia','khamis','jumua','yazur','khala','layla','wasat','usbu']},
+  // стр. ٧٩ упр. ٢: картинки по кругу часов, как в книге [буква, картинка, угол: 0 — справа, 90 — внизу].
+  // Звучат фразы другого диктора — ключ не определён, проверяет учитель
+  {id:'x9',n:'٢',part:2,title:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ',type:'pic',layout:'clock',pics:[['د','arbia',-90],['أ','khala',-45],['ب','ithnayn',0],['ت','thulatha',45],['ث','sabt',90],['ج','khamis',135],['ح','jumua',180],['خ','ahad',225]],key:null,count:8}],
+ // поле слов упр. ٥ стр. ٧٥ в порядке книги (ряды справа налево), цвета рамок как в книге
+ BLOB:[['jumua','#e8794a'],['sabt','#f0a12a'],['usbu','#8c8c8c'],['arbia','#f0a12a'],['layla','#8c8c8c'],['yazur','#2f80d1'],['khala','#d68ab0'],['ahad','#7cb342'],['ithnayn','#f0a12a'],['khamis','#2f80d1'],['thulatha','#8c8c8c'],['wasat','#f0a12a']],
+
+ // ---------- ٤ звуки стр. ٧٨: «ال» الشَّمْسِيَّةُ وَ«ال» الْقَمَرِيَّةُ, змейка по алфавиту (звук s1_0…s1_27 в том же порядке) ----------
+ SNAKE:{n:'١',page:'78',pre:'s1',title:'«ال» الشَّمْسِيَّةُ وَ«ال» الْقَمَرِيَّةُ',w:[
+  ['أ','الْأَبُ'],['ب','الْبَابُ'],['ت','التِّينُ'],['ث','الثَّوْبُ'],['ج','الْجَدُّ'],['ح','الْحَالُ'],['خ','الْخَيْرُ'],
+  ['د','الدَّارُ'],['ذ','الذِّكْرُ'],['ر','الرَّابِعُ'],['ز','الزَّكَاةُ'],['س','السَّلَامُ'],['ش','الشَّمْسُ'],['ص','الصَّلَاةُ'],
+  ['ض','الضَّيْفُ'],['ط','الطَّعَامُ'],['ظ','الظُّهْرُ'],['ع','الْعَيْنُ'],['غ','الْغَدَاءُ'],['ف','الْفَصْلُ'],['ق','الْقَلَمُ'],
+  ['ك','الْكِتَابُ'],['ل','اللَّيْلُ'],['م','الْمَاءُ'],['ن','النَّاسُ'],['ه','الْهَاءُ'],['و','الْوَاحِدُ'],['ي','الْيَوْمُ']]},
+
+ // ---------- ٣ пары стр. ٧٦–٧٧ ----------
+ // q: [мальчику, девочке] — по полу отвечающего; a: ответ (одинаковый: «я навещаю его / её»); lab — подпись карточки
+ PAIRS:[
+  {id:'p1',title:'Упражнение ١',page:'٧٦',items:[['w_jadd','جَدّ','جَدَّكَ','جَدَّكِ','الْخَمِيسِ','الْأَرْبِعَاءِ'],['w_khal','خَال','خَالَكَ','خَالَكِ','الْأَحَدِ','الْجُمُعَةِ'],['w_sadiq','صَدِيق','صَدِيقَكَ','صَدِيقَكِ','الثُّلَاثَاءِ','الْإِثْنَيْنِ'],['w_amm','عَمّ','عَمَّكَ','عَمَّكِ','السَّبْتِ','الْخَمِيسِ']]
+   .map(([img,lab,m,f,l,y])=>({img,lab,q:['مَتَى تَزُورُ '+m+'؟','مَتَى تَزُورِينَ '+f+'؟'],a:['لَيْلَةَ '+l+'، وَيَوْمَ '+y+'.']}))},
+  {id:'p2',title:'Упражнение ٢',page:'٧٧',items:[['w_amm','عَمّ','عَمَّكَ','عَمَّكِ','أَزُورُهُ يَوْمَ الْإِثْنَيْنِ.'],['w_khal','خَال','خَالَكَ','خَالَكِ','أَزُورُهُ يَوْمَ الْأَحَدِ.'],['w_sadiq','صَدِيق','صَدِيقَكَ','صَدِيقَكِ','أَزُورُهُ يَوْمَ الثُّلَاثَاءِ.'],['w_jadd','جَدّ','جَدَّكَ','جَدَّكِ','أَزُورُهُ يَوْمَ السَّبْتِ.'],['w_amm','عَمّ · وَسَط','عَمَّكَ','عَمَّكِ','أَزُورُهُ وَسَطَ الْأُسْبُوعِ.'],['w_khala','خَالَة · وَسَط','خَالَتَكَ','خَالَتَكِ','أَزُورُهَا وَسَطَ الْأُسْبُوعِ.']]
+   .map(([img,lab,m,f,a])=>({img,lab,q:['مَتَى تَزُورُ '+m+'؟','مَتَى تَزُورِينَ '+f+'؟'],a:[a]}))},
+  // упр. ٣: четыре реплики — вторая пара «وَمَتَى تَزُورُ …؟ — أَزُورُهَا …» (r и r2); картинка — второй человек
+  {id:'p3',title:'Упражнение ٣',page:'٧٧',items:[['b_ibna','ابْنَة','الْإِثْنَيْنِ','ابْنَتَكَ','ابْنَتَكِ','السَّبْتِ'],['w_jadda','جَدَّة','السَّبْتِ','جَدَّتَكَ','جَدَّتَكِ','الْأَحَدِ'],['w_khala','خَالَة','الْخَمِيسِ','خَالَتَكَ','خَالَتَكِ','الثُّلَاثَاءِ'],['b_ukht','عَمَّة','الْأَرْبِعَاءِ','عَمَّتَكَ','عَمَّتَكِ','السَّبْتِ']]
+   .map(([img,lab,d1,m,f,d2])=>({img,lab,q:['مَتَى تَزُورُ وَالِدَتَكَ؟','مَتَى تَزُورِينَ وَالِدَتَكِ؟'],a:['أَزُورُهَا يَوْمَ '+d1+'.'],r:['وَمَتَى تَزُورُ '+m+'؟','وَمَتَى تَزُورِينَ '+f+'؟'],r2:'أَزُورُهَا يَوْمَ '+d2+'.'}))
+   .concat([{img:'w_khala',lab:'خَالَة · وَسَط',q:['وَمَتَى تَزُورُ خَالَتَكَ؟','وَمَتَى تَزُورِينَ خَالَتَكِ؟'],a:['أَزُورُهَا وَسَطَ الْأُسْبُوعِ.']}])},
+  // упр. ٤ — свободный опрос: вопрос выпадает с картинкой дня, по ней ребёнок отвечает
+  {id:'p4',title:'Упражнение ٤',page:'٧٧',items:[
+   {surprise:true,n:'١',q:['مَتَى تَزُورُ خَالَكَ؟','مَتَى تَزُورِينَ خَالَكِ؟'],cues:[['w_jumua','أَزُورُهُ يَوْمَ الْجُمُعَةِ.'],['w_wasat','أَزُورُهُ وَسَطَ الْأُسْبُوعِ.']]},
+   {surprise:true,n:'٢',q:['مَتَى تَزُورُ خَالَتَكَ؟','مَتَى تَزُورِينَ خَالَتَكِ؟'],cues:[['w_khamis','أَزُورُهَا يَوْمَ الْخَمِيسِ.'],['w_layla','أَزُورُهَا لَيْلَةَ الْأَرْبِعَاءِ.']]},
+   {surprise:true,n:'٣',q:['مَتَى تَزُورُ وَالِدَتَكَ؟','مَتَى تَزُورِينَ وَالِدَتَكِ؟'],cues:[['w_ithnayn','أَزُورُهَا يَوْمَ الْإِثْنَيْنِ.'],['w_ahad','أَزُورُهَا يَوْمَ الْأَحَدِ.']]},
+   {surprise:true,n:'٤',q:['مَتَى تَزُورُ وَالِدَكَ؟','مَتَى تَزُورِينَ وَالِدَكِ؟'],cues:[['w_sabt','أَزُورُهُ يَوْمَ السَّبْتِ.'],['w_thulatha','أَزُورُهُ يَوْمَ الثُّلَاثَاءِ.']]},
+   {surprise:true,n:'٥',q:['مَتَى تَزُورُ صَدِيقَكَ؟','مَتَى تَزُورِينَ صَدِيقَكِ؟'],cues:[['w_arbia','أَزُورُهُ يَوْمَ الْأَرْبِعَاءِ.'],['w_wasat','أَزُورُهُ وَسَطَ الْأُسْبُوعِ.']]},
+   {surprise:true,n:'٦',q:['مَتَى تَزُورُ جَدَّتَكَ؟','مَتَى تَزُورِينَ جَدَّتَكِ؟'],cues:[['w_jumua','أَزُورُهَا يَوْمَ الْجُمُعَةِ.'],['w_layla','أَزُورُهَا لَيْلَةَ الْخَمِيسِ.']]}]}],
+ SUBW:{w_jadd:'جَدّ',w_khal:'خَال',w_sadiq:'صَدِيق',w_amm:'عَمّ',w_khala:'خَالَة',w_jadda:'جَدَّة',b_ibna:'ابْنَة',b_ukht:'عَمَّة'},
+
+ // ---------- ٥ чтение стр. ٨٠–٨١ ----------
+ R1:[['السَّبْتُ','sabt'],['الْأَحَدُ','ahad'],['الْإِثْنَيْنُ','ithnayn'],['الثُّلَاثَاءُ','thulatha'],['الْأَرْبِعَاءُ','arbia'],['الْخَمِيسُ','khamis'],['الْجُمُعَةُ','jumua']],
+ RCOL:['#2f80d1','#3cae4a','#f0a12a','#e04a4a','#6c4ba3','#a0705a','#c9a227'],
+ // упр. ٣ стр. ٨١: текст про هِنْد
+ RTEXT:[['s1','اِسْمِي هِنْدٌ،'],['s2','أَزُورُ جَدَّتِي فِي بَيْتِهَا يَوْمَ الْخَمِيسِ.'],['s3','أَذْهَبُ أَنَا وَوَالِدِي وَوَالِدَتِي بِالسَّيَّارَةِ.'],['s4','اِسْمُ جَدَّتِي لَيْلَى.']],
+ RTEXTimg:'b_chtenie',
+ RTEXTru:'Меня зовут Хинд. Я навещаю бабушку в её доме в четверг. Я еду с папой и мамой на машине. Мою бабушку зовут Лейла.',
+ // первые 4 — задание книги «اِقْرَأْ، وَأَجِبْ بِـ (✓) أَوْ (✗)», дальше вопросы на знакомых словах
+ RQ:[
+  {q:'اِسْمُ وَالِدَةِ هِنْدٍ لَيْلَى.',ch:['✓','✗'],a:1,ev:'s4',book:true},
+  {q:'تَزُورُ هِنْدٌ جَدَّتَهَا يَوْمَ السَّبْتِ.',ch:['✓','✗'],a:1,ev:'s2',book:true},
+  {q:'لَا تَذْهَبُ هِنْدٌ وَوَالِدُهَا وَوَالِدَتُهَا بِالسَّيَّارَةِ.',ch:['✓','✗'],a:1,ev:'s3',book:true},
+  {q:'اِسْمُ جَدَّةِ هِنْدٍ لَيْلَى.',ch:['✓','✗'],a:0,ev:'s4',book:true},
+  {q:'مَتَى تَزُورُ هِنْدٌ جَدَّتَهَا؟',ch:['يَوْمَ السَّبْتِ','يَوْمَ الْخَمِيسِ','يَوْمَ الْجُمُعَةِ'],a:1,ev:'s2'},
+  {q:'أَيْنَ تَزُورُ هِنْدٌ جَدَّتَهَا؟',ch:['فِي بَيْتِهَا','فِي السَّيَّارَةِ'],a:0,ev:'s2'},
+  {q:'مَنْ لَيْلَى؟',ch:['جَدَّةُ هِنْدٍ','وَالِدَةُ هِنْدٍ'],a:0,ev:'s4'}],
+ // «Читаем по очереди»: упр. ١ стр. ٨٠ (4 фразы) + упр. ٢ (вопрос — ответ по ключу книги)
+ R4:[['أ','أَزُورُ عَمِّي يَوْمَ الْأَحَدِ.'],['ب','ذَهَبَ وَالِدِي يَوْمَ السَّبْتِ.'],['ت','يَوْمَ الْجُمُعَةِ أَنَا فِي الْبَيْتِ.'],['ث','هَذِهِ سَيَّارَةٌ طَوِيلَةٌ.'],
+     ['١','مَتَى تَزُورُ عَمَّكَ؟ — أَزُورُهُ يَوْمَ الْأَرْبِعَاءِ.'],['٢','مِنْ أَيْنَ أَنْتَ؟ — أَنَا مِنَ الْمَغْرِبِ.'],['٣','مَتَى تُصَلِّي الْجُمُعَةَ؟ — يَوْمَ الْجُمُعَةِ.'],['٤','أَيْنَ وَالِدَتُكَ؟ — وَالِدَتِي فِي الْبَيْتِ.'],['٥','كَيْفَ حَالُكَ؟ — بِخَيْرٍ وَالْحَمْدُ لِلهِ.']],
+ // упр. ١ стр. ٨٠ «اِقْرَأْ»: [фраза, картинка, буква книги] — вкладка «Фраза и картинка»
+ R1S:[['أَزُورُ عَمِّي يَوْمَ الْأَحَدِ.','w_ahad','أ'],['ذَهَبَ وَالِدِي يَوْمَ السَّبْتِ.','w_sabt','ب'],['يَوْمَ الْجُمُعَةِ أَنَا فِي الْبَيْتِ.','w_jumua','ت'],['هَذِهِ سَيَّارَةٌ طَوِيلَةٌ.','b_r4','ث']],
+ // упр. ٢ стр. ٨٠ «اِقْرَأْ، وَصِلْ بَيْنَ السُّؤَالِ وَالْجَوَابِ»: ключ книги (первая линия дана в книге: أ → ث)
+ QA:{q:[['أ','مَتَى تَزُورُ عَمَّكَ؟'],['ب','مِنْ أَيْنَ أَنْتَ؟'],['ت','مَتَى تُصَلِّي الْجُمُعَةَ؟'],['ث','أَيْنَ وَالِدَتُكَ؟'],['ج','كَيْفَ حَالُكَ؟']],
+  a:[['أ','أَنَا مِنَ الْمَغْرِبِ.'],['ب','وَالِدَتِي فِي الْبَيْتِ.'],['ت','بِخَيْرٍ وَالْحَمْدُ لِلهِ.'],['ث','أَزُورُهُ يَوْمَ الْأَرْبِعَاءِ.'],['ج','يَوْمَ الْجُمُعَةِ.']],
+  key:{'أ':'ث','ب':'أ','ت':'ج','ث':'ب','ج':'ت'}},
+
+ // ---------- буквы ط ظ ف ق стр. ٨١: [слово, место буквы 0 начало / 1 середина / 2 конец] ----------
+ LET:[
+  {l:'ط',c:'#8e2b4a',w:[['طَهَ',0],['سُلْطَانُ',1],['قِطٌّ',2]]},
+  {l:'ظ',c:'#7cb342',w:[['ظَافِرٌ',0],['مَظْلُومٌ',1],['حَافِظٌ',2]]},
+  {l:'ف',c:'#1f9a8a',w:[['فَهْدٌ',0],['عَفَافٌ',1],['شَرِيفٌ',2]]},
+  {l:'ق',c:'#f0a12a',w:[['قَيْسٌ',0],['صَقْرٌ',1],['شَفِيقٌ',2]]}],
+ // «Охота за буквой»: в диалоге этих букв почти нет — ищем во фразах урока (стр. 73–81)
+ hunt:(()=>{const H=[['стр. 73','أَزُورُهُ وَسَطَ الْأُسْبُوعِ.'],['стр. 77','مَتَى تَزُورُ صَدِيقَكَ؟'],['стр. 78','الطَّعَامُ، الظُّهْرُ، الْفَصْلُ، الْقَلَمُ'],['стр. 80','هَذِهِ سَيَّارَةٌ طَوِيلَةٌ.'],['стр. 81','أَزُورُ جَدَّتِي فِي بَيْتِهَا يَوْمَ الْخَمِيسِ.']];return {'ط':H,'ظ':H,'ف':H,'ق':H}})(),
+
+ // ---------- نَشَاط стр. ٨٢: «اِعْمَلْ جُمَلًا حَسَبَ الْخَطِّ» ----------
+ // Координаты — как на странице книги (поле 1600×1450). Пути прослежены по пунктиру книги; предложения — образец для учителя.
+ LINES:{page:'82',W:1600,H:1450,rows:['#f29a86','#8cc63f','#e5679a','#c890b5','#7b2f86'],
+  people:[['ghina','غِنَى','b_p_ghina',180],['nuha','نُهَى','b_p_nuha',420],['suha','سُهَى','b_p_suha',660],['fadl','فَضْلٌ','b_p_fadl',900],['walid','وَلِيدٌ','b_p_walid',1145],['ali','عَلِيٌّ','b_p_ali',1390]],
+  nodes:{
+   yakhudh:['يَأْخُذُ',345,410,0],yalbas:['يَلْبَسُ',633,410,0],yazur:['يَزُورُ',928,405,0],yadhhab:['يَذْهَبُ',1218,400,0],
+   zawj:['زَوْج',258,632,1],sadiq:['صَدِيق',462,630,1],khal:['خَال',668,625,1],amm:['عَمّ',872,622,1],jadd:['جَدّ',1080,620,1],walid:['وَالِد',1283,620,1],
+   waraqa:['وَرَقَة',350,855,2],qalam:['قَلَم',570,855,2],hidha:['حِذَاء',790,850,2],haqiba:['حَقِيبَة',1010,848,2],sayyara:['سَيَّارَة',1230,845,2],
+   qarib:['قَرِيب',265,1085,3],tawil:['طَوِيل',470,1080,3],qasir:['قَصِير',678,1078,3],kabir:['كَبِير',885,1075,3],saghir:['صَغِير',1090,1072,3],baid:['بَعِيد',1295,1068,3],
+   d_jumua:['الْجُمُعَة',238,1330,4],d_khamis:['الْخَمِيس',420,1328,4],d_arbia:['الْأَرْبِعَاء',603,1325,4],d_thulatha:['الثُّلَاثَاء',785,1322,4],d_ithnayn:['الْإِثْنَيْن',968,1320,4],d_ahad:['الْأَحَد',1150,1318,4],d_sabt:['السَّبْت',1332,1315,4]},
+  paths:[
+   {p:'ali',c:'#2f80d1',via:['yazur','khal','d_arbia'],s:'عَلِيٌّ يَزُورُ خَالَهُ يَوْمَ الْأَرْبِعَاءِ.',pts:[[1390,285],[1300,300],[1150,325],[1000,360],[928,405],[880,470],[760,560],[668,625],[620,700],[480,770],[455,860],[490,960],[560,1040],[580,1180],[603,1325]]},
+   {p:'walid',c:'#ef6c00',via:['yalbas','hidha','kabir'],s:'وَلِيدٌ يَلْبَسُ حِذَاءً كَبِيرًا.',pts:[[1145,285],[1120,303],[950,306],[790,304],[700,330],[633,410],[690,480],[770,525],[784,700],[790,850],[840,970],[885,1075]]},
+   {p:'fadl',c:'#2e9e4f',via:['yadhhab','sayyara','baid'],s:'فَضْلٌ يَذْهَبُ بِالسَّيَّارَةِ بَعِيدًا.',pts:[[900,285],[1000,320],[1140,355],[1218,400],[1212,500],[1186,620],[1190,760],[1230,845],[1300,905],[1330,965],[1295,1068]]},
+   {p:'suha',c:'#d6337a',via:['yakhudh','haqiba','saghir'],s:'سُهَى تَأْخُذُ حَقِيبَةً صَغِيرَةً.',pts:[[660,285],[560,330],[430,380],[345,410],[350,500],[354,690],[420,750],[700,745],[930,760],[1010,848],[1060,960],[1090,1072]]},
+   {p:'nuha',c:'#8e44ad',via:['yazur','walid','d_sabt'],s:'نُهَى تَزُورُ وَالِدَهَا يَوْمَ السَّبْتِ.',pts:[[420,285],[480,305],[650,312],[790,316],[880,340],[928,405],[1000,465],[1200,560],[1283,620],[1350,690],[1425,900],[1420,1100],[1380,1240],[1332,1315]]},
+   {p:'ghina',c:'#c08a3e',via:['yakhudh','waraqa','kabir'],s:'غِنَى تَأْخُذُ وَرَقَةً كَبِيرَةً.',pts:[[180,285],[280,345],[345,410],[290,460],[150,560],[105,640],[150,720],[300,800],[350,855],[362,960],[368,1140],[440,1200],[600,1222],[800,1200],[880,1160],[885,1075]]}]},
+ // вторая вкладка نَشَاط — «собери фразу из двух слов» на фразах урока
+ ACT:[['يَوْمَ','الْإِثْنَيْنِ','c1'],['لَيْلَةَ','الثُّلَاثَاءِ',''],['وَسَطَ','الْأُسْبُوعِ','c3'],['أَزُورُ','خَالَتِي',''],['مَتَى','تَزُورُ؟','c1'],['أَزُورُهُ','يَوْمَ السَّبْتِ',''],['هِنْدٌ','تَزُورُ جَدَّتَهَا','']],
+ ACOL:['#c9c33b','#d6337a','#b44fc4','#e04a4a','#7ac143','#27a36b','#e8a93a'],
+
+ // ---------- игры ----------
+ CONC:['أَزُورُ عَمِّي يَوْمَ الْأَحَدِ','ذَهَبَ وَالِدِي يَوْمَ السَّبْتِ','يَوْمَ الْجُمُعَةِ أَنَا فِي الْبَيْتِ','هَذِهِ سَيَّارَةٌ طَوِيلَةٌ','أَزُورُهُ يَوْمَ الْأَرْبِعَاءِ','وَالِدَتِي فِي الْبَيْتِ','أَنَا مِنَ الْمَغْرِبِ'],
+ decoMap:{jadd:'jumua',akh:'khala',sadiq:'sabt',amm:'ahad',khal:'khamis',bayt:'yazur',yadhhab:'layla'},
+
+ // ---------- тест: пропуски сначала из диалога (0–5, 9), потом из рамок пар (6–8) ----------
+ GAPS:[
+  {s:'مَتَى ___ عَمَّكَ؟',ch:['تَزُورُ','أَزُورُهُ'],a:0},
+  {s:'يَوْمَ ___، وَيَوْمَ الْإِثْنَيْنِ.',ch:['السَّبْتِ','الْأُسْبُوعِ'],a:0},
+  {s:'يَوْمَ الْجُمُعَةِ، وَيَوْمَ الْأَحَدِ، وَ___ الثُّلَاثَاءِ.',ch:['لَيْلَةَ','وَسَطَ'],a:0},
+  {s:'أَزُورُهُ ___ الْأُسْبُوعِ.',ch:['وَسَطَ','لَيْلَةَ'],a:0},
+  {s:'يَوْمَ الْخَمِيسِ، وَلَيْلَةَ ___.',ch:['الْأَرْبِعَاءِ','الْأُسْبُوعِ'],a:0},
+  {s:'___ تَزُورُ جَدَّكَ؟',ch:['مَتَى','مَنْ'],a:0},
+  {s:'مَتَى تَزُورُ ___؟ — أَزُورُهَا يَوْمَ الْإِثْنَيْنِ.',ch:['وَالِدَتَكَ','عَمَّكَ'],a:0},
+  {s:'مَتَى تَزُورُ عَمَّكَ؟ — ___ يَوْمَ الْإِثْنَيْنِ.',ch:['أَزُورُهُ','أَزُورُهَا'],a:0},
+  {s:'مَتَى تَزُورُ خَالَتَكَ؟ — ___ وَسَطَ الْأُسْبُوعِ.',ch:['أَزُورُهَا','أَزُورُهُ'],a:0},
+  {s:'لَيْلَةَ الْخَمِيسِ، وَ___ الْأَرْبِعَاءِ.',ch:['يَوْمَ','مَتَى'],a:0}]
+};
+
+// ---------- подсказки учителю ----------
+const AR8=s=>`<span class="ar">${s}</span>`;
+const NOTES8={
+ dialog:`<h4>Как работать с диалогом (5 мин)</h4><div class="n">1. «Только слушать»: текст размыт. Перед этим одна фраза по-русски: «Когда услышите ${AR8('يَوْمَ')}, хлопните».</div><div class="n">2. «Весь диалог». Говорят двое: ${AR8('فَضْل')} (зелёный) спрашивает, ${AR8('مُحَمَّد')} (синий) отвечает днями недели.</div><div class="n">3. Второй раз с текстом, по одной строке, пауза 3 секунды.</div><div class="n">4. Третий раз хором: дети повторяют ответы ${AR8('مُحَمَّد')}.</div><h4>Опора на старое</h4><div class="n">${AR8('مَتَى')} знают с урока 6 (${AR8('مَتَى تُعْطِينِي…؟')}). ${AR8('عَمّ، جَدّ، خَال')} — урок 5. Новое в диалоге — только дни и ${AR8('تَزُورُ، خَالَة، لَيْلَة، وَسَط، الْأُسْبُوع')}.</div><h4>Жесты</h4><div class="n">${AR8('تَزُورُ')} — «постучать в дверь». ${AR8('لَيْلَةَ')} — ладонь у щеки (сон). ${AR8('وَسَطَ')} — ладони в стороны, палец в середину.</div><div class="n">${AR8('لَيْلَةَ الثُّلَاثَاءِ')} — это вечер накануне вторника (вечер понедельника): у арабов ночь идёт перед своим днём. Скажите это детям по-русски один раз.</div>`,
+ words:`<h4>Слова (5–7 мин)</h4><div class="n">Нажмите на карточку, звучит диктор. Сначала 7 дней по порядку, потом 5 слов. Потом «Скрыть слова»: вы показываете картинку, дети называют хором.</div><div class="n">Дни — это порядок. Дети уже знают порядковые (урок 2): ${AR8('الْأَوَّلُ، الثَّانِي…')}. Неделя в книге начинается с ${AR8('السَّبْتُ')}.</div><h4>Ввести заранее</h4><div class="n">${AR8('أَزُورُهُ / أَزُورُهَا')} — блоком: ${AR8('ـهُ')} «его» (мужчину), ${AR8('ـهَا')} «её» (женщину). Покажите на ${AR8('خَال')} и ${AR8('خَالَة')}.</div><div class="n">${AR8('خَالَة')} — сестра мамы, ${AR8('عَمَّة')} — сестра папы (на дереве стр. 74 есть обе стрелки).</div><h4>Счётчик (цель 40 за занятие)</h4><div class="n">${AR8('السَّبْت ☐ الْأَحَد ☐ الْإِثْنَيْن ☐ الثُّلَاثَاء ☐ الْأَرْبِعَاء ☐ الْخَمِيس ☐ الْجُمُعَة ☐')}</div><div class="n">${AR8('يَزُورُ ☐ خَالَة ☐ لَيْلَة ☐ وَسَط ☐ الْأُسْبُوع ☐')}</div>`,
+ tree:`<h4>Дерево семьи · стр. 74 (5 мин)</h4><div class="n">В книге это задание «смотри»: стрелки показывают, кто кому кто. Кнопка «Стрелки · как в книге» открывает страницу книги. Главная новая стрелка — ${AR8('خَالَة')}: от ${AR8('نُهَى')} к ${AR8('سُهَى')}.</div><div class="n">«Где мой…?» и «Правда или нет?» — только знакомые слова: ${AR8('خَالَتِي، خَالِي، عَمِّي، جَدِّي، جَدَّتِي')}. Говорите фразу два раза. <span class="p">3 сек</span> Дети показывают.</div><div class="n">Ловушка: для ${AR8('عِيسَى')} тётя ${AR8('هَالَة')} — ${AR8('عَمَّة')}, а не ${AR8('خَالَة')} (она сестра папы).</div><h4>Соедини · стр. 74</h4><div class="n">Как в книге: слово в кружке, сверху две картинки ${AR8('أ')} и ${AR8('ب')}. Ребёнок нажимает на слово (звучит диктор), потом на свою картинку. Верная половина круга окрашивается. В Zoom дети называют букву.</div>`,
+ listen:`<h4>Слушание · стр. 75 и 79</h4><div class="n">Звук издателя без музыки: диктор называет номер и слово.</div><div class="n">Упр. ٣, ٤, ٥ стр. 75: ключи надёжные, каждое слово я сравнил с эталонным словом диктора. В упр. ٤ шесть картинок — шесть номеров.</div><div class="n">Упр. ٢ стр. 79 (часы): звучат фразы другого диктора, ключ я не определил. Номера ставятся, но ответ проверяете вы на слух.</div>`,
+ sounds:`<h4>«ال» солнечная и лунная · стр. 78</h4><div class="n">Змейка — все 28 букв по алфавиту. Жёлтые плитки ☀️ — солнечные: ${AR8('ل')} не читается, следующая буква удваивается (${AR8('الشَّمْسُ')} = аш-шамсу). Синие 🌙 — лунные: ${AR8('لْ')} читается (${AR8('الْقَمَرُ')} = аль-камару).</div><div class="n">Нажмите на плитку, дети повторяют хором. «Слушать всё по порядку» — с паузой для повтора.</div><div class="n">Правило без слов: дети смотрят на цвет. Серая ${AR8('ل')} — молчит, синяя ${AR8('لْ')} — звучит.</div><div class="n">«☀️ или 🌙?» — 10 слов со змейки на слух. Ключ точный (по букве).</div><div class="n">Слова змейки — тренировка звука, значения не разбираем. Знакомые: ${AR8('الْجَدُّ، الْقَلَمُ، الْيَوْمُ، الْوَاحِدُ')}.</div>`,
+ pairs:`<h4>Пары по цепочке</h4><div class="n">Не раньше третьего занятия по теме. Сначала модель: вы читаете обе роли два раза.</div><div class="n">Девочке вопрос задаётся с ${AR8('تَزُورِينَ … ـكِ')} (${AR8('مَتَى تَزُورِينَ جَدَّكِ؟')}) — приложение подставляет форму само по полу отвечающего. В книге этой формы нет: если не хотите вводить, читайте вопрос мальчиковой формы.</div><div class="n">Упр. ١: ответ «${AR8('لَيْلَةَ … وَيَوْمَ …')}» — два дня. Упр. ٢: ${AR8('أَزُورُهُ')} (мужчину), последняя карточка ${AR8('خَالَة')} — ${AR8('أَزُورُهَا')}. Упр. ٣: четыре реплики, все ${AR8('أَزُورُهَا')}.</div><div class="n">Упр. ٤ — «Вопрос-сюрприз»: вопрос выпадает с картинкой дня, по ней ребёнок отвечает.</div><div class="n">${AR8('عَمَّة')} (упр. ٣) — только узнавание, картинка — ${AR8('هَالَة')} с дерева.</div>`,
+ read:`<h4>Чтение · стр. 80–81</h4><div class="n">«Фраза и картинка» — упр. ١ стр. 80: ребёнок читает фразу вслух и соединяет с картинкой.</div><div class="n">«Вопрос и ответ» — упр. ٢ стр. 80, ключ книги (первая линия ${AR8('أ → ث')} в книге уже проведена). Здесь вопросы из книги 1: ${AR8('مِنْ أَيْنَ أَنْتَ؟ كَيْفَ حَالُكَ؟')}. Новое: ${AR8('الْمَغْرِب')} (страна) и ${AR8('مَتَى تُصَلِّي الْجُمُعَةَ؟')} — покажите жестом молитву.</div><div class="n">Текст стр. 81 про ${AR8('هِنْد')}: новое ${AR8('أَذْهَبُ')} (= ${AR8('يَذْهَبُ')}, «я») и ${AR8('بِالسَّيَّارَةِ')} «на машине». ${AR8('بَيْتِهَا')} «её дом» знают с урока 7.</div><div class="n">Первые четыре вопроса — задание книги «${AR8('✓')} или ${AR8('✗')}». Дальше мои вопросы на знакомых словах.</div>`,
+ letters:`<h4>Буквы ط ظ ف ق · стр. 81</h4><div class="n">В диалоге этих букв почти нет, поэтому «Охота за буквой» идёт по фразам урока: ${AR8('ط')} в ${AR8('وَسَطَ، طَوِيلَةٌ، الطَّعَامُ')}, ${AR8('ظ')} в ${AR8('الظُّهْرُ')}, ${AR8('ف')} в ${AR8('فِي، الْفَصْلُ')}, ${AR8('ق')} в ${AR8('صَدِيقَكَ، الْقَلَمُ')}.</div><div class="n">${AR8('ط / ت')} и ${AR8('ظ / ذ')} — толстые и тонкие, как ${AR8('ص / س')} в уроке 7.</div>`,
+ activity:`<h4>نَشَاط · стр. 82 «اِعْمَلْ جُمَلًا حَسَبَ الْخَطِّ»</h4><div class="n">Правила книги: играют две команды или двое. Первый называет человека, второй строит предложение по пунктиру от его портрета. Ответил верно — сам выбирает следующего.</div><div class="n">В приложении: нажмите на портрет, потом ребёнок (или вы по его подсказке) нажимает слова на линии по порядку. В конце появляется предложение-образец. «Показать путь» — подсказка.</div><div class="n">Новые слова только здесь: ${AR8('يَلْبَسُ')} «надевает» (жест: надеть ботинок), ${AR8('يَأْخُذُ')} (= ${AR8('خُذْ')}), ${AR8('صَغِير')} — противоположность ${AR8('كَبِير')}. Девочкам глагол с ${AR8('تَـ')}: ${AR8('سُهَى تَأْخُذُ')}.</div><div class="n">Предложения в книге не написаны — дети могут сказать по-своему (${AR8('غِنَى تَأْخُذُ وَرَقَةً كَبِيرَةً')} или ${AR8('وَرَقَةٌ كَبِيرَةٌ')}). Засчитывайте, если слова идут по линии.</div><div class="n">Кнопка «Фразы урока» — игра «собери фразу из двух слов» на 3–5 минут.</div>`,
+ games:`<h4>Как играть в Zoom</h4><div class="n">Вы показываете экран и кликаете сами, дети отвечают пальцами или словом.</div><div class="n">«Найди пару» — фразы стр. 80.</div><div class="n">Дни недели на картинках подписаны: «Слушай и найди» здесь — это и слушание, и чтение.</div>`
+};
+return Object.assign(L8,{NOTES:NOTES8});
+})();
+
+// ================= «Живая книга» · урок 8 · раскладка по страницам книги =================
+// Тексты, картинки и звук берутся из LESSONS[8] (data.js). Здесь — только порядок как в книге,
+// переводы строк для кнопки «Ру» и короткие заметки учителю (жёлтый листок).
+// Разворот: правая половина — первая страница (как в арабской книге), левая — следующая.
+KNIGA[8]=(()=>{
+const RU_LAB={'جَدّ':'дедушку','خَال':'дядю (брата мамы)','صَدِيق':'друга','عَمّ':'дядю (брата папы)','خَالَة':'тётю (сестру мамы)','جَدَّة':'бабушку','ابْنَة':'дочь','عَمَّة':'тётю (сестру папы)','وَالِدَة':'маму','وَالِد':'папу'};
+return {
+ RU_LAB,
+ // фразы, у которых нет перевода в data.js
+ RU:{
+  'أَزُورُ عَمِّي يَوْمَ الْأَحَدِ.':'Я навещаю дядю (брата папы) в воскресенье.',
+  'ذَهَبَ وَالِدِي يَوْمَ السَّبْتِ.':'Мой папа уехал в субботу.',
+  'يَوْمَ الْجُمُعَةِ أَنَا فِي الْبَيْتِ.':'В пятницу я дома.',
+  'هَذِهِ سَيَّارَةٌ طَوِيلَةٌ.':'Это длинная машина.',
+  'مَتَى تَزُورُ عَمَّكَ؟':'Когда ты навещаешь дядю (брата папы)?',
+  'مِنْ أَيْنَ أَنْتَ؟':'Откуда ты?',
+  'مَتَى تُصَلِّي الْجُمُعَةَ؟':'Когда ты молишься джума?',
+  'أَيْنَ وَالِدَتُكَ؟':'Где твоя мама?',
+  'كَيْفَ حَالُكَ؟':'Как дела?',
+  'أَنَا مِنَ الْمَغْرِبِ.':'Я из Марокко.',
+  'وَالِدَتِي فِي الْبَيْتِ.':'Моя мама дома.',
+  'بِخَيْرٍ وَالْحَمْدُ لِلهِ.':'Хорошо, слава Аллаху.',
+  'أَزُورُهُ يَوْمَ الْأَرْبِعَاءِ.':'Навещаю его в среду.',
+  'يَوْمَ الْجُمُعَةِ.':'В пятницу.',
+  'اِسْمِي هِنْدٌ،':'Меня зовут Хинд.',
+  'أَزُورُ جَدَّتِي فِي بَيْتِهَا يَوْمَ الْخَمِيسِ.':'Я навещаю бабушку у неё дома в четверг.',
+  'أَذْهَبُ أَنَا وَوَالِدِي وَوَالِدَتِي بِالسَّيَّارَةِ.':'Я еду с папой и мамой на машине.',
+  'اِسْمُ جَدَّتِي لَيْلَى.':'Мою бабушку зовут Лейла.',
+  'اِسْمُ وَالِدَةِ هِنْدٍ لَيْلَى.':'Маму Хинд зовут Лейла.',
+  'تَزُورُ هِنْدٌ جَدَّتَهَا يَوْمَ السَّبْتِ.':'Хинд навещает бабушку в субботу.',
+  'لَا تَذْهَبُ هِنْدٌ وَوَالِدُهَا وَوَالِدَتُهَا بِالسَّيَّارَةِ.':'Хинд с папой и мамой не едут на машине.',
+  'اِسْمُ جَدَّةِ هِنْدٍ لَيْلَى.':'Бабушку Хинд зовут Лейла.',
+  'عَلِيٌّ يَزُورُ خَالَهُ يَوْمَ الْأَرْبِعَاءِ.':'Али навещает дядю (брата мамы) в среду.',
+  'وَلِيدٌ يَلْبَسُ حِذَاءً كَبِيرًا.':'Валид надевает большие ботинки.',
+  'فَضْلٌ يَذْهَبُ بِالسَّيَّارَةِ بَعِيدًا.':'Фадль едет на машине далеко.',
+  'سُهَى تَأْخُذُ حَقِيبَةً صَغِيرَةً.':'Суха берёт маленькую сумку.',
+  'نُهَى تَزُورُ وَالِدَهَا يَوْمَ السَّبْتِ.':'Нуха навещает папу в субботу.',
+  'غِنَى تَأْخُذُ وَرَقَةً كَبِيرَةً.':'Гина берёт большой лист.'},
+ // развороты: half = половина разворота (одна страница книги или её часть); на телефоне — страница целиком
+ spreads:[
+  {halves:[{p:'٧٣',ex:['dialog']},{p:'٧٣',ex:['words']}],note:'dialog'},
+  {halves:[{p:'٧٤',ex:['tree','sil']},{p:'٧٥',ex:['x3','x4','x5']}]},
+  {halves:[{p:'٧٦',ex:['pic76','p1']},{p:'٧٧',ex:['p2','p3','p4']}]},
+  {halves:[{p:'٧٨',ex:['snake']},{p:'٧٩',ex:['x9']}]},
+  {halves:[{p:'٨٠',ex:['r1s','qa']},{p:'٨١',ex:['rtext','let']}]},
+  {halves:[{p:'٨٢',ex:['lines'],full:true}]}],
+ // заголовки заданий — как в книге
+ EX:{
+  dialog:{n:'١',t:'اُنْظُرْ وَاسْتَمِعْ وَأَعِدْ'},
+  words:{n:'٢',t:'اُنْظُرْ وَاسْتَمِعْ وَرَدِّدْ'},
+  tree:{n:'١',t:'شَجَرَةُ الْعَائِلَةِ'},
+  sil:{n:'٢',t:'صِلْ'},
+  x3:{n:'٣',t:'اِسْتَمِعْ، وَضَعْ (✓)'},
+  x4:{n:'٤',t:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ'},
+  x5:{n:'٥',t:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ'},
+  pic76:{},
+  p1:{n:'١',t:'تَبَادَلِ السُّؤَالَ وَالْجَوَابَ مَعَ زَمِيلِكَ، كَمَا فِي الْمِثَالِ'},
+  p2:{n:'٢',t:'تَبَادَلِ السُّؤَالَ وَالْجَوَابَ مَعَ زَمِيلِكَ، كَمَا فِي الْمِثَالِ'},
+  p3:{n:'٣',t:'تَبَادَلِ السُّؤَالَ وَالْجَوَابَ مَعَ زَمِيلِكَ، كَمَا فِي الْمِثَالِ'},
+  p4:{n:'٤',t:'تَبَادَلِ السُّؤَالَ وَالْجَوَابَ مَعَ زَمِيلِكَ'},
+  snake:{n:'١',t:'اِسْتَمِعْ وَرَدِّدْ',sub:'«ال» الشَّمْسِيَّةُ وَ«ال» الْقَمَرِيَّةُ'},
+  x9:{n:'٢',t:'اِسْتَمِعْ، وَضَعِ الرَّقْمَ الصَّحِيحَ'},
+  r1s:{n:'١',t:'اِقْرَأْ'},
+  qa:{n:'٢',t:'اِقْرَأْ، وَصِلْ بَيْنَ السُّؤَالِ وَالْجَوَابِ'},
+  rtext:{n:'٣',t:'اِقْرَأْ، وَأَجِبْ بِـ (✓) أَوْ (✗)'},
+  let:{n:'٤',t:'اِقْرَأْ وَاكْتُبْ'},
+  lines:{n:'',t:'اِعْمَلْ جُمَلًا حَسَبَ الْخَطِّ',tag:'نَشَاطٌ'}},
+ // жёлтый листок: коротко, что делать сейчас. Счётчик слов добавляется сам.
+ TIP:{
+  dialog:'Жест تَزُورُ — постучать в дверь. لَيْلَةَ — ладонь у щеки. لَيْلَةَ الثُّلَاثَاءِ = понедельник вечером.',
+  words:'Сначала 7 дней по порядку, потом 5 слов. Затем «Скрыть слова»: показываете картинку, дети называют хором.',
+  tree:'Главная стрелка урока — خَالَة: от نُهَى к سُهَى. Ловушка: для عِيسَى тётя هَالَة — عَمَّة.',
+  sil:'Нажмите слово (звучит диктор), дети называют букву أ или ب.',
+  x3:'Ключи надёжные. Сначала ▶, пауза 3 секунды, дети говорят букву.',
+  x4:'Нажмите номер внизу (звучит), потом картинку.',
+  x5:'Нажмите номер (звучит), потом слово в облаке.',
+  p1:'Не раньше третьего занятия. Сначала модель: вы читаете обе роли два раза.',
+  p2:'أَزُورُهُ — мужчину, أَزُورُهَا — женщину (последняя карточка خَالَة).',
+  p3:'Четыре реплики, все ответы أَزُورُهَا.',
+  p4:'Вопрос-сюрприз: выпадает вопрос и два дня-подсказки.',
+  snake:'Жёлтые ☀️: ل молчит. Синие 🌙: لْ звучит. Дети повторяют хором.',
+  x9:'Звучат фразы другого диктора: ответы проверяете вы на слух.',
+  r1s:'Ребёнок читает вслух, вы показываете картинку.',
+  qa:'Первая линия أ → ث уже дана в книге. Новое: الْمَغْرِب, مَتَى تُصَلِّي الْجُمُعَةَ؟',
+  rtext:'Новое: أَذْهَبُ (я иду), بِالسَّيَّارَةِ (на машине).',
+  let:'ط / ت и ظ / ذ — толстые и тонкие, как ص / س.',
+  lines:'Нажмите портрет, ребёнок нажимает слова по линии. Засчитывайте, если слова идут по линии.'}
+};})();
+
+const N=8,ASSET={"a_ahad":"../a/8/a_ahad.mp3?h=bdb9e75e","a_arbia":"../a/8/a_arbia.mp3?h=491ea664","a_ithnayn":"../a/8/a_ithnayn.mp3?h=881ab308","a_jumua":"../a/8/a_jumua.mp3?h=558a3dec","a_khala":"../a/8/a_khala.mp3?h=c4d09aae","a_khamis":"../a/8/a_khamis.mp3?h=16331f69","a_layla":"../a/8/a_layla.mp3?h=d14c1999","a_sabt":"../a/8/a_sabt.mp3?h=375c79fc","a_thulatha":"../a/8/a_thulatha.mp3?h=8503b223","a_usbu":"../a/8/a_usbu.mp3?h=431de77c","a_wasat":"../a/8/a_wasat.mp3?h=35202ab7","a_yazur":"../a/8/a_yazur.mp3?h=e52e9c82","d_0":"../a/8/d_0.mp3?h=d221766b","d_1":"../a/8/d_1.mp3?h=eec6da9e","d_2":"../a/8/d_2.mp3?h=b1196a77","d_3":"../a/8/d_3.mp3?h=1c3ae466","d_4":"../a/8/d_4.mp3?h=c9879a4a","d_5":"../a/8/d_5.mp3?h=a8c799bb","d_6":"../a/8/d_6.mp3?h=008cbdbf","d_7":"../a/8/d_7.mp3?h=049db888","d_full":"../a/8/d_full.mp3?h=f32f7aca","s1_0":"../a/8/s1_0.mp3?h=7522c316","s1_1":"../a/8/s1_1.mp3?h=96ec153e","s1_10":"../a/8/s1_10.mp3?h=f26dc21d","s1_11":"../a/8/s1_11.mp3?h=8e8d78fd","s1_12":"../a/8/s1_12.mp3?h=7c7e2534","s1_13":"../a/8/s1_13.mp3?h=61bbac65","s1_14":"../a/8/s1_14.mp3?h=3e77ea2e","s1_15":"../a/8/s1_15.mp3?h=be4cdf8a","s1_16":"../a/8/s1_16.mp3?h=12a3cd78","s1_17":"../a/8/s1_17.mp3?h=6af41982","s1_18":"../a/8/s1_18.mp3?h=e441120c","s1_19":"../a/8/s1_19.mp3?h=4f80bf2b","s1_2":"../a/8/s1_2.mp3?h=f86df8c8","s1_20":"../a/8/s1_20.mp3?h=2d6bb7f5","s1_21":"../a/8/s1_21.mp3?h=b09ba93e","s1_22":"../a/8/s1_22.mp3?h=64fbf07a","s1_23":"../a/8/s1_23.mp3?h=9e1f5540","s1_24":"../a/8/s1_24.mp3?h=0b61b3e6","s1_25":"../a/8/s1_25.mp3?h=788abc3d","s1_26":"../a/8/s1_26.mp3?h=a893e187","s1_27":"../a/8/s1_27.mp3?h=3fcbd827","s1_3":"../a/8/s1_3.mp3?h=e14aa828","s1_4":"../a/8/s1_4.mp3?h=e68b41b1","s1_5":"../a/8/s1_5.mp3?h=02d67272","s1_6":"../a/8/s1_6.mp3?h=91f8075c","s1_7":"../a/8/s1_7.mp3?h=99969534","s1_8":"../a/8/s1_8.mp3?h=d59d261b","s1_9":"../a/8/s1_9.mp3?h=eb464393","x3_0":"../a/8/x3_0.mp3?h=a2df8b4a","x3_1":"../a/8/x3_1.mp3?h=f8882e02","x3_2":"../a/8/x3_2.mp3?h=258e35dd","x3_3":"../a/8/x3_3.mp3?h=827e7f2e","x3_4":"../a/8/x3_4.mp3?h=72dee069","x3_5":"../a/8/x3_5.mp3?h=373ef33a","x3_6":"../a/8/x3_6.mp3?h=2c5b0b14","x4_0":"../a/8/x4_0.mp3?h=8aabf785","x4_1":"../a/8/x4_1.mp3?h=d785ae26","x4_2":"../a/8/x4_2.mp3?h=dfd6d518","x4_3":"../a/8/x4_3.mp3?h=5b68d88f","x4_4":"../a/8/x4_4.mp3?h=85eb8741","x4_5":"../a/8/x4_5.mp3?h=4764b982","x5_0":"../a/8/x5_0.mp3?h=2ff7e163","x5_1":"../a/8/x5_1.mp3?h=bf2aaadb","x5_10":"../a/8/x5_10.mp3?h=94b103b4","x5_11":"../a/8/x5_11.mp3?h=6b5715ce","x5_2":"../a/8/x5_2.mp3?h=991ceeef","x5_3":"../a/8/x5_3.mp3?h=bd5f66ac","x5_4":"../a/8/x5_4.mp3?h=6e09e378","x5_5":"../a/8/x5_5.mp3?h=6fa88aba","x5_6":"../a/8/x5_6.mp3?h=a89fb849","x5_7":"../a/8/x5_7.mp3?h=3d79df95","x5_8":"../a/8/x5_8.mp3?h=592fbc10","x5_9":"../a/8/x5_9.mp3?h=3dcb14a3","x9_0":"../a/8/x9_0.mp3?h=09d0e6c6","x9_1":"../a/8/x9_1.mp3?h=12248c64","x9_2":"../a/8/x9_2.mp3?h=32a9db13","x9_3":"../a/8/x9_3.mp3?h=41eb0d5b","x9_4":"../a/8/x9_4.mp3?h=5196d322","x9_5":"../a/8/x9_5.mp3?h=3592821c","x9_6":"../a/8/x9_6.mp3?h=10831359","x9_7":"../a/8/x9_7.mp3?h=0f531e57","b_chtenie":"../a/8/b_chtenie.jpg?h=f989bca3","b_ibna":"../a/8/b_ibna.jpg?h=9a90e1e8","b_p_ali":"../a/8/b_p_ali.jpg?h=7d0c7504","b_p_fadl":"../a/8/b_p_fadl.jpg?h=9a9a8038","b_p_ghina":"../a/8/b_p_ghina.jpg?h=49e63581","b_p_nuha":"../a/8/b_p_nuha.jpg?h=c747942c","b_p_suha":"../a/8/b_p_suha.jpg?h=f587b8ad","b_p_walid":"../a/8/b_p_walid.jpg?h=41639e7f","b_r4":"../a/8/b_r4.jpg?h=0cca56f5","b_tree":"../a/8/b_tree.jpg?h=5d8c3dac","b_tree8":"../a/8/b_tree8.jpg?h=62685665","b_ukht":"../a/8/b_ukht.jpg?h=dd22e544","scene":"../a/8/scene.jpg?h=4ce67b7f","w_ahad":"../a/8/w_ahad.jpg?h=2bd4349f","w_amm":"../a/8/w_amm.jpg?h=6f0675dd","w_arbia":"../a/8/w_arbia.jpg?h=0b1de4b8","w_ithnayn":"../a/8/w_ithnayn.jpg?h=bb91c6ca","w_jadd":"../a/8/w_jadd.jpg?h=2fd3f279","w_jadda":"../a/8/w_jadda.jpg?h=3023161c","w_jumua":"../a/8/w_jumua.jpg?h=73e4a64f","w_khal":"../a/8/w_khal.jpg?h=592a7ad0","w_khala":"../a/8/w_khala.jpg?h=ed9d6af8","w_khamis":"../a/8/w_khamis.jpg?h=5e29d718","w_layla":"../a/8/w_layla.jpg?h=29caa64a","w_sabt":"../a/8/w_sabt.jpg?h=2e403e19","w_sadiq":"../a/8/w_sadiq.jpg?h=81a98546","w_thulatha":"../a/8/w_thulatha.jpg?h=77a8b707","w_usbu":"../a/8/w_usbu.jpg?h=5b722264","w_wasat":"../a/8/w_wasat.jpg?h=6db809ff","w_yazur":"../a/8/w_yazur.jpg?h=c8e0bc2c"};
+</script>
+<script>
+const D=LESSONS[N],K=KNIGA[N],$=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const A=k=>ASSET[k]||'';
+const W={};D.words.forEach(w=>W[w.k]=w);
+const PLAY='<svg viewBox="0 0 10 12"><path d="M0 0L10 6L0 12Z" fill="currentColor"/></svg>';
+const h=(html)=>{const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstElementChild};
+const AR=s=>`<span class="ar">${s}</span>`;
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const DIG='٠١٢٣٤٥٦٧٨٩',an=n=>String(n).replace(/\d/g,d=>DIG[d]);
+const LS={get(k,d){try{return JSON.parse(localStorage.getItem('kn'+N+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem('kn'+N+k,JSON.stringify(v))}catch(e){}}};
+
+// ---------- нормализация и счётчик повторов (цель — 40 за занятие) ----------
+const norm=s=>s.replace(/[ً-ْٰـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');
+const PAT={sabt:/سبت/g,ahad:/احد/g,ithnayn:/اثنين/g,thulatha:/ثلاثاء/g,arbia:/اربعاء/g,khamis:/خميس/g,jumua:/جمعه/g,yazur:/زور/g,khala:/خال[هت]/g,layla:/ليل[هت]/g,wasat:/وسط/g,usbu:/اسبوع/g};
+const today=new Date().toISOString().slice(0,10);
+let CNT=LS.get('cnt',{});if(CNT.d!==today)CNT={d:today,c:{}};
+function count(text,mult=1){if(!text)return;const t=norm(text);let ch=0;for(const k in PAT){const m=t.match(PAT[k]);if(m){CNT.c[k]=(CNT.c[k]||0)+m.length*mult;ch=1}}if(ch){LS.set('cnt',CNT);drawNote()}}
+function wordsIn(el){const t=norm(el.textContent);return Object.keys(PAT).filter(k=>{PAT[k].lastIndex=0;return t.match(PAT[k])})}
+
+// ---------- звук ----------
+const TXT={};D.words.forEach(w=>TXT['a_'+w.k]=w.w);D.dialog.forEach((d,i)=>TXT['d_'+i]=d[1]);
+D.LX.forEach(x=>{if(x.type==='ab')x.items.forEach((it,i)=>TXT[x.id+'_'+i]=W[it[it[2]==='a'?0:1]].w);else if(x.key)x.key.forEach((k,i)=>TXT[x.id+'_'+i]=W[k].w)});
+const au=new Audio();au.preload='auto';let tok=0,paused=false,glowEl=null;
+function unglow(){if(glowEl){glowEl.classList.remove('on');glowEl=null}}
+function play(k,el){return new Promise(res=>{unglow();if(!A(k)){res();return}
+ au.src=A(k);au.currentTime=0;paused=false;
+ if(el){el.classList.add('on');glowEl=el}
+ const end=()=>{au.onended=au.onerror=null;unglow();res()};au.onended=end;au.onerror=end;
+ au.play().catch(end);count(TXT[k])})}
+function stopAll(){tok++;au.pause();au.onended&&au.onended();paused=false;$$('.on.pl,.ln.on,.wc.on,.tile.on').forEach(e=>e.classList.remove('on'))}
+async function wait(ms,t){const end=Date.now()+ms;while(Date.now()<end||paused){if(t!==tok)return false;await sleep(100)}return t===tok}
+async function seq(items,gap=700){stopAll();const t=++tok;for(const [k,el] of items){if(t!==tok)return;
+ el&&el.scrollIntoView({block:'nearest',behavior:'smooth'});await play(k,el);if(!await wait(gap,t))return}}
+function togglePause(b){if(au.src&&!au.ended){paused=!paused;paused?au.pause():au.play().catch(()=>{});b&&b.classList.toggle('on',paused)}}
+const plBtn=(k,el)=>{const b=h(`<button class="pl" aria-label="Слушать">${PLAY}</button>`);b.onclick=e=>{e.stopPropagation();stopAll();play(k,b)};return b};
+
+// ---------- перевод ----------
+const DAYS=D.LAYLA.g.map(norm),DAYV=D.LAYLA.v;
+const OBJ=[['والدت','маму'],['والد','папу'],['جدت','бабушку'],['جد','дедушку'],['خالت','тётю (сестру мамы)'],['خال','дядю (брата мамы)'],['عمت','тётю (сестру папы)'],['عم','дядю (брата папы)'],['صديق','друга'],['ابنت','дочь']];
+function dayOf(p){const t=norm(p);let best=-1,bi=-1;DAYS.forEach((d,i)=>{const j=t.indexOf(d.replace(/^ال/,''));if(j>=0&&(bi<0||j<bi)){bi=j;best=i}});return best}
+function ruAns(s){const t=norm(s);let pre='';if(t.includes('ازوره'))pre='Навещаю его ';else if(t.includes('ازورها'))pre='Навещаю её ';
+ const parts=s.split('،').map(p=>{const n=norm(p),d=dayOf(p);if(n.includes('وسط'))return 'в середине недели';if(d<0)return '';
+  return n.includes('ليله')?'в ночь на '+DAYV[d].replace(/^во? /,''):DAYV[d]}).filter(Boolean);
+ const r=pre+parts.join(' и ');return r.charAt(0).toUpperCase()+r.slice(1)+'.'}
+function ruQ(s){const t=norm(s).replace(/^و?متي تزور(ين)? /,'');const o=OBJ.find(([a])=>t.startsWith(a));
+ return (norm(s).startsWith('و')?'А когда':'Когда')+' ты навещаешь '+(o?o[1]:'…')+'?'}
+function ruOf(ar){if(K.RU[ar])return K.RU[ar];const i=D.dialog.findIndex(d=>d[1]===ar);if(i>=0)return D.dialogRu[i];
+ const n=norm(ar);if(/متي تزور/.test(n))return ruQ(ar);if(/(يوم|ليله|وسط)/.test(n))return ruAns(ar);return ''}
+function ruBtn(row,ruEl){const b=h('<button class="rub">Ру</button>');b.onclick=e=>{e.stopPropagation();ruEl.classList.toggle('show');b.classList.toggle('on')};return b}
+// строка: арабский текст в пузыре, ▶ (если есть звук), Ру
+function line(ar,{cls='',who='',aud='',ru}={}){ru=ru??ruOf(ar);
+ const r=h(`<div class="ln ${cls}">${who?`<span class="who">${who}</span>`:''}<div class="bub">${AR(ar)}<div class="ru">${ru}</div></div></div>`);
+ if(aud)r.append(plBtn(aud,r));if(ru)r.append(ruBtn(r,$('.ru',r)));if(aud)r.querySelector('.bub').onclick=()=>{stopAll();play(aud,r)};return r}
+
+// ---------- задания ----------
+const R={};
+R.dialog=(box)=>{
+ box.append(h(`<div class="scene"><img src="${A('scene')}" alt="${D.meta.sceneAlt}"></div>`));
+ const lines=D.dialog.map(([who,ar],i)=>{const l=line(ar,{cls:i%2?'s2':'s1',who:who.charAt(0),aud:'d_'+i,ru:D.dialogRu[i]});box.append(l);return l});
+ let rep=false;
+ const all=()=>{box.classList.remove('blur');seq(lines.map((l,i)=>['d_'+i,l]),rep?3200:600)};
+ return [{t:'▶ Весь диалог',gold:1,fn:all},
+  {t:'🙈 Только слушать',fn:()=>{box.classList.add('blur');seq(lines.map((l,i)=>['d_'+i,l]),rep?3200:600).then(()=>{})}},
+  {t:'⏸ Пауза',fn:b=>togglePause(b)},
+  {t:'🔁 С паузами',tog:1,fn:b=>{rep=!rep;b.classList.toggle('on',rep)}}]};
+R.words=(box)=>{const g=h('<div class="cards"></div>');box.append(g);
+ const cs=D.words.map(w=>{const c=h(`<div class="wc" role="button"><img src="${A('w_'+w.k)}" alt=""><span class="ar">${w.w}</span><div class="ru">${w.ru}</div></div>`);
+  const ru=$('.ru',c),rb=ruBtn(c,ru);c.append(rb);c.onclick=()=>{stopAll();play('a_'+w.k,c)};g.append(c);return c});
+ return [{t:'▶ Все слова по порядку',gold:1,fn:()=>seq(cs.map((c,i)=>['a_'+D.words[i].k,c]),1400)},
+  {t:'🙈 Скрыть слова',tog:1,fn:b=>{b.classList.toggle('on',g.classList.toggle('hidew'))}},{t:'⏸ Пауза',fn:b=>togglePause(b)}]};
+R.tree=(box)=>{
+ const ch=h('<div class="chips"></div>'),body=h('<div></div>');box.append(ch,body);
+ const modes=[['📖 Стрелки как в книге',book],['Где мой…?',who],['Правда или нет?',tf]];
+ modes.forEach(([t,f],i)=>{const b=h(`<button class="chip">${t}</button>`);b.onclick=()=>{$$('.chip',ch).forEach(x=>x.classList.remove('on'));b.classList.add('on');body.innerHTML='';f()};ch.append(b);if(!i)b.click()});
+ function treeImg(){const w=h(`<div class="treew"><img src="${A('b_tree')}" alt=""></div>`);const hs={};
+  for(const k in D.TREE){const [x1,y1,x2,y2]=D.TREE[k];const e=h(`<button class="hs" title="${D.NAME[k]}" style="left:${x1/D.TREE_W*100}%;top:${y1/D.TREE_H*100}%;width:${(x2-x1)/D.TREE_W*100}%;height:${(y2-y1)/D.TREE_H*100}%"></button>`);w.append(e);hs[k]=e}return [w,hs]}
+ function book(){body.append(h(`<div class="treew"><img src="${A('b_tree8')}" alt="Дерево семьи со стрелками, стр. 74"></div>`))}
+ function who(){let i=0;const p=h('<div class="prompt"></div>'),[w,hs]=treeImg();body.append(p,w);
+  const show=()=>{const q=D.WHO[i%D.WHO.length];p.innerHTML='';Object.values(hs).forEach(e=>e.className='hs');hs[q.spk].classList.add('spot');
+   p.append(h(`<span class="num">${an(i%D.WHO.length+1)}</span>`),h(AR(q.line)));const nx=h('<button class="chip">Дальше ›</button>');nx.onclick=()=>{i++;show()};p.append(nx);count(q.line);
+   for(const k in hs)hs[k].onclick=()=>{if(q.ans.includes(k)){q.ans.forEach(a=>hs[a].className='hs ok');p.querySelector('.after')||p.append(h(`<div class="after">${AR(q.after)}</div>`));count(q.after)}
+    else{hs[k].className='hs bad';setTimeout(()=>hs[k].className=k===q.spk?'hs spot':'hs',700)}}};show()}
+ function tf(){let i=0;const p=h('<div class="prompt"></div>'),[w,hs]=treeImg();body.append(p,w);
+  const show=()=>{const q=D.TF[i%D.TF.length];p.innerHTML='';Object.values(hs).forEach(e=>e.className='hs');hs[q.pt].classList.add('spot');
+   const y=h('<button class="tfb y">✓</button>'),n=h('<button class="tfb n">✕</button>'),nx=h('<button class="chip">Дальше ›</button>');
+   p.append(h(`<span class="num">${an(i%D.TF.length+1)}</span>`),h(AR(q.line)),y,n,nx);count(q.line);
+   const ans=v=>{const r=v===q.ok;(v?y:n).classList.add(r?'ok':'bad');p.querySelector('.after')||p.append(h(`<div class="after">${AR(q.fix)}</div>`))};
+   y.onclick=()=>ans(true);n.onclick=()=>ans(false);nx.onclick=()=>{i++;show()}};show()}
+ return []};
+R.sil=(box)=>{const M=D.MATCH1;const g=h('<div class="rings"></div>');box.append(h('<div class="hint">Нажмите на слово — звучит диктор. Потом на картинку أ или ب</div>'),g);let solved=0;const sc=h('<span class="sc"></span>');$('.exh',box).append(sc);
+ const upd=()=>sc.textContent=solved+' из '+M.items.length;upd();
+ M.items.forEach(([wk,pa,pb,side,c])=>{const r=h(`<div class="ring" style="--c:${c}"><svg viewBox="0 0 160 170"><path class="pa ${side==='a'?'win':''}" d="M80 118 C 112 112 122 96 125 70"/><path class="pb ${side==='b'?'win':''}" d="M80 118 C 48 112 38 96 35 70"/></svg>
+  <button class="pc a"><img src="${A('w_'+pa)}" alt=""><span class="lt">أ</span></button><button class="pc b"><img src="${A('w_'+pb)}" alt=""><span class="lt">ب</span></button><button class="wd">${W[wk].w}</button></div>`);
+  const wd=$('.wd',r);wd.onclick=()=>{stopAll();play('a_'+wk,wd)};
+  ['a','b'].forEach(s=>{const pc=$('.pc.'+s,r);pc.onclick=()=>{if(r.classList.contains('solved'))return;
+   if(s===side){r.classList.add('solved');pc.classList.add('ok');solved++;upd();count(W[wk].w)}else{pc.classList.add('bad');setTimeout(()=>pc.classList.remove('bad'),800)}}});g.append(r)});
+ return [{t:'↺ Заново',fn:()=>rerender()}]};
+// слушание «номер → картинка/слово»
+function numListen(box,x,targets,opts={}){const n=opts.count||x.key.length;let cur=-1,got=0;const sc=h('<span class="sc"></span>');if(x.key){$('.exh',box).append(sc)}
+ const upd=()=>sc.textContent=got+' из '+n;upd();
+ const nums=h('<div class="nums"></div>');const nb=[];
+ for(let i=0;i<n;i++){const b=h(`<button class="nb">${an(i+1)}</button>`);b.onclick=()=>{nb.forEach(e=>e.classList.remove('on'));b.classList.add('on');cur=i;stopAll();play(x.id+'_'+i,null)};nb.push(b);nums.append(b)}
+ targets.forEach(t=>{t.el.onclick=()=>{if(cur<0)return;const s=$('.slot',t.el);
+  if(!x.key){s.textContent=an(cur+1);s.classList.add('f');nb[cur].classList.add('used');return}
+  if(x.key[cur]===t.k){s.textContent=an(cur+1);s.classList.add('f');t.el.classList.add('ok');nb[cur].classList.add('used');nb[cur].classList.remove('on');cur=-1;got++;upd()}
+  else{t.el.classList.add('bad');setTimeout(()=>t.el.classList.remove('bad'),800)}}});
+ return [nums,nb]}
+R.x3=(box)=>{const x=D.LX.find(l=>l.id==='x3');let got=0;const sc=h('<span class="sc"></span>');$('.exh',box).append(sc);const upd=()=>sc.textContent=got+' из '+x.items.length;upd();const rows=[];
+ x.items.forEach((it,i)=>{const r=h(`<div class="abrow"><span class="num">${an(i+1)}</span></div>`);const p=plBtn(x.id+'_'+i);r.append(p);rows.push(p);
+  [0,1].forEach(j=>{const c=h(`<button class="pick"><img src="${A('w_'+it[j])}" alt=""><span class="lt">${j?'ب':'أ'}</span></button>`);
+   c.onclick=()=>{if(r.dataset.d)return;if((j?'b':'a')===it[2]){c.classList.add('ok');r.dataset.d=1;got++;upd()}else{c.classList.add('bad');setTimeout(()=>c.classList.remove('bad'),800)}};r.append(c)});box.append(r)});
+ return [{t:'▶ Слушать упражнение',gold:1,fn:()=>seq(rows.map((p,i)=>[x.id+'_'+i,p]),3500)},{t:'⏸ Пауза',fn:b=>togglePause(b)},{t:'↺ Заново',fn:()=>rerender()}]};
+R.x4=(box)=>{const x=D.LX.find(l=>l.id==='x4');box.append(h('<div class="hint">Нажмите номер (звучит), потом картинку</div>'));const g=h('<div class="pgrid"></div>');
+ const ts=x.pics.map(([l,k])=>{const e=h(`<button class="pick"><span class="lt">${l}</span><img src="${A('w_'+k)}" alt=""><div class="slot"></div></button>`);g.append(e);return {el:e,k}});
+ const [nums,nb]=numListen(box,x,ts);box.append(g,nums);
+ return [{t:'▶ Слушать упражнение',gold:1,fn:()=>seq(nb.map((b,i)=>[x.id+'_'+i,b]),4000)},{t:'⏸ Пауза',fn:b=>togglePause(b)},{t:'↺ Заново',fn:()=>rerender()}]};
+R.x5=(box)=>{const x=D.LX.find(l=>l.id==='x5');const g=h('<div class="blob"></div>');
+ const ts=D.BLOB.map(([k,c])=>{const e=h(`<button class="wchip" style="--c:${c}">${AR(W[k].w.replace(/[ٌُ]$/,''))}<div class="slot"></div></button>`);g.append(e);return {el:e,k}});
+ const [nums,nb]=numListen(box,x,ts);box.append(g,nums);
+ return [{t:'▶ Слушать упражнение',gold:1,fn:()=>seq(nb.map((b,i)=>[x.id+'_'+i,b]),3500)},{t:'⏸ Пауза',fn:b=>togglePause(b)},{t:'↺ Заново',fn:()=>rerender()}]};
+R.x9=(box)=>{const x=D.LX.find(l=>l.id==='x9');const c=h('<div class="clock"><div class="dial"></div><div class="hand"></div></div>');
+ const ts=x.pics.map(([l,k,ang])=>{const a=ang*Math.PI/180,px=50+38*Math.cos(a),py=50+38*Math.sin(a);
+  const e=h(`<button class="pick" style="left:${px}%;top:${py}%"><span class="lt">${l}</span><img src="${A('w_'+k)}" alt=""><div class="slot"></div></button>`);c.append(e);return {el:e,k}});
+ const [nums,nb]=numListen(box,x,ts,{count:x.count});box.append(c,nums,h('<div class="teach">Звучат фразы другого диктора — ответы проверяет учитель на слух.</div>'));
+ return [{t:'▶ Слушать упражнение',gold:1,fn:()=>seq(nb.map((b,i)=>[x.id+'_'+i,b]),5000)},{t:'⏸ Пауза',fn:b=>togglePause(b)},{t:'↺ Заново',fn:()=>rerender()}]};
+R.pic76=(box)=>{box.classList.add('pic76');box.innerHTML=`<img src="${A('scene')}" alt="${D.meta.sceneAlt}">`;return []};
+function pairs(box,P){let g=0,cur=0;const model=h('<div class="model"></div>'),fr=h('<div class="frame"></div>');
+ const gen=h('<span class="gen"><button class="chip on">мальчику</button><button class="chip">девочке</button></span>');$('.exh',box).append(gen);
+ $$('.chip',gen).forEach((b,i)=>b.onclick=()=>{g=i;$$('.chip',gen).forEach((x,j)=>x.classList.toggle('on',j===i));draw()});
+ box.append(model,fr);
+ const cards=P.items.map((it,i)=>{const c=h(`<button class="fc"><img src="${A(it.img)}" alt=""><span class="ar">${it.lab}</span></button>`);c.onclick=()=>{cur=i;draw(true)};fr.append(c);return c});
+ function draw(cnt){const it=P.items[cur];model.innerHTML='';cards.forEach((c,i)=>c.classList.toggle('on',i===cur));
+  const L=[[it.q[g],'s1','أ'],[it.a[0],'s2','ب']];if(it.r)L.push([it.r[g],'s1','أ'],[it.r2,'s2','ب']);
+  L.forEach(([ar,c,w])=>{model.append(line(ar,{cls:c,who:w}));cnt&&count(ar)})}
+ draw();return [{t:'Следующая карточка ›',gold:1,fn:()=>{cur=(cur+1)%P.items.length;draw(true)}}]}
+R.p1=b=>pairs(b,D.PAIRS[0]);R.p2=b=>pairs(b,D.PAIRS[1]);R.p3=b=>pairs(b,D.PAIRS[2]);
+R.p4=(box)=>{const P=D.PAIRS[3];let g=0;const gen=h('<span class="gen"><button class="chip on">мальчику</button><button class="chip">девочке</button></span>');$('.exh',box).append(gen);
+ const ch=h('<div class="chips"></div>'),st=h('<div></div>');box.append(ch,st);
+ $$('.chip',gen).forEach((b,i)=>b.onclick=()=>{g=i;$$('.chip',gen).forEach((x,j)=>x.classList.toggle('on',j===i));show(last)});
+ let last=-1;const go=h('<button class="big">🎲 Вопрос-сюрприз</button>');go.onclick=()=>{let i;do{i=Math.random()*P.items.length|0}while(i===last&&P.items.length>1);show(i)};ch.append(go);
+ P.items.forEach((it,i)=>{const b=h(`<button class="nb">${an(i+1)}</button>`);b.onclick=()=>show(i);ch.append(b)});
+ function show(i){if(i<0)return;last=i;const it=P.items[i];st.innerHTML='';$$('.nb',ch).forEach((b,j)=>b.classList.toggle('on',j===i));
+  st.append(line(it.q[g],{cls:'s1',who:'أ'}));count(it.q[g]);const s=h('<div class="surp"></div>');st.append(s);
+  it.cues.forEach(([img,a])=>{const c=h(`<button class="cue"><img src="${A(img)}" alt=""><span class="ar hid">${a}</span><div class="ru">${ruAns(a)}</div></button>`);c.onclick=()=>{$('.ar',c).classList.remove('hid');count(a)};s.append(c)})}
+ return [{t:'🎲 Вопрос-сюрприз',gold:1,fn:()=>go.click()}]};
+R.snake=(box)=>{const S=D.SNAKE,SUN='تثدذرزسشصضطظلن';const g=h('<div class="snake"></div>');box.append(g);
+ const cols=matchMedia('(max-width:820px)').matches?4:7;const tiles=[];
+ S.w.forEach(([l,w],i)=>{const sun=SUN.includes(l);const t=h(`<button class="tile ${sun?'sun':'moon'}"><span class="ic">${sun?'☀️':'🌙'}</span><span class="l">${l}</span>${AR(w)}</button>`);
+  const row=i/cols|0,col=i%cols;t.style.gridRow=row+1;t.style.gridColumn=(row%2?cols-col:col+1);t.onclick=()=>{stopAll();play(S.pre+'_'+i,t)};g.append(t);tiles.push(t)});
+ return [{t:'▶ По порядку с паузой',gold:1,fn:()=>seq(tiles.map((t,i)=>[S.pre+'_'+i,t]),2600)},{t:'⏸ Пауза',fn:b=>togglePause(b)}]};
+R.r1s=(box)=>{const g=h('<div class="r1s"></div>');box.append(g);
+ D.R1S.forEach(([ar,img,l],i)=>{const c=h(`<div class="rc" style="--c:${D.RCOL[i*2%D.RCOL.length]}"><span class="lt">${l}</span><div class="ci"><img src="${A(img)}" alt=""></div>${AR(ar)}<div class="ru">${ruOf(ar)}</div></div>`);
+  c.append(ruBtn(c,$('.ru',c)));$('.rub',c).style.marginTop='8px';c.onclick=()=>count(ar);g.append(c)});return []};
+R.qa=(box)=>{const Q=D.QA;const w=h('<div class="qa"><svg></svg><div class="qcol"></div><div class="acol"></div></div>');box.append(w);
+ const svg=$('svg',w),qs={},as={},links={'أ':Q.key['أ']};let sel=null;
+ Q.q.forEach(([l,t])=>{const b=h(`<button class="qb"><span class="lt">${l}</span>${AR(t)}</button>`);b.onclick=()=>{$$('.qb.on',w).forEach(e=>e.classList.remove('on'));sel=l;b.classList.add('on');count(t)};qs[l]=b;$('.qcol',w).append(b)});
+ Q.a.forEach(([l,t])=>{const b=h(`<button class="qb"><span class="lt">${l}</span>${AR(t)}</button>`);b.onclick=()=>{if(!sel)return;
+  if(Q.key[sel]===l){links[sel]=l;qs[sel].classList.remove('on');qs[sel].classList.add('ok');b.classList.add('ok');count(t);sel=null;lines()}else{b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),700)}};as[l]=b;$('.acol',w).append(b)});
+ qs['أ'].classList.add('ok');as[Q.key['أ']].classList.add('ok');
+ function lines(){const R0=w.getBoundingClientRect();svg.innerHTML='';for(const q in links){const a=qs[q].getBoundingClientRect(),b=as[links[q]].getBoundingClientRect();
+  const x1=a.left-R0.left,y1=a.top+a.height/2-R0.top,x2=b.right-R0.left,y2=b.top+b.height/2-R0.top;
+  svg.insertAdjacentHTML('beforeend',`<circle cx="${x1}" cy="${y1}" r="5" fill="#d94a3a"/><circle cx="${x2}" cy="${y2}" r="5" fill="#d94a3a"/><path d="M${x1} ${y1} C ${x1-35} ${y1} ${x2+35} ${y2} ${x2} ${y2}" stroke="#d94a3a" stroke-width="3" fill="none" stroke-linecap="round"/>`)}}
+ requestAnimationFrame(()=>requestAnimationFrame(lines));new ResizeObserver(lines).observe(w);
+ return [{t:'↺ Заново',fn:()=>rerender()}]};
+R.rtext=(box)=>{const w=h(`<div class="rtext"><div class="im"><img src="${A(D.RTEXTimg)}" alt=""></div><div class="tx"></div></div>`);box.append(w);const tx=$('.tx',w),ls={};
+ D.RTEXT.forEach(([id,ar])=>{const l=h(`<div class="rl">${AR(ar)}<div class="ru">${ruOf(ar)}</div></div>`);const rb=ruBtn(l,$('.ru',l));rb.style.marginInlineStart='8px';l.firstChild.after(rb);l.onclick=e=>{if(e.target===rb)return;count(ar)};tx.append(l);ls[id]=l});
+ D.RQ.filter(q=>q.book).forEach((q,i)=>{const r=h(`<div class="tfq"><span class="num">${an(i+1)}</span>${AR(q.q)}</div>`);const y=h('<button class="tfb y">✓</button>'),n=h('<button class="tfb n">✕</button>');r.append(y,n);
+  const ru=h(`<div class="ru" style="width:100%">${ruOf(q.q)}</div>`);r.append(ruBtn(r,ru));r.style.flexWrap='wrap';r.append(ru);
+  [y,n].forEach((b,v)=>b.onclick=()=>{$$('.rl',tx).forEach(e=>e.classList.remove('ev'));ls[q.ev].classList.add('ev');count(q.q);
+   if(v===q.a){b.classList.add('ok')}else{b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),900)}});box.append(r)});
+ return [{t:'↺ Заново',fn:()=>rerender()}]};
+R.let=(box)=>{const g=h('<div class="lets"></div>');box.append(g);
+ D.LET.forEach(({l,c,w})=>{const col=h(`<div class="lcol" style="--c:${c}"><div class="big1">${l}</div></div>`);
+  w.forEach(([s,pos])=>{const idx=pos===2?s.lastIndexOf(l):pos===0?s.indexOf(l):s.indexOf(l,1);let j=idx+1;while(j<s.length&&/[ً-ْ]/.test(s[j]))j++;
+   col.append(h(`<span class="w">${s.slice(0,idx)}<b>${s.slice(idx,j)}</b>${s.slice(j)}</span>`),h('<div class="wr"></div>'))});g.append(col)});return []};
+R.lines=(box)=>{const L=D.LINES;const f=h('<div class="field"></div>');const sent=h('<div class="sent"></div>');box.append(f,sent);
+ const NS='http://www.w3.org/2000/svg';let s=`<svg viewBox="0 20 ${L.W} ${L.H-20}">`;
+ L.paths.forEach((p,i)=>s+=`<polyline class="pth" data-i="${i}" points="${p.pts.map(q=>q.join(',')).join(' ')}" fill="none" stroke="#b9c3cf" stroke-width="5" stroke-dasharray="4 12" stroke-linecap="round" stroke-linejoin="round"/>`);
+ for(const k in L.nodes){const [t,x,y,r]=L.nodes[k];s+=`<g class="nd" data-k="${k}"><circle cx="${x}" cy="${y}" r="62" fill="#fff" stroke="${L.rows[r]}" stroke-width="7"/><text x="${x}" y="${y+12}" text-anchor="middle" font-family="Noto Naskh Arabic" font-weight="700" font-size="${t.length>7?28:34}" fill="#1d2a1f">${t}</text></g>`}
+ L.people.forEach(([k,n,img,x])=>s+=`<g class="pp" data-k="${k}"><clipPath id="cp${k}"><circle cx="${x}" cy="140" r="78"/></clipPath><circle class="ring0" cx="${x}" cy="140" r="84" fill="#7b2f86"/><image href="${A(img)}" x="${x-78}" y="62" width="156" height="156" clip-path="url(#cp${k})" preserveAspectRatio="xMidYMid slice"/><text x="${x}" y="262" text-anchor="middle" font-family="Noto Naskh Arabic" font-weight="700" font-size="34" fill="#4a2058">${n}</text></g>`);
+ f.innerHTML=s+'</svg>';let act=null,step=0;
+ const reset=()=>{$$('.pth',f).forEach(e=>{e.setAttribute('stroke','#b9c3cf');e.setAttribute('stroke-dasharray','4 12');e.setAttribute('stroke-width',5)});
+  $$('.nd circle',f).forEach(c=>c.setAttribute('fill','#fff'));$$('.nd text',f).forEach(t=>t.setAttribute('fill','#1d2a1f'));$$('.ring0',f).forEach(c=>c.setAttribute('fill','#7b2f86'));sent.classList.remove('show')};
+ $$('.pp',f).forEach(g=>g.onclick=()=>{reset();act=L.paths.find(p=>p.p===g.dataset.k);step=0;$('.ring0',g).setAttribute('fill','#ffc21a');
+  const pl=$(`.pth[data-i="${L.paths.indexOf(act)}"]`,f);pl.setAttribute('stroke',act.c);pl.setAttribute('stroke-dasharray','14 10');pl.setAttribute('stroke-width',8);pl.parentNode.append(pl);
+  $$('.nd',f).forEach(n=>n.parentNode.append(n));$$('.pp',f).forEach(n=>n.parentNode.append(n))});
+ $$('.nd',f).forEach(g=>g.onclick=()=>{if(!act)return;const c=$('circle',g);
+  if(act.via[step]===g.dataset.k){c.setAttribute('fill',act.c);$('text',g).setAttribute('fill','#fff');step++;
+   if(step===act.via.length){sent.innerHTML='';sent.append(h(AR(act.s)));const ru=h(`<div class="ru" style="width:100%">${ruOf(act.s)}</div>`);sent.append(ruBtn(sent,ru),ru);sent.classList.add('show');count(act.s)}}
+  else{c.setAttribute('fill','#fde4e4');setTimeout(()=>{if(c.getAttribute('fill')==='#fde4e4')c.setAttribute('fill','#fff')},600)}});
+ return [{t:'👁 Показать путь',fn:()=>{if(!act)return;act.via.slice(step).forEach(k=>{const g=$(`.nd[data-k="${k}"]`,f);$('circle',g).setAttribute('fill',act.c);$('text',g).setAttribute('fill','#fff')});step=act.via.length;
+   sent.innerHTML='';sent.append(h(AR(act.s)));const ru=h(`<div class="ru" style="width:100%">${ruOf(act.s)}</div>`);sent.append(ruBtn(sent,ru),ru);sent.classList.add('show')}},
+  {t:'↺ Заново',fn:()=>{act=null;reset()}}]};
+
+// ---------- навигация ----------
+const SP=K.spreads,PAGES=[...new Set(SP.flatMap(s=>s.halves.map(x=>x.p)))];
+const isPhone=()=>matchMedia('(max-width:820px)').matches;
+let cur=LS.get('pg',PAGES[0]);if(!PAGES.includes(cur))cur=PAGES[0];
+let done=new Set(LS.get('done',[])),activeEx=null,acts={};
+const spreadOf=p=>SP.findIndex(s=>s.halves.some(x=>x.p===p));
+const viewPages=()=>isPhone()?[cur]:[...new Set(SP[spreadOf(cur)].halves.map(x=>x.p))];
+function rail(el,cls){el.innerHTML='';PAGES.forEach(p=>{const b=h(`<button class="pgb${viewPages().includes(p)?' on':''}${done.has(p)?' done':''}">${p}</button>`);b.onclick=()=>go(p);el.append(b)})}
+function render(){stopAll();const book=$('#book');book.innerHTML='';acts={};activeEx=null;
+ const s=SP[spreadOf(cur)];let halves=s.halves;if(isPhone())halves=halves.filter(x=>x.p===cur);
+ halves.forEach((hf,i)=>{const pg=h(`<section class="pg ${hf.full?'full':i?'l':'r'}"></section>`);if(i)book.append(h('<div class="spine"></div>'));book.append(pg);
+  hf.ex.forEach(id=>{const e=K.EX[id]||{};const box=h(`<div class="ex" data-id="${id}"></div>`);
+   if(e.t)box.append(h(`<div class="exh">${e.tag?`<span class="tag">${e.tag}</span>`:''}${e.n?`<span class="exn">${e.n}</span>`:''}<h2>${e.t}</h2>${e.sub?`<span class="sub">${e.sub}</span>`:''}</div>`));
+   pg.append(box);const a=R[id](box)||[];acts[id]=a;
+   if(a.length){const ac=h('<div class="acts"></div>');a.forEach(x=>ac.append(actBtn(x)));box.querySelector('.exh')?box.querySelector('.exh').after(ac):box.prepend(ac)}
+   box.addEventListener('pointerdown',()=>setActive(id),true)});
+  pg.append(h(`<div class="pno"><span>${hf.p}</span></div>`))});
+ // заголовок на телефоне и лента страниц
+ $('#top').innerHTML=`<div class="trow"><a class="badge" href="../index.html" title="Все уроки">${D.meta.n}</a><span class="tt">${D.meta.t}</span><span class="pp2">Страница ${cur.replace(/[٠-٩]/g,d=>DIG.indexOf(d))} · ${PAGES.indexOf(cur)+1} из ${PAGES.length}</span></div><div class="strip"></div>`;
+ rail($('.strip'));const r=$('#rail');r.innerHTML=`<a class="badge" href="../index.html" title="Все уроки">${D.meta.n}</a>`;const rr=h('<div style="display:contents"></div>');r.append(rr);rail(rr);
+ $('.strip .on')?.scrollIntoView({inline:'center',block:'nearest'});
+ const first=halves.flatMap(x=>x.ex).find(id=>acts[id]&&acts[id].length)||halves[0].ex[0];setActive(first);
+ $('#done').classList.toggle('done',viewPages().every(p=>done.has(p)));$('#done').textContent=viewPages().every(p=>done.has(p))?'✓ Пройдено':'○ Пройдено';
+ window.scrollTo(0,0);$$('.pg').forEach(p=>p.scrollTop=0)}
+function actBtn(x){const b=h(`<button class="bt${x.gold?' gold':''}">${x.t}</button>`);b.onclick=()=>x.fn(b);return b}
+function setActive(id){if(activeEx===id)return;activeEx=id;const c=$('#ctx');c.innerHTML='';(acts[id]||[]).forEach(x=>c.append(actBtn(x)));drawNote()}
+function rerender(){const y=$$('.pg').map(p=>p.scrollTop);render();$$('.pg').forEach((p,i)=>p.scrollTop=y[i]||0)}
+function go(p){cur=p;LS.set('pg',p);render()}
+function step(d){if(isPhone()){const i=PAGES.indexOf(cur)+d;if(PAGES[i])go(PAGES[i])}else{const s=spreadOf(cur)+d;if(SP[s])go(SP[s].halves[0].p)}}
+$('#prev').onclick=()=>step(-1);$('#next').onclick=()=>step(1);
+document.addEventListener('keydown',e=>{if(e.target.closest('input'))return;if(e.key==='ArrowLeft')step(1);if(e.key==='ArrowRight')step(-1);if(e.key==='Escape')closeOv()});
+$('#ruSw').onclick=()=>{const on=document.body.classList.toggle('ruon');$('#ruSw').classList.toggle('on',on)};
+$('#done').onclick=()=>{const v=viewPages(),all=v.every(p=>done.has(p));v.forEach(p=>all?done.delete(p):done.add(p));LS.set('done',[...done]);render()};
+matchMedia('(max-width:820px)').addEventListener('change',render);
+
+// ---------- заметка учителю ----------
+let noteMin=LS.get('noteMin',false);
+function drawNote(){const n=$('#note');if(!activeEx){n.innerHTML='';return}
+ const tip=K.TIP[activeEx]||'';const bx=$(`.ex[data-id="${activeEx}"]`);const ws=bx?wordsIn(bx):[];
+ n.className=noteMin?'min':'';
+ n.innerHTML=`<h5>📌 Заметка учителю<button title="Свернуть">${noteMin?'▢':'–'}</button></h5><div class="tp">${tip.replace(/([؀-ۿ][؀-ۿً-ْ\s،؟]*[؀-ۿً-ْ])/g,'<span class="ar">$1</span>')}</div>
+ <div class="cn">${ws.map(k=>`<button data-k="${k}" class="${(CNT.c[k]||0)>=40?'full':''}" title="+1, если слово сказали вы или дети">${AR(W[k].w.replace(/^ال/,'').replace(/[ٌُ]$/,''))} ${CNT.c[k]||0}/40</button>`).join('')}</div>
+ <button class="rs">обнулить счётчик</button>`;
+ $('h5 button',n).onclick=()=>{noteMin=!noteMin;LS.set('noteMin',noteMin);drawNote()};
+ $$('.cn button',n).forEach(b=>b.onclick=()=>{CNT.c[b.dataset.k]=(CNT.c[b.dataset.k]||0)+1;LS.set('cnt',CNT);drawNote()});
+ $('.rs',n).onclick=()=>{if(confirm('Обнулить счётчик слов за сегодня?')){CNT={d:today,c:{}};LS.set('cnt',CNT);drawNote()}}}
+
+// ---------- окна: закрепить, учителю ----------
+function openOv(html){$('#win').innerHTML='<button class="x" title="Закрыть">✕</button>'+html;$('#ov').classList.add('show');$('#win .x').onclick=closeOv}
+function closeOv(){$('#ov').classList.remove('show');stopAll()}
+$('#ov').onclick=e=>{if(e.target.id==='ov')closeOv()};
+$('#zak').onclick=()=>{let pool=wordsIn($('#book'));if(pool.length<4)pool=D.words.map(w=>w.k);let streak=0;
+ openOv('<h3>🎯 Закрепить · слушай и найди</h3><div class="gtop"></div><div class="game"></div>');
+ const round=()=>{const opts=shuffle(pool).slice(0,4),t=opts[Math.random()*4|0];const top=$('.gtop'),g=$('.game');top.innerHTML='';g.innerHTML='';
+  const p=plBtn('a_'+t);top.append(p,h(`<span style="font-size:15px;color:var(--mute)">Подряд верно: <b style="color:var(--g2);font-size:20px">${streak}</b></span>`));
+  opts.forEach(k=>{const c=h(`<div class="wc"><img src="${A('w_'+k)}" alt=""><span class="ar">${W[k].w}</span></div>`);
+   c.onclick=()=>{if(k===t){c.classList.add('ok');streak++;stopAll();play('a_'+k,null).then(()=>setTimeout(round,400))}else{c.classList.add('bad');streak=0;setTimeout(()=>c.classList.remove('bad'),700)}};g.append(c)});
+  setTimeout(()=>p.click(),300)};round()};
+const NOTEKEY=[['dialog','words'],['tree','listen'],['pairs'],['sounds','listen'],['read','letters'],['activity']];
+$('#tch').onclick=()=>{const ks=NOTEKEY[spreadOf(cur)]||[];
+ openOv('<h3>📖 Учителю · страницы '+viewPages().map(p=>p.replace(/[٠-٩]/g,d=>DIG.indexOf(d))).join('–')+'</h3>'+ks.map(k=>D.NOTES[k]||'').join('')+
+ `<h4>Домашка (ссылки для детей)</h4>${D.HW.map((p,i)=>`<div class="hwl"><a href="../hw/l${N}-${i+1}.html" target="_blank">Часть ${i+1}<small>${p.t}</small></a><button class="chip" data-u="hw/l${N}-${i+1}.html">Копировать</button></div>`).join('')}`);
+ $$('#win [data-u]').forEach(b=>b.onclick=()=>{const u=new URL('../'+b.dataset.u,location.href).href;navigator.clipboard?.writeText(u);b.textContent='Скопировано ✓'})};
+render();
+</script>
+</body>
+</html>

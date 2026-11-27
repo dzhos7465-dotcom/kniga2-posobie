@@ -296,6 +296,27 @@ body.kids #note{display:none}
 .hwl a{flex:1;color:var(--g2);font-weight:900;text-decoration:none}
 .hwl small{display:block;color:var(--mute)}
 
+/* ---------- детский режим и учитель ---------- */
+body.kid #note,body.kid #tch,body.kid #done,body.kid #link,body.kid .tg,body.kid .bt.teach{display:none!important}
+.pgb.lock{opacity:.35;cursor:default}
+.pgb.lock::before{content:'🔒';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-size:9px}
+.locked{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:100%;text-align:center;direction:ltr;color:#8d8366}
+.locked .lk{width:96px;height:96px;border-radius:30px;display:grid;place-items:center;font-size:44px;background:linear-gradient(180deg,#fff,#f1ead7);box-shadow:var(--sh)}
+.locked b{font-size:20px;color:var(--g2)}
+.locked span{font-size:15px;max-width:300px}
+#tchip{display:none;font-size:11px;font-weight:900;color:#2a1d00;background:linear-gradient(180deg,#ffd75a,var(--gold2));border-radius:999px;padding:3px 8px;margin:-2px 0 4px}
+body.tch #tchip{display:block}
+.pin{display:flex;flex-direction:column;align-items:center;gap:16px;padding:10px 0}
+.pin input{width:240px;height:60px;border:0;border-radius:16px;text-align:center;font:900 30px var(--fr);letter-spacing:12px;background:#fff;box-shadow:inset 0 2px 6px rgba(0,0,0,.08),0 0 0 2px var(--line);outline:none}
+.pin input:focus{box-shadow:inset 0 2px 6px rgba(0,0,0,.08),0 0 0 3px var(--gold)}
+.pin .err{color:var(--bad);font-size:14px;min-height:18px}
+.pin.shake input{animation:shk .35s}
+.plist{display:flex;flex-wrap:wrap;gap:8px;direction:rtl;margin:6px 0 16px}
+.plist button{width:58px;height:46px;border-radius:14px;font:20px var(--fa);font-weight:700;color:var(--g2);background:linear-gradient(180deg,#fff,#f3eee0);box-shadow:inset 0 1px 0 #fff,0 3px 0 #ddd2b5;position:relative}
+.plist button.d::after{content:'';position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.plist button.on{color:#2a1d00;background:linear-gradient(180deg,#ffd75a,var(--gold) 50%,var(--gold2));box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 3px 0 #c98400}
+.url{direction:ltr;word-break:break-all;font-size:14px;background:#fff;border-radius:12px;padding:10px 12px;box-shadow:inset 0 0 0 2px var(--line);margin-bottom:12px}
+
 /* ---------- телефон ---------- */
 @media (max-width:820px){
  body{overflow:auto;background:var(--gdd)}
@@ -555,7 +576,7 @@ R.lines=(box)=>{const L=D.LINES;const f=h('<div class="field"></div>');const sen
   if(act.via[step]===g.dataset.k){c.setAttribute('fill',act.c);$('text',g).setAttribute('fill','#fff');step++;
    if(step===act.via.length){sent.innerHTML='';sent.append(h(AR(act.s)));const ru=h(`<div class="ru" style="width:100%">${ruOf(act.s)}</div>`);sent.append(ruBtn(sent,ru),ru);sent.classList.add('show');count(act.s)}}
   else{c.setAttribute('fill','#fde4e4');setTimeout(()=>{if(c.getAttribute('fill')==='#fde4e4')c.setAttribute('fill','#fff')},600)}});
- return [{t:'👁 Показать путь',fn:()=>{if(!act)return;act.via.slice(step).forEach(k=>{const g=$(`.nd[data-k="${k}"]`,f);$('circle',g).setAttribute('fill',act.c);$('text',g).setAttribute('fill','#fff')});step=act.via.length;
+ return [{t:'👁 Показать путь',teach:1,fn:()=>{if(!act)return;act.via.slice(step).forEach(k=>{const g=$(`.nd[data-k="${k}"]`,f);$('circle',g).setAttribute('fill',act.c);$('text',g).setAttribute('fill','#fff')});step=act.via.length;
    sent.innerHTML='';sent.append(h(AR(act.s)));const ru=h(`<div class="ru" style="width:100%">${ruOf(act.s)}</div>`);sent.append(ruBtn(sent,ru),ru);sent.classList.add('show')}},
   {t:'↺ Заново',fn:()=>{act=null;reset()}}]};
 
@@ -564,12 +585,21 @@ const SP=K.spreads,PAGES=[...new Set(SP.flatMap(s=>s.halves.map(x=>x.p)))];
 const isPhone=()=>matchMedia('(max-width:820px)').matches;
 let cur=LS.get('pg',PAGES[0]);if(!PAGES.includes(cur))cur=PAGES[0];
 let done=new Set(LS.get('done',[])),activeEx=null,acts={};
+// ---------- учитель / дети ----------
+const TEACH_H='f70f484e11c15528388a053eb118783ec88504ef04c3fd638156c5c441b14d6d';
+let teacher=false;
+const pnum=p=>+String(p).replace(/[٠-٩]/g,d=>DIG.indexOf(d));
+const isOpen=p=>true; // дети видят всю книгу; закрыто только учительское
+const OPEN=()=>PAGES.filter(isOpen);
+async function sha(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function setMode(){document.body.classList.toggle('kid',!teacher);document.body.classList.toggle('tch',teacher);if(!isOpen(cur))cur=OPEN().slice(-1)[0]}
 const spreadOf=p=>SP.findIndex(s=>s.halves.some(x=>x.p===p));
 const viewPages=()=>isPhone()?[cur]:[...new Set(SP[spreadOf(cur)].halves.map(x=>x.p))];
-function rail(el,cls){el.innerHTML='';PAGES.forEach(p=>{const b=h(`<button class="pgb${viewPages().includes(p)?' on':''}${done.has(p)?' done':''}">${p}</button>`);b.onclick=()=>go(p);el.append(b)})}
+function rail(el,cls){el.innerHTML='';PAGES.forEach(p=>{const o=isOpen(p);const b=h(`<button class="pgb${viewPages().includes(p)?' on':''}${teacher&&done.has(p)?' done':''}${o?'':' lock'}" ${o?'':'aria-disabled="true" title="Откроется после урока"'}>${p}</button>`);if(o)b.onclick=()=>go(p);el.append(b)})}
 function render(){stopAll();const book=$('#book');book.innerHTML='';acts={};activeEx=null;
  const s=SP[spreadOf(cur)];let halves=s.halves;if(isPhone())halves=halves.filter(x=>x.p===cur);
  halves.forEach((hf,i)=>{const pg=h(`<section class="pg ${hf.full?'full':i?'l':'r'}"></section>`);if(i)book.append(h('<div class="spine"></div>'));book.append(pg);
+  if(!isOpen(hf.p)){pg.append(h(`<div class="locked"><div class="lk">🔒</div><b>Страница ${pnum(hf.p)}</b><span>Эта страница откроется, когда мы пройдём её на уроке</span></div>`));return}
   hf.ex.forEach(id=>{const e=K.EX[id]||{};const box=h(`<div class="ex" data-id="${id}"></div>`);
    if(e.t)box.append(h(`<div class="exh">${e.tag?`<span class="tag">${e.tag}</span>`:''}${e.n?`<span class="exn">${e.n}</span>`:''}<h2>${e.t}</h2>${e.sub?`<span class="sub">${e.sub}</span>`:''}</div>`));
    pg.append(box);const a=R[id](box)||[];acts[id]=a;
@@ -578,16 +608,17 @@ function render(){stopAll();const book=$('#book');book.innerHTML='';acts={};acti
   pg.append(h(`<div class="pno"><span>${hf.p}</span></div>`))});
  // заголовок на телефоне и лента страниц
  $('#top').innerHTML=`<div class="trow"><a class="badge" href="../index.html" title="Все уроки">${D.meta.n}</a><span class="tt">${D.meta.t}</span><span class="pp2">Страница ${cur.replace(/[٠-٩]/g,d=>DIG.indexOf(d))} · ${PAGES.indexOf(cur)+1} из ${PAGES.length}</span></div><div class="strip"></div>`;
- rail($('.strip'));const r=$('#rail');r.innerHTML=`<a class="badge" href="../index.html" title="Все уроки">${D.meta.n}</a>`;const rr=h('<div style="display:contents"></div>');r.append(rr);rail(rr);
+ rail($('.strip'));const r=$('#rail');r.innerHTML=`<a class="badge" href="../index.html" title="Все уроки">${D.meta.n}</a><span id="tchip">Учитель</span>`;const rr=h('<div style="display:contents"></div>');r.append(rr);rail(rr);
  $('.strip .on')?.scrollIntoView({inline:'center',block:'nearest'});
+ $$('.badge').forEach(longPress);
  const first=halves.flatMap(x=>x.ex).find(id=>acts[id]&&acts[id].length)||halves[0].ex[0];setActive(first);
  $('#done').classList.toggle('done',viewPages().every(p=>done.has(p)));$('#done').textContent=viewPages().every(p=>done.has(p))?'✓ Пройдено':'○ Пройдено';
  window.scrollTo(0,0);$$('.pg').forEach(p=>p.scrollTop=0)}
-function actBtn(x){const b=h(`<button class="bt${x.gold?' gold':''}">${x.t}</button>`);b.onclick=()=>x.fn(b);return b}
+function actBtn(x){if(x.teach&&!teacher)return document.createComment('');const b=h(`<button class="bt${x.gold?' gold':''}">${x.t}</button>`);b.onclick=()=>x.fn(b);return b}
 function setActive(id){if(activeEx===id)return;activeEx=id;const c=$('#ctx');c.innerHTML='';(acts[id]||[]).forEach(x=>c.append(actBtn(x)));drawNote()}
 function rerender(){const y=$$('.pg').map(p=>p.scrollTop);render();$$('.pg').forEach((p,i)=>p.scrollTop=y[i]||0)}
 function go(p){cur=p;LS.set('pg',p);render()}
-function step(d){if(isPhone()){const i=PAGES.indexOf(cur)+d;if(PAGES[i])go(PAGES[i])}else{const s=spreadOf(cur)+d;if(SP[s])go(SP[s].halves[0].p)}}
+function step(d){if(isPhone()){const i=PAGES.indexOf(cur)+d;if(PAGES[i]&&isOpen(PAGES[i]))go(PAGES[i])}else{const s=spreadOf(cur)+d;if(SP[s]&&isOpen(SP[s].halves[0].p))go(SP[s].halves[0].p)}}
 $('#prev').onclick=()=>step(-1);$('#next').onclick=()=>step(1);
 document.addEventListener('keydown',e=>{if(e.target.closest('input'))return;if(e.key==='ArrowLeft')step(1);if(e.key==='ArrowRight')step(-1);if(e.key==='Escape')closeOv()});
 $('#ruSw').onclick=()=>{const on=document.body.classList.toggle('ruon');$('#ruSw').classList.toggle('on',on)};
@@ -622,7 +653,19 @@ $('#tch').onclick=()=>{const ks=NOTEKEY[spreadOf(cur)]||[];
  openOv('<h3>📖 Учителю · страницы '+viewPages().map(p=>p.replace(/[٠-٩]/g,d=>DIG.indexOf(d))).join('–')+'</h3>'+ks.map(k=>D.NOTES[k]||'').join('')+
  `<h4>Домашка (ссылки для детей)</h4>${D.HW.map((p,i)=>`<div class="hwl"><a href="../hw/l${N}-${i+1}.html" target="_blank">Часть ${i+1}<small>${p.t}</small></a><button class="chip" data-u="hw/l${N}-${i+1}.html">Копировать</button></div>`).join('')}`);
  $$('#win [data-u]').forEach(b=>b.onclick=()=>{const u=new URL('../'+b.dataset.u,location.href).href;navigator.clipboard?.writeText(u);b.textContent='Скопировано ✓'})};
-render();
+// ---------- вход учителя: долгое нажатие на номер урока ----------
+function longPress(el){let t=null,fired=false;
+ el.addEventListener('pointerdown',()=>{fired=false;t=setTimeout(()=>{fired=true;teacher?tchMenu():pinWin()},700)});
+ ['pointerup','pointerleave','pointercancel'].forEach(e=>el.addEventListener(e,()=>clearTimeout(t)));
+ el.addEventListener('click',e=>{if(fired){e.preventDefault();e.stopPropagation()}});
+ el.addEventListener('contextmenu',e=>e.preventDefault())}
+function pinWin(){openOv('<h3>Учительская версия</h3><div class="pin"><input type="password" inputmode="numeric" maxlength="8" autocomplete="off" aria-label="Код учителя"><div class="err"></div><button class="big">Войти</button></div>');
+ const box=$('#win .pin'),inp=$('input',box),go1=async()=>{if(await sha('kniga2:'+inp.value)===TEACH_H){try{localStorage.setItem('knT',TEACH_H)}catch(e){}teacher=true;setMode();closeOv();render()}
+  else{box.classList.remove('shake');void box.offsetWidth;box.classList.add('shake');$('.err',box).textContent='Неверный код';inp.value=''}};
+ $('button',box).onclick=go1;inp.onkeydown=e=>{if(e.key==='Enter')go1()};setTimeout(()=>inp.focus(),50)}
+function tchMenu(){openOv('<h3>Учительская версия включена</h3><p class="n">На этом устройстве открыты все страницы и панель учителя.</p><button class="big" id="kidv">Выйти: детский вид</button>');
+ $('#kidv').onclick=()=>{try{localStorage.removeItem('knT')}catch(e){}teacher=false;setMode();closeOv();render()}}
+(async()=>{try{teacher=localStorage.getItem('knT')===TEACH_H}catch(e){}setMode();render()})();
 </script>
 </body>
 </html>

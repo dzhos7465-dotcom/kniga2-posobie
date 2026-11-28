@@ -388,7 +388,7 @@ body.tch #tchip{display:block}
 <script>
 const D=LESSONS[N],K=KNIGA[N],$=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const A=k=>ASSET[k]||'';
-const W={};D.words.forEach(w=>W[w.k]=w);
+const W={};(D.words||[]).forEach(w=>W[w.k]=w);
 const PLAY='<svg viewBox="0 0 10 12"><path d="M0 0L10 6L0 12Z" fill="currentColor"/></svg>';
 const h=(html)=>{const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstElementChild};
 const AR=s=>`<span class="ar">${s}</span>`;
@@ -399,15 +399,16 @@ const LS={get(k,d){try{return JSON.parse(localStorage.getItem('kn'+N+k))??d}catc
 
 // ---------- нормализация и счётчик повторов (цель — 40 за занятие) ----------
 const norm=s=>s.replace(/[ً-ْٰـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');
-const PAT={sabt:/سبت/g,ahad:/احد/g,ithnayn:/اثنين/g,thulatha:/ثلاثاء/g,arbia:/اربعاء/g,khamis:/خميس/g,jumua:/جمعه/g,yazur:/زور/g,khala:/خال[هت]/g,layla:/ليل[هت]/g,wasat:/وسط/g,usbu:/اسبوع/g};
+// шаблоны слов для счётчика: KNIGA[N].PAT {ключ слова: 'регулярка по тексту без огласовок'}; без него — из самих слов урока
+const PAT=Object.fromEntries(K.PAT?Object.entries(K.PAT).map(([k,v])=>[k,new RegExp(v,'g')]):(D.words||[]).map(w=>{let b=norm(w.w).replace(/[^\u0621-\u064A]/g,'').replace(/^ال/,'');if(b.endsWith('ه'))b=b.slice(0,-1)+'[هت]';return [w.k,new RegExp(b,'g')]}));
 const today=new Date().toISOString().slice(0,10);
 let CNT=LS.get('cnt',{});if(CNT.d!==today)CNT={d:today,c:{}};
 function count(text,mult=1){if(!text)return;const t=norm(text);let ch=0;for(const k in PAT){const m=t.match(PAT[k]);if(m){CNT.c[k]=(CNT.c[k]||0)+m.length*mult;ch=1}}if(ch){LS.set('cnt',CNT);drawNote()}}
 function wordsIn(el){const t=norm(el.textContent);return Object.keys(PAT).filter(k=>{PAT[k].lastIndex=0;return t.match(PAT[k])})}
 
 // ---------- звук ----------
-const TXT={};D.words.forEach(w=>TXT['a_'+w.k]=w.w);D.dialog.forEach((d,i)=>TXT['d_'+i]=d[1]);
-D.LX.forEach(x=>{if(x.type==='ab')x.items.forEach((it,i)=>TXT[x.id+'_'+i]=W[it[it[2]==='a'?0:1]].w);else if(x.key)x.key.forEach((k,i)=>TXT[x.id+'_'+i]=W[k].w)});
+const TXT={};(D.words||[]).forEach(w=>TXT['a_'+w.k]=w.w);(D.dialog||[]).forEach((d,i)=>TXT['d_'+i]=d[1]);
+(D.LX||[]).forEach(x=>{if(x.type==='ab')x.items.forEach((it,i)=>TXT[x.id+'_'+i]=W[it[it[2]==='a'?0:1]]?.w);else if(x.key)x.key.forEach((k,i)=>TXT[x.id+'_'+i]=W[k]?.w)});
 const au=new Audio();au.preload='auto';let tok=0,paused=false,glowEl=null;
 function unglow(){if(glowEl){glowEl.classList.remove('on');glowEl=null}}
 function play(k,el){return new Promise(res=>{unglow();if(!A(k)){res();return}
@@ -423,7 +424,7 @@ function togglePause(b){if(au.src&&!au.ended){paused=!paused;paused?au.pause():a
 const plBtn=(k,el)=>{const b=h(`<button class="pl" aria-label="Слушать">${PLAY}</button>`);b.onclick=e=>{e.stopPropagation();stopAll();play(k,b)};return b};
 
 // ---------- перевод ----------
-const DAYS=D.LAYLA.g.map(norm),DAYV=D.LAYLA.v;
+const DAYS=(D.LAYLA?.g||[]).map(norm),DAYV=D.LAYLA?.v||[];
 const OBJ=[['والدت','маму'],['والد','папу'],['جدت','бабушку'],['جد','дедушку'],['خالت','тётю (сестру мамы)'],['خال','дядю (брата мамы)'],['عمت','тётю (сестру папы)'],['عم','дядю (брата папы)'],['صديق','друга'],['ابنت','дочь']];
 function dayOf(p){const t=norm(p);let best=-1,bi=-1;DAYS.forEach((d,i)=>{const j=t.indexOf(d.replace(/^ال/,''));if(j>=0&&(bi<0||j<bi)){bi=j;best=i}});return best}
 function ruAns(s){const t=norm(s);let pre='';if(t.includes('ازوره'))pre='Навещаю его ';else if(t.includes('ازورها'))pre='Навещаю её ';

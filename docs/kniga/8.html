@@ -922,8 +922,8 @@ function render(){stopAll();const book=$('#book');book.innerHTML='';acts={};acti
    box.addEventListener('pointerdown',()=>setActive(id),true)});
   pg.append(h(`<div class="pno"><span>${hf.p}</span></div>`))});
  // заголовок на телефоне и лента страниц
- $('#top').innerHTML=`<div class="trow"><a class="badge" href="../index.html" title="Все уроки">${D.meta.n}</a><span class="tt">${D.meta.t}</span><span class="pp2">Страница ${cur.replace(/[٠-٩]/g,d=>DIG.indexOf(d))} · ${PAGES.indexOf(cur)+1} из ${PAGES.length}</span></div><div class="strip"></div>`;
- rail($('.strip'));const r=$('#rail');r.innerHTML=`<a class="badge" href="../index.html" title="Все уроки">${D.meta.n}</a><span id="tchip">Учитель</span>`;const rr=h('<div style="display:contents"></div>');r.append(rr);rail(rr);
+ $('#top').innerHTML=`<div class="trow"><a class="badge" href="index.html" title="Все уроки">${D.meta.n}</a><span class="tt">${D.meta.t}</span><span class="pp2">Страница ${cur.replace(/[٠-٩]/g,d=>DIG.indexOf(d))} · ${PAGES.indexOf(cur)+1} из ${PAGES.length}</span></div><div class="strip"></div>`;
+ rail($('.strip'));const r=$('#rail');r.innerHTML=`<a class="badge" href="index.html" title="Все уроки">${D.meta.n}</a><span id="tchip">Учитель</span>`;const rr=h('<div style="display:contents"></div>');r.append(rr);rail(rr);
  $('.strip .on')?.scrollIntoView({inline:'center',block:'nearest'});
  $$('.badge').forEach(longPress);
  const first=halves.flatMap(x=>x.ex).find(id=>acts[id]&&acts[id].length)||halves[0].ex[0];setActive(first);
@@ -933,6 +933,7 @@ function actBtn(x){if(x.teach&&!teacher)return document.createComment('');const 
 function setActive(id){if(activeEx===id)return;activeEx=id;const c=$('#ctx');c.innerHTML='';(acts[id]||[]).forEach(x=>c.append(actBtn(x)));drawNote()}
 function rerender(){const y=$$('.pg').map(p=>p.scrollTop);render();$$('.pg').forEach((p,i)=>p.scrollTop=y[i]||0)}
 function go(p){cur=p;LS.set('pg',p);render()}
+try{localStorage.setItem('knLast',N)}catch(e){}
 function step(d){if(isPhone()){const i=PAGES.indexOf(cur)+d;if(PAGES[i]&&isOpen(PAGES[i]))go(PAGES[i])}else{const s=spreadOf(cur)+d;if(SP[s]&&isOpen(SP[s].halves[0].p))go(SP[s].halves[0].p)}}
 $('#prev').onclick=()=>step(-1);$('#next').onclick=()=>step(1);
 document.addEventListener('keydown',e=>{if(e.target.closest('input'))return;if(e.key==='ArrowLeft')step(1);if(e.key==='ArrowRight')step(-1);if(e.key==='Escape')closeOv()});

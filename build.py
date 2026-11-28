@@ -57,6 +57,7 @@ for n, d in lessons:
     parts = hw_re.findall(src[src.find('HW:['):] if 'HW:[' in src else '')
     for i, t in enumerate(parts):
         hw_page(f'l{n}-{i+1}', f'#l{n}-test-{i+1}', f'Домашка · урок {n} «{lt}» · часть {i+1}', f'{t}. Слушай, соединяй, собирай фразы · около 10 минут.')
+    if not parts: continue  # урок без домашки (уроки 1–3 пока только в «живой книге») — страниц-ссылок нет
     hw_page(f'l{n}', f'#l{n}-test', f'Домашка · урок {n} «{lt}» · весь урок', 'Все слова, фразы и текст урока. Слушай, соединяй, собирай фразы · около 10 минут.')
 open(f'{root}/docs/index.html', 'w', encoding='utf-8').write(s)
 print('docs/index.html', round(len(s) / 1e6, 2), 'MB, уроки:', ', '.join(str(n) for n, _ in lessons))
